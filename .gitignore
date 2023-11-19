@@ -402,8 +402,7 @@ FodyWeavers.xsd
 
 # Folder node_modules
 /node_modules
-/app/configs/database.js
-/[update  on server]/app/configs/database.js
+/app/configs/databasebackup.js
 # Folder vscode
 .vscode/
 
