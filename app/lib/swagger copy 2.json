@@ -1,0 +1,195 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API with 'Developer NodeJs Easy'",
+        "description": "This is a sample server for a pet store.",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.example.com/support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:6969/openapi/",
+            "description": "Localhost"
+        }
+    ],
+    "tags": [
+        {
+            "name": "categories",
+            "description": "ghi chú"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/categories": {
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "get all",
+                "requestBody": {
+                    "description": "categories body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/categoriesGetAll"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "get 1 categories",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of pet that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/search": {
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "search categories",
+                "requestBody": {
+                    "description": "categories body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/categoriesFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schema": {
+            "categories": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Slug": {
+                        "type": "string"
+                    },
+                    "Thumbnail": {
+                        "type": "string"
+                    },
+                    "ViewType": {
+                        "type": "string"
+                    },
+                    "ShowHomePage": {
+                        "type": "string"
+                    },
+                    "Ordering": {
+                        "type": "integer"
+                    },
+                    "Description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "categoriesFrom": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Slug": {
+                        "type": "string"
+                    },
+                    "ViewType": {
+                        "type": "string"
+                    },
+                    "ShowHomePage": {
+                        "type": "string"
+                    },
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "categoriesGetAll": {
+                "type": "object",
+                "properties": {
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}

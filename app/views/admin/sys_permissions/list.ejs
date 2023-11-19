@@ -1,0 +1,1539 @@
+<%- include ('./../helpers/pagination') %>
+	<% const collection="sys_permissions" ; const linkPrefix=systemConfig.prefixAdmin + `/${collection}/`; %>
+		<% const linkPrefixDepartments=systemConfig.prefixAdmin + `/sys_departments/`; %>
+			<% const linkPrefixUser=systemConfig.prefixAdmin + `/sys_users/`; %>
+				<%- include ('./../elements/notify') %>
+					<div class="container-fluid">
+						<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+						<input name="linkPrefixDepartments" id="linkPrefixDepartments" type="hidden"
+							value="<%= linkPrefixDepartments %>">
+						<input name="linkPrefixUser" id="linkPrefixUser" type="hidden" value="<%= linkPrefixUser %>">
+						<input name="params" id="params" type="hidden" value="<%= params %>">
+						&nbsp; &nbsp; <button type="button" id="btnOpenMainModalForm" class="btn btn-primary">
+							<i class="fas fa-plus"></i> Add new
+						</button>
+						&nbsp; <button type="button" id="btnDelete" class="btn-sm btn-danger" title="Delete">
+							<i class="fas fa-trash-alt"></i> Delete
+						</button>
+						&nbsp; <button type="button" id="btnSearchPost_OpenForm" class="btn-sm btn-info" title="Search">
+							<i class="fa fa-search"></i> Search
+						</button>
+						&nbsp; <button type="button" id="btnExport_OpenForm" class="btn-sm btn-success" title="Export">
+							<i class="fa fa-download"></i> Export
+						</button>
+						&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh"
+							onclick="RefreshPage()">
+							<i class="fa fa-refresh"></i> Refresh
+						</button>
+						<!-- ================ Modal From ======================== -->
+						<div class="modal fade" id="modaMainForm" data-backdrop="static" data-keyboard="true"
+							tabindex="- 1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-xl" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Add New & Edit</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form role="form" name="formsys_permissions" id="formsys_permissions"
+											autocomplete="off" action=" <%= linkPrefix %>searchGet" method="get">
+											<div class="form-group row">
+												<label id="labid_company"
+													class="col-sm-2 col-form-label text-sm-right required">Company</label>
+												<div class="col-xs-2 col-sm-2">
+													<div class="dropdown">
+														<div id="divDropdownCompanyName" class="dropdown-content">
+															<input type="text" id="CompanyName" name="CompanyName"
+																onkeyup="filterSelectBox('CompanyName')"
+																onfocus="focusDropdown('CompanyName')"
+																onblur="blurDropdown('CompanyName')"
+																class="form-control form-control-sm">
+															<input id="id_company" name="id_company" type="hidden">
+															<div id="DivContenCompanyName"
+																class="Divdropdown-content DivContenCompanyName">
+															</div>
+														</div>
+													</div>
+												</div>
+												<label id="labid_department"
+													class="col-sm-2 col-form-label text-sm-right required">Department</label>
+												<div class="col-xs-2 col-sm-2">
+													<div class="dropdown">
+														<div id="divDropdowndepartment_name" class="dropdown-content">
+															<input type="text" id="department_name"
+																name="department_name"
+																onkeyup="filterSelectBox('department_name')"
+																onfocus="focusDropdown('department_name')"
+																onblur="blurDropdown('department_name')"
+																class="form-control form-control-sm">
+															<input id="id_department" name="id_department"
+																type="hidden">
+															<div id="DivContendepartment_name"
+																class="Divdropdown-content DivContendepartment_name">
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<label id="labuser_id"
+													class="col-sm-2 col-form-label text-sm-right required">User</label>
+												<div class="col-xs-2 col-sm-2">
+													<div class="dropdown">
+														<div id="divDropdownfullName" class="dropdown-content">
+															<input type="text" id="fullName" name="fullName"
+																onkeyup="filterSelectBox('fullName')"
+																onfocus="focusDropdown('fullName')"
+																onblur="blurDropdown('fullName')"
+																class="form-control form-control-sm">
+															<input id="user_id" name="user_id" type="hidden">
+															<div id="DivContenfullName" class="Divdropdown-content">
+															</div>
+														</div>
+													</div>
+												</div>
+												<label id="labfunctions"
+													class="col-sm-2 col-form-label text-sm-right required">Functions</label>
+												<div class="col-xs-2 col-sm-2">
+													<div class="dropdown">
+														<div id="divDropdowndescription" class="dropdown-content">
+															<input type="text" id="description" name="description"
+																onkeyup="filterSelectBox('description')"
+																onfocus="focusDropdown('description')"
+																onblur="blurDropdown('description')"
+																class="form-control form-control-sm">
+															<input id="functions" name="functions" type="hidden">
+															<div id="DivContendescription" class="Divdropdown-content">
+															</div>
+														</div>
+													</div>
+												</div>
+												<label id="labfullauthority"
+													class="col-sm-2 col-form-label text-sm-right ">Fullauthority</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="fullauthority" id="fullauthority"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labaddnew" class="col-sm-2 col-form-label text-sm-right ">Add
+													New</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="addnew" id="addnew"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labupdates"
+													class="col-sm-2 col-form-label text-sm-right ">Updates</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="updates" id="updates"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labreadonly"
+													class="col-sm-2 col-form-label text-sm-right ">Readonly</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="readonly" id="readonly"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labfull_of_yourself"
+													class="col-sm-2 col-form-label text-sm-right ">Full Of
+													Yourself</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="full_of_yourself" id="full_of_yourself"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission1"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 1</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission1" id="permission1"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission2"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 2</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission2" id="permission2"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission3"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 3</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission3" id="permission3"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission4"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 4</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission4" id="permission4"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission5"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 5</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission5" id="permission5"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission6"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 6</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission6" id="permission6"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission7"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 7</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission7" id="permission7"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission8"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 8</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission8" id="permission8"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission9"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 9</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission9" id="permission9"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+												<label id="labpermission10"
+													class="col-sm-2 col-form-label text-sm-right ">Permission 10</label>
+												<div class="col-xs-2 col-sm-2">
+													<input type="checkbox" name="permission10" id="permission10"
+														class="form-control form-control-sm form-control-checkbox">
+												</div>
+											</div>
+											<div class="form-group row">
+												<div class="text-success" id="divMessage"></div>
+											</div>
+											<input name="_idHidden" id="_idHidden" type="hidden">
+											<div class="modal-footer">
+												&nbsp; <button type="button" id="btnCloseMainMoal" data-dismiss="modal"
+													class="btn btn-sm btn-primary" title="Close">
+													<i class="fa fa-mail-reply"></i> Close
+												</button>
+												<button type="button" id="btnSave" class="btn-sm btn-success"
+													title="Save">
+													<i class="fa fa-save"></i> Save
+												</button>
+												&nbsp; <button type="button" id="btnUpdate" class="btn-sm btn-primary"
+													title="Update">
+													<i class="fa fa-save"></i> Update
+												</button>
+												&nbsp; <button type="button" id="btnSearchPost" class="btn-sm btn-info"
+													title="Search">
+													<i class="fa fa-search"></i> Search
+												</button>
+												&nbsp; <button type="submit" id="btnSearchGet"
+													class="btn-sm btn-warning" title="Search Get">
+													<i class="fa fa-search"></i> Search Get
+												</button>
+												&nbsp; <button type="button" id="btnExport" class="btn-sm btn-success"
+													title="Export">
+													<i class="fa fa-download"></i> Export
+												</button>
+											</div>
+										</form>
+										<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+										<input name="sysLanguage" id="sysLanguage" type="hidden"
+											value="<%= language %>">
+										<input name="listDataCatalogue" id="listDataCatalogue" type="hidden"
+											value="<%= catalogue %>">
+										<!-- // Underline -->
+										<!--<div class="card card-info card-outline collapsed-card"></div>-->
+									</div> <!-- End <div class="modal-body">  -->
+									<!-- ================= Other information ==============================-->
+									<div class="card card-info card-outline collapsed-card">
+										<div class="card-header">
+											<h6 class="card-title">Other information</h6>
+											<div class="card-tools">
+												<button type="button" class="btn btn-tool" data-card-widget="collapse"
+													data-toggle="tooltip" title="Collapse">
+													<i class="fas fa-plus"></i>
+												</button>
+											</div>
+										</div>
+										<div class="card-body" style="display: none;">
+											<div class="row justify-content-between">
+												<label class="col-sm-3 col-form-label text-sm-right"
+													id="labuser_name_created_Text">User name created: </label>
+												<label class="col-sm-3 col-form-label"
+													id="labuser_name_created_Value">User
+													name
+													created: </label>
+												<label class="col-sm-3 col-form-label text-sm-right"
+													id="labdatetime_created_Text">Datetime created: </label>
+												<label class="col-sm-3 col-form-label"
+													id="labdatetime_created_Value">Datetime
+													created:</label>
+												<label class="col-sm-3 col-form-label text-sm-right"
+													id="labuser_name_modified_Text">User name modifiedd: </label>
+												<label class="col-sm-3 col-form-label"
+													id="labuser_name_modified_Value">User
+													name modifiedd: </label>
+												<label class="col-sm-3 col-form-label text-sm-right"
+													id="labdatetime_modified_Text">DateTime modified: </label>
+												<label class="col-sm-3 col-form-label"
+													id="labdatetime_modified_Value">DateTime
+													modified: </label>
+											</div>
+										</div>
+
+									</div>
+									<!-- ================= End Other information ==================== -->
+								</div> <!-- End <div class="modal-content">  -->
+							</div>
+						</div>
+						<!-- ================ End Modal From ============================= -->
+
+						<div class="card card-info card-outline">
+							<div class="card-header">
+								<h4 class="card-title">List data &nbsp;</h4>
+								<!-- //===========================================-->
+								<div class="button-group card-title">
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle"
+										data-toggle="dropdown">
+										<span class="fas fa-cog"></span>
+										<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" style="width: 300px;">
+										<li>
+											<a href="#" class="small" data-value="user_id" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnuser_id" />&nbsp;
+												<label id="labuser_id_CheckboxShow">User </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="functions" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnfunctions" />&nbsp;
+												<label id="labfunctions_CheckboxShow">Functions </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="fullauthority" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnfullauthority" />&nbsp;
+												<label id="labfullauthority_CheckboxShow">Fullauthority </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="addnew" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnaddnew" />&nbsp;
+												<label id="labaddnew_CheckboxShow">Add New </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="updates" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnupdates" />&nbsp;
+												<label id="labupdates_CheckboxShow">Updates </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="readonly" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnreadonly" />&nbsp;
+												<label id="labreadonly_CheckboxShow">Readonly </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="full_of_yourself" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnfull_of_yourself" />&nbsp;
+												<label id="labfull_of_yourself_CheckboxShow">Full Of Yourself </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="permission1" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission1" />&nbsp;
+												<label id="labpermission1_CheckboxShow">Permission 1 </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="permission2" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission2" />&nbsp;
+												<label id="labpermission2_CheckboxShow">Permission 2 </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="permission3" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission3" />&nbsp;
+												<label id="labpermission3_CheckboxShow">Permission 3 </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="permission4" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission4" />&nbsp;
+												<label id="labpermission4_CheckboxShow">Permission 4 </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="permission5" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission5" />&nbsp;
+												<label id="labpermission5_CheckboxShow">Permission 5 </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="permission6" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission6" />&nbsp;
+												<label id="labpermission6_CheckboxShow">Permission 6 </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="permission7" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission7" />&nbsp;
+												<label id="labpermission7_CheckboxShow">Permission 7 </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="permission8" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission8" />&nbsp;
+												<label id="labpermission8_CheckboxShow">Permission 8 </label>
+											</a> &nbsp; &nbsp;
+											<a href="#" class="small" data-value="permission9" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission9" />&nbsp;
+												<label id="labpermission9_CheckboxShow">Permission 9 </label>
+											</a>
+										</li>
+										<li>
+											<a href="#" class="small" data-value="permission10" tabIndex="-1">
+												<input type="checkbox" id="ckhShowColumnpermission10" />&nbsp;
+												<label id="labpermission10_CheckboxShow">Permission 10 </label>
+											</a> &nbsp; &nbsp;
+										</li>
+									</ul>
+								</div>
+								<!-- //=========================================================== -->
+								<div class="card-tools">
+									<button type="button" class="btn btn-tool" data-card-widget="collapse"
+										data-toggle="tooltip" title="Collapse"><i class="fas fa-minus"></i></button>
+								</div>
+							</div>
+							<div class="card-body">
+								<table id="tablesys_permissions"
+									class="table table-bordered table-hover btn-table mb-0">
+									<thead>
+										<tr>
+											<th class="text-center" style="min-width: 100px;">
+												<div class="custom-control custom-checkbox">
+													<input class="custom-control-input cbAll" type="checkbox"
+														id="check-all">
+													#
+												</div>
+											</th>
+											<th class="text-center" style="min-width: 170px;" data-sort=""
+												data-column="user_id" class="columnHeader" onclick="sortByColumn(this)">
+												<label id="labuser_id_tb">
+													User <i class="fa fa-fw" data-column="user_id"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 120px;" data-sort=""
+												data-column="functions" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labfunctions_tb">
+													Functions <i class="fa fa-fw" data-column="functions"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="fullauthority" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labfullauthority_tb">
+													Fullauthority <i class="fa fa-fw" data-column="fullauthority"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 100px;" data-sort=""
+												data-column="addnew" class="columnHeader" onclick="sortByColumn(this)">
+												<label id="labaddnew_tb">
+													Add New <i class="fa fa-fw" data-column="addnew"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 100px;" data-sort=""
+												data-column="updates" class="columnHeader" onclick="sortByColumn(this)">
+												<label id="labupdates_tb">
+													Updates <i class="fa fa-fw" data-column="updates"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 110px;" data-sort=""
+												data-column="readonly" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labreadonly_tb">
+													Readonly <i class="fa fa-fw" data-column="readonly"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 150px;" data-sort=""
+												data-column="full_of_yourself" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labfull_of_yourself_tb">
+													Full Of Yourself <i class="fa fa-fw"
+														data-column="full_of_yourself"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission1" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission1_tb">
+													Permission 1 <i class="fa fa-fw" data-column="permission1"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission2" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission2_tb">
+													Permission 2 <i class="fa fa-fw" data-column="permission2"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission3" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission3_tb">
+													Permission 3 <i class="fa fa-fw" data-column="permission3"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission4" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission4_tb">
+													Permission 4 <i class="fa fa-fw" data-column="permission4"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission5" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission5_tb">
+													Permission 5 <i class="fa fa-fw" data-column="permission5"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission6" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission6_tb">
+													Permission 6 <i class="fa fa-fw" data-column="permission6"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission7" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission7_tb">
+													Permission 7 <i class="fa fa-fw" data-column="permission7"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission8" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission8_tb">
+													Permission 8 <i class="fa fa-fw" data-column="permission8"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 130px;" data-sort=""
+												data-column="permission9" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission9_tb">
+													Permission 9 <i class="fa fa-fw" data-column="permission9"></i>
+												</label>
+											</th>
+											<th class="text-center" style="min-width: 140px;" data-sort=""
+												data-column="permission10" class="columnHeader"
+												onclick="sortByColumn(this)">
+												<label id="labpermission10_tb">
+													Permission 10 <i class="fa fa-fw" data-column="permission10"></i>
+												</label>
+											</th>
+											<th class="text-center">#</a></th>
+										</tr>
+									</thead>
+									<tbody id="bodyTablesys_permissions">
+										<tr>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+											<th class="text-center"></a></th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+							<div class="col-xs-1 col-sm-1">
+								<input type="number" class="form-control form-control-sm" name="numberItemPerPage"
+									id="numberItemPerPage" size="4">
+							</div>
+							<div class="col-xs-9 col-sm-9" id="paginationsys_permissions">
+							</div>
+						</div>
+					</div>
+					<script type="application/javascript">
+						var language={};
+						var listData;
+						var intervalCompany;
+						var intervalDepartment;
+						//var intervalUser;
+						var linkPrefix=$('#linkPrefix').val();
+						var idMainTable="tablesys_permissions";
+						setSelectedColumnToShowInterface(idMainTable);
+
+						onLoadData();
+						function onLoadData() {
+							getLanguage();
+							setUpdateButtonStatus(false)
+							setInterfaceText();
+							getNumberItemPerPage();
+							var strData=$('#listData').val();
+							listData=JSON.parse(strData);
+							if(listData.length>0) {
+								displayDataToTable();
+								var paramsString=$('#params').val();
+								const params=JSON.parse(paramsString);
+								paginationHelper(params.pagination,"sys_permissions",params.currentStatus,params.keyword,linkPrefix,"paginationsys_permissions");
+							}
+						}
+
+						function displayDataToTable() {
+							sortDataJson();
+							showAllColumnInTable(idMainTable);
+							var table=document.getElementById("bodyTablesys_permissions");
+							var lengthtable=table.rows.length-1;
+							for(var n=lengthtable;n>=0;n--) {
+								table.deleteRow(n);
+							}
+							var length=listData.length;
+							if(length<1) {
+								showNoticeDanger(language.Message_NotFoundData);
+								return false;
+							}
+							$("#modaMainForm").modal('hide');
+							listData.forEach(function(data) {
+								var row=table.insertRow(0);
+								var cell0=row.insertCell(0);
+								var cell1=row.insertCell(1);
+								var cell2=row.insertCell(2);
+								var cell3=row.insertCell(3);
+								var cell4=row.insertCell(4);
+								var cell5=row.insertCell(5);
+								var cell6=row.insertCell(6);
+								var cell7=row.insertCell(7);
+								var cell8=row.insertCell(8);
+								var cell9=row.insertCell(9);
+								var cell10=row.insertCell(10);
+								var cell11=row.insertCell(11);
+								var cell12=row.insertCell(12);
+								var cell13=row.insertCell(13);
+								var cell14=row.insertCell(14);
+								var cell15=row.insertCell(15);
+								var cell16=row.insertCell(16);
+								var cell17=row.insertCell(17);
+								var cell18=row.insertCell(18);
+								let check=`<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+				<label for="${data._id}" class="custom-control-label"></label>
+			</div>`;
+								let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+									"<i class=\"fas fa-pencil-alt\"></i>"+
+									"</a> "+
+									" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.functions+"')\">";
+								strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+								strbutton+=" </ button > ";
+								cell0.innerHTML=check+strbutton;
+								sys_users=data.sys_users;
+								if(sys_users!=undefined) {
+									if(sys_users.fullName!=undefined)
+										cell1.innerHTML=sys_users.fullName;
+								}
+								sys_function_for_permissions=data.sys_function_for_permissions;
+								if(sys_function_for_permissions!=undefined) {
+									if(sys_function_for_permissions.description!=undefined)
+										cell2.innerHTML=sys_function_for_permissions.description;
+								}
+								//cell2.innerHTML=data.functions;
+								cell3.innerHTML=data.fullauthority;
+								cell4.innerHTML=data.addnew;
+								cell5.innerHTML=data.updates;
+								cell6.innerHTML=data.readonly;
+								cell7.innerHTML=data.full_of_yourself;
+								cell8.innerHTML=data.permission1;
+								cell9.innerHTML=data.permission2;
+								cell10.innerHTML=data.permission3;
+								cell11.innerHTML=data.permission4;
+								cell12.innerHTML=data.permission5;
+								cell13.innerHTML=data.permission6;
+								cell14.innerHTML=data.permission7;
+								cell15.innerHTML=data.permission8;
+								cell16.innerHTML=data.permission9;
+								cell17.innerHTML=data.permission10;
+
+								//cell18.innerHTML=strbutton;
+							});
+							hideColumnInTable(idMainTable);
+						}
+						function setUpdateButtonStatus(statusUpdate) {
+							$('#btnSave').prop('hidden',statusUpdate);
+							$('#btnUpdate').prop('hidden',!statusUpdate);
+						}
+
+						function getLanguage() {
+							var languageString=$('#sysLanguage').val();
+							language=JSON.parse(languageString);
+						}
+
+						function setInterfaceText() {
+							$("#pageTitle").html(language.TitlePage);
+							$("#labuser_id").text(language.user_id);
+							$("#labfunctions").text(language.functions);
+							$("#labfullauthority").text(language.fullauthority);
+							$("#labaddnew").text(language.addnew);
+							$("#labupdates").text(language.updates);
+							$("#labreadonly").text(language.readonly);
+							$("#labfull_of_yourself").text(language.full_of_yourself);
+							$("#labpermission1").text(language.permission1);
+							$("#labpermission2").text(language.permission2);
+							$("#labpermission3").text(language.permission3);
+							$("#labpermission4").text(language.permission4);
+							$("#labpermission5").text(language.permission5);
+							$("#labpermission6").text(language.permission6);
+							$("#labpermission7").text(language.permission7);
+							$("#labpermission8").text(language.permission8);
+							$("#labpermission9").text(language.permission9);
+							$("#labpermission10").text(language.permission10);
+
+							$("#labuser_id_tb").html(language.user_id+"<i class=\"fa fa-fw\" data-column=\"user_id\"></i>");
+							$("#labfunctions_tb").html(language.functions+"<i class=\"fa fa-fw\" data-column=\"functions\"></i>");
+							$("#labfullauthority_tb").html(language.fullauthority+"<i class=\"fa fa-fw\" data-column=\"fullauthority\"></i>");
+							$("#labaddnew_tb").html(language.addnew+"<i class=\"fa fa-fw\" data-column=\"addnew\"></i>");
+							$("#labupdates_tb").html(language.updates+"<i class=\"fa fa-fw\" data-column=\"updates\"></i>");
+							$("#labreadonly_tb").html(language.readonly+"<i class=\"fa fa-fw\" data-column=\"readonly\"></i>");
+							$("#labfull_of_yourself_tb").html(language.full_of_yourself+"<i class=\"fa fa-fw\" data-column=\"full_of_yourself\"></i>");
+							$("#labpermission1_tb").html(language.permission1+"<i class=\"fa fa-fw\" data-column=\"permission1\"></i>");
+							$("#labpermission2_tb").html(language.permission2+"<i class=\"fa fa-fw\" data-column=\"permission2\"></i>");
+							$("#labpermission3_tb").html(language.permission3+"<i class=\"fa fa-fw\" data-column=\"permission3\"></i>");
+							$("#labpermission4_tb").html(language.permission4+"<i class=\"fa fa-fw\" data-column=\"permission4\"></i>");
+							$("#labpermission5_tb").html(language.permission5+"<i class=\"fa fa-fw\" data-column=\"permission5\"></i>");
+							$("#labpermission6_tb").html(language.permission6+"<i class=\"fa fa-fw\" data-column=\"permission6\"></i>");
+							$("#labpermission7_tb").html(language.permission7+"<i class=\"fa fa-fw\" data-column=\"permission7\"></i>");
+							$("#labpermission8_tb").html(language.permission8+"<i class=\"fa fa-fw\" data-column=\"permission8\"></i>");
+							$("#labpermission9_tb").html(language.permission9+"<i class=\"fa fa-fw\" data-column=\"permission9\"></i>");
+							$("#labpermission10_tb").html(language.permission10+"<i class=\"fa fa-fw\" data-column=\"permission10\"></i>");
+
+							$("#labuser_id_CheckboxShow").text(language.user_id);
+							$("#labfunctions_CheckboxShow").text(language.functions);
+							$("#labfullauthority_CheckboxShow").text(language.fullauthority);
+							$("#labaddnew_CheckboxShow").text(language.addnew);
+							$("#labupdates_CheckboxShow").text(language.updates);
+							$("#labreadonly_CheckboxShow").text(language.readonly);
+							$("#labfull_of_yourself_CheckboxShow").text(language.full_of_yourself);
+							$("#labpermission1_CheckboxShow").text(language.permission1);
+							$("#labpermission2_CheckboxShow").text(language.permission2);
+							$("#labpermission3_CheckboxShow").text(language.permission3);
+							$("#labpermission4_CheckboxShow").text(language.permission4);
+							$("#labpermission5_CheckboxShow").text(language.permission5);
+							$("#labpermission6_CheckboxShow").text(language.permission6);
+							$("#labpermission7_CheckboxShow").text(language.permission7);
+							$("#labpermission8_CheckboxShow").text(language.permission8);
+							$("#labpermission9_CheckboxShow").text(language.permission9);
+							$("#labpermission10_CheckboxShow").text(language.permission10);
+						}
+
+						createDataForDropdownLists();
+						function createDataForDropdownLists() {
+							var strCatalogue=$('#listDataCatalogue').val();
+							arrCatalogue=JSON.parse(strCatalogue);
+							createDataForDropdown(arrCatalogue[0],'functions','function_name','description','description','-- Chose --',{'showId': false});
+							createDataForDropdown(arrCatalogue[1],'id_company','_id','CompanyName','name','-- Chose --',{'showId': false});
+							//createDataForDropdown(arrCatalogue[1],'user_id','_id','fullName','fullName','-- Chose --',{'showId': false});
+						}
+
+						closeAllDropdown();
+						function closeAllDropdown() {
+							var DivContenCompanyName=document.getElementById('DivContenCompanyName');
+							DivContenCompanyName.hidden=true;
+
+							var DivContendepartment_name=document.getElementById('DivContendepartment_name');
+							DivContendepartment_name.hidden=true;
+
+							var DivContenfullName=document.getElementById('DivContenfullName');
+							DivContenfullName.hidden=true;
+
+							var DivContendescription=document.getElementById('DivContendescription');
+							DivContendescription.hidden=true;
+
+						}
+
+						$('.DivContenCompanyName').mousedown(function(e) {
+							intervalCompany=setInterval(getDepartmentByCompany,100);
+						});
+
+						function getDepartmentByCompany() {
+							clearInterval(intervalCompany);
+							var IdCompany=$("#id_company").val();
+							let data={
+								'company_id': IdCompany,
+							}
+							$("#department_name").val('');
+							$("#id_department").val('');
+
+							var link=$('#linkPrefixDepartments').val()+'getDepartmentByCompany';
+							$.ajax({
+								type: 'post',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									let result=resultdata.data;
+									createDataForDropdown(result,'id_department','_id','department_name','department_name','-- Chose --',{'showId': false});
+								},
+								failure: function(response) {
+
+									showNoticeDanger('Export Error');
+								},
+								error: function(response) {
+
+									showNoticeDanger('Export Error');
+								}
+							});
+
+
+						}
+
+						$('.DivContendepartment_name').mousedown(function(e) {
+							intervalDepartment=setInterval(getUserByDepartment,100);
+						});
+
+						function getUserByDepartment() {
+							clearInterval(intervalDepartment);
+							var id_department=$("#id_department").val();
+							var id_company=$("#id_company").val();
+							let data={
+								'id_department': id_department,
+								'id_company': id_company
+							}
+							$("#fullName").val('');
+							$("#user_id").val('');
+
+							var link=$('#linkPrefixUser').val()+'getUserByDepartment';
+							$.ajax({
+								type: 'post',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									let result=resultdata.data;
+									createDataForDropdown(result,'user_id','_id','fullName','fullName','-- Chose --',{'showId': false});
+
+									//createDataForDropdown(result,'id_department','_id','department_name','department_name','-- Chose --',{'showId': false});
+								},
+								failure: function(response) {
+
+									showNoticeDanger('Export Error');
+								},
+								error: function(response) {
+
+									showNoticeDanger('Export Error');
+								}
+							});
+
+
+						}
+
+
+						function getById(Id) {
+							var link=linkPrefix+'getById/'+Id;
+							$.ajax({
+								type: 'GET',
+								url: link,
+								dataType: "json",
+								success: function(resultdata) {
+									var success=resultdata.success;
+									if(success==true) {
+										showDataToForm(resultdata.data);
+									}
+								},
+								failure: function(response) {
+									alert(language.Message_GetItemByIdError);
+								},
+								error: function(response) {
+									alert(language.Message_GetItemByIdError);
+								},
+							});
+						}
+
+						function showDataToForm(data) {
+							try {
+								setUpdateButtonStatus(true);
+								$("#modaMainForm").modal('show');
+								$('#_idHidden').val(data._id);
+								$('#user_id').val(data.user_id);
+								sys_users=data.sys_users;
+								if(sys_users!=undefined) {
+									if(sys_users.fullName!=undefined)
+										$('#fullName').val(sys_users.fullName);
+								}
+								$('#functions').val(data.functions);
+								sys_function_for_permissions=data.sys_function_for_permissions;
+								if(sys_function_for_permissions!=undefined) {
+									if(sys_function_for_permissions.description!=undefined)
+										$('#description').val(sys_function_for_permissions.description);
+								}
+								if((data.fullauthority=="true")||(data.fullauthority==true)||(data.fullauthority=="active")||(data.fullauthority=="yes")||(data.fullauthority=="1"))
+									$("#fullauthority").prop("checked",true);
+								else $("#fullauthority").prop("checked",false);
+								if((data.addnew=="true")||(data.addnew==true)||(data.addnew=="active")||(data.addnew=="yes")||(data.addnew=="1"))
+									$("#addnew").prop("checked",true);
+								else $("#addnew").prop("checked",false);
+								if((data.updates=="true")||(data.updates==true)||(data.updates=="active")||(data.updates=="yes")||(data.updates=="1"))
+									$("#updates").prop("checked",true);
+								else $("#updates").prop("checked",false);
+								if((data.readonly=="true")||(data.readonly==true)||(data.readonly=="active")||(data.readonly=="yes")||(data.readonly=="1"))
+									$("#readonly").prop("checked",true);
+								else $("#readonly").prop("checked",false);
+								if((data.full_of_yourself=="true")||(data.full_of_yourself==true)||(data.full_of_yourself=="active")||(data.full_of_yourself=="yes")||(data.full_of_yourself=="1"))
+									$("#full_of_yourself").prop("checked",true);
+								else $("#full_of_yourself").prop("checked",false);
+								if((data.permission1=="true")||(data.permission1==true)||(data.permission1=="active")||(data.permission1=="yes")||(data.permission1=="1"))
+									$("#permission1").prop("checked",true);
+								else $("#permission1").prop("checked",false);
+								if((data.permission2=="true")||(data.permission2==true)||(data.permission2=="active")||(data.permission2=="yes")||(data.permission2=="1"))
+									$("#permission2").prop("checked",true);
+								else $("#permission2").prop("checked",false);
+								if((data.permission3=="true")||(data.permission3==true)||(data.permission3=="active")||(data.permission3=="yes")||(data.permission3=="1"))
+									$("#permission3").prop("checked",true);
+								else $("#permission3").prop("checked",false);
+								if((data.permission4=="true")||(data.permission4==true)||(data.permission4=="active")||(data.permission4=="yes")||(data.permission4=="1"))
+									$("#permission4").prop("checked",true);
+								else $("#permission4").prop("checked",false);
+								if((data.permission5=="true")||(data.permission5==true)||(data.permission5=="active")||(data.permission5=="yes")||(data.permission5=="1"))
+									$("#permission5").prop("checked",true);
+								else $("#permission5").prop("checked",false);
+								if((data.permission6=="true")||(data.permission6==true)||(data.permission6=="active")||(data.permission6=="yes")||(data.permission6=="1"))
+									$("#permission6").prop("checked",true);
+								else $("#permission6").prop("checked",false);
+								if((data.permission7=="true")||(data.permission7==true)||(data.permission7=="active")||(data.permission7=="yes")||(data.permission7=="1"))
+									$("#permission7").prop("checked",true);
+								else $("#permission7").prop("checked",false);
+								if((data.permission8=="true")||(data.permission8==true)||(data.permission8=="active")||(data.permission8=="yes")||(data.permission8=="1"))
+									$("#permission8").prop("checked",true);
+								else $("#permission8").prop("checked",false);
+								if((data.permission9=="true")||(data.permission9==true)||(data.permission9=="active")||(data.permission9=="yes")||(data.permission9=="1"))
+									$("#permission9").prop("checked",true);
+								else $("#permission9").prop("checked",false);
+								if((data.permission10=="true")||(data.permission10==true)||(data.permission10=="active")||(data.permission10=="yes")||(data.permission10=="1"))
+									$("#permission10").prop("checked",true);
+								else $("#permission10").prop("checked",false);
+
+								create=data.create;
+								if(create!=undefined) {
+									$('#labuser_name_created_Value').text(create.user_name_created);
+									$('#labdatetime_created_Value').text(create.datetime_created);
+								}
+								modified=data.modified;
+								if(modified!=undefined) {
+									$('#labuser_name_modified_Value').text(modified.user_name_modified);
+									$('#labdatetime_modified_Value').text(modified.datetime_modified);
+								}
+							}
+							catch(error) {}
+						}
+
+						$('#btnOpenMainModalForm').click(function() {
+							$("#modaMainForm").modal('show');
+							clearForm();
+						});
+
+						$('#btnSearchPost_OpenForm').click(function() {
+							$("#modaMainForm").modal('show');
+						});
+
+						$('#btnExport_OpenForm').click(function() {
+							$("#modaMainForm").modal('show');
+						});
+
+						function clearForm() {
+							try {
+								$('#_idHidden').val('');
+								setUpdateButtonStatus(false)
+								// $('#user_id').val('');
+								// $('#fullName').val('');
+								$('#functions').val('');
+								$('#description').val('');
+								$("#fullauthority").prop("checked",false);
+								$("#addnew").prop("checked",false);
+								$("#updates").prop("checked",false);
+								$("#readonly").prop("checked",false);
+								$("#full_of_yourself").prop("checked",false);
+								$("#permission1").prop("checked",false);
+								$("#permission2").prop("checked",false);
+								$("#permission3").prop("checked",false);
+								$("#permission4").prop("checked",false);
+								$("#permission5").prop("checked",false);
+								$("#permission6").prop("checked",false);
+								$("#permission7").prop("checked",false);
+								$("#permission8").prop("checked",false);
+								$("#permission9").prop("checked",false);
+								$("#permission10").prop("checked",false);
+							}
+							catch(error) {}
+						}
+
+						$('#btnSearchPost').click(function() {
+							$(this).prop('disabled',true);
+							getContentPages(1);
+						});
+
+						function getContentPages(page) {
+							var sortStorage=getSortType(linkPrefix);
+							let data={
+								user_id: $('#user_id').val(),
+								functions: $('#functions').val(),
+								Page: page,
+								sortColumn: sortStorage.sortColumn,
+								sortType: sortStorage.sortType,
+								numberItemPerPage: $('#numberItemPerPage').val()
+							}
+							var link=linkPrefix+'search';
+							$.ajax({
+								type: 'POST',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									$('#btnSearchPost').prop('disabled',false);
+									listData=resultdata.data;
+									displayDataToTable();
+									let params=resultdata.params;
+									paginationHelper(params.pagination,"sys_permissions","","",linkPrefix,"paginationsys_permissions");
+
+									if(params.pagination.totalItems>0) {
+										var message=language.Message_Find+params.pagination.totalItems+language.Message_Words_records;
+										showNoticeSuccess(message);
+									}
+								},
+								failure: function(response) {
+									$('#btnSearchPost').prop('disabled',false);
+									showNoticeDanger('Search Error');
+								},
+								error: function(response) {
+									$('#btnSearchPost').prop('disabled',false);
+									showNoticeDanger('Search Error');
+								}
+							});
+							$('#btnSearchPost').prop('disabled',false);
+						}
+
+						$('#btnSave').click(function() {
+							$(this).prop('disabled',true);
+							saveInsert();
+						});
+
+						function chekValueAndSubmit() {
+							if(($('#user_id').val().length<1)||($('#user_id').val().length>50)) {
+								var message=formatMessage(language.user_id+": "+language.Message_Invalid_user_id,'1','50');
+								alert(message);
+								return false;
+							}
+							if(($('#functions').val().length<1)||($('#functions').val().length>50)) {
+								var message=formatMessage(language.functions+": "+language.Message_Invalid_functions,'1','50');
+								alert(message);
+								return false;
+							}
+							let fullauthority=$('#fullauthority').is(":checked")? 1:0;
+							$('#fullauthority').val(fullauthority);
+							let addnew=$('#addnew').is(":checked")? 1:0;
+							$('#addnew').val(addnew);
+							let updates=$('#updates').is(":checked")? 1:0;
+							$('#updates').val(updates);
+							let readonly=$('#readonly').is(":checked")? 1:0;
+							$('#readonly').val(readonly);
+							let full_of_yourself=$('#full_of_yourself').is(":checked")? 1:0;
+							$('#full_of_yourself').val(full_of_yourself);
+							let permission1=$('#permission1').is(":checked")? 1:0;
+							$('#permission1').val(permission1);
+							let permission2=$('#permission2').is(":checked")? 1:0;
+							$('#permission2').val(permission2);
+							let permission3=$('#permission3').is(":checked")? 1:0;
+							$('#permission3').val(permission3);
+							let permission4=$('#permission4').is(":checked")? 1:0;
+							$('#permission4').val(permission4);
+							let permission5=$('#permission5').is(":checked")? 1:0;
+							$('#permission5').val(permission5);
+							let permission6=$('#permission6').is(":checked")? 1:0;
+							$('#permission6').val(permission6);
+							let permission7=$('#permission7').is(":checked")? 1:0;
+							$('#permission7').val(permission7);
+							let permission8=$('#permission8').is(":checked")? 1:0;
+							$('#permission8').val(permission8);
+							let permission9=$('#permission9').is(":checked")? 1:0;
+							$('#permission9').val(permission9);
+							let permission10=$('#permission10').is(":checked")? 1:0;
+							$('#permission10').val(permission10);
+							document.getElementById("formsys_permissions").submit();
+						}
+
+						function getDataForm() {
+							if(($('#user_id').val().length<1)||($('#user_id').val().length>50)) {
+								var message=formatMessage(language.user_id+": "+language.Message_Invalid_user_id,'1','50');
+								alert(message);
+								return false;
+							}
+							if(($('#functions').val().length<1)||($('#functions').val().length>50)) {
+								var message=formatMessage(language.functions+": "+language.Message_Invalid_functions,'1','50');
+								alert(message);
+								return false;
+							}
+							return {
+								'_idHidden': $('#_idHidden').val(),
+								'user_id': $('#user_id').val(),
+								'sys_users': {
+									'id': $('#user_id').val(),
+									'fullName': $('#fullName').val()
+								},
+								'functions': $('#functions').val(),
+								'sys_function_for_permissions': {
+									'id': $('#functions').val(),
+									'description': $('#description').val()
+								},
+								'fullauthority': $('#fullauthority').is(":checked")? 1:0,
+								'addnew': $('#addnew').is(":checked")? 1:0,
+								'updates': $('#updates').is(":checked")? 1:0,
+								'readonly': $('#readonly').is(":checked")? 1:0,
+								'full_of_yourself': $('#full_of_yourself').is(":checked")? 1:0,
+								'permission1': $('#permission1').is(":checked")? 1:0,
+								'permission2': $('#permission2').is(":checked")? 1:0,
+								'permission3': $('#permission3').is(":checked")? 1:0,
+								'permission4': $('#permission4').is(":checked")? 1:0,
+								'permission5': $('#permission5').is(":checked")? 1:0,
+								'permission6': $('#permission6').is(":checked")? 1:0,
+								'permission7': $('#permission7').is(":checked")? 1:0,
+								'permission8': $('#permission8').is(":checked")? 1:0,
+								'permission9': $('#permission9').is(":checked")? 1:0,
+								'permission10': $('#permission10').is(":checked")? 1:0,
+							}
+						}
+
+						function saveInsert() {
+							let data=getDataForm();
+							if(data==false) {
+								$('#btnSave').prop('disabled',false);
+								return false;
+							}
+							var link=linkPrefix+'save';
+							$.ajax({
+								type: 'post',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(response) {
+									var success=response.success;
+									var result=response.data;
+									if((success=='false')||(success==false))
+										showNoticeDanger(language.Message_AddNewError+' ('+response.message+')');
+									else if((success!=true)&&(success!='true'))
+										showNoticeDanger(result.message);
+									else {
+										insertRow(result.data);
+										clearForm();
+									}
+								},
+								failure: function(response) {
+									showErrorMessageSave(response,language.Message_AddNewError);
+								},
+								error: function(response) {
+									showErrorMessageSave(response,language.Message_AddNewError);
+								},
+							});
+							$('#btnSave').prop('disabled',false);
+						}
+
+						function insertRow(data) {
+							showAllColumnInTable(idMainTable);
+							showNoticeSuccess(language.Message_AddNewSuccess);
+							var table=document.getElementById("bodyTablesys_permissions");
+							var row=table.insertRow(0);
+							var cell0=row.insertCell(0);
+							var cell1=row.insertCell(1);
+							var cell2=row.insertCell(2);
+							var cell3=row.insertCell(3);
+							var cell4=row.insertCell(4);
+							var cell5=row.insertCell(5);
+							var cell6=row.insertCell(6);
+							var cell7=row.insertCell(7);
+							var cell8=row.insertCell(8);
+							var cell9=row.insertCell(9);
+							var cell10=row.insertCell(10);
+							var cell11=row.insertCell(11);
+							var cell12=row.insertCell(12);
+							var cell13=row.insertCell(13);
+							var cell14=row.insertCell(14);
+							var cell15=row.insertCell(15);
+							var cell16=row.insertCell(16);
+							var cell17=row.insertCell(17);
+							var cell18=row.insertCell(18);
+							let check=`<div class="custom-control custom-checkbox"> 
+					<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+					<label for="${data._id}" class="custom-control-label"></label>
+				</div>`;
+							let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+								"<i class=\"fas fa-pencil-alt\"></i>"+
+								"</a> "+
+								" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.fullauthority+"')\">";
+							strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+							strbutton+=" </ button > ";
+
+							cell0.innerHTML=check+strbutton;
+							if(data.user_id==$('#user_id').val()) {
+								cell1.innerHTML=$('#fullName').val();
+							}
+							if(data.functions==$('#functions').val()) {
+								cell2.innerHTML=$('#description').val();
+							}
+							cell3.innerHTML=data.fullauthority;
+							cell4.innerHTML=data.addnew;
+							cell5.innerHTML=data.updates;
+							cell6.innerHTML=data.readonly;
+							cell7.innerHTML=data.full_of_yourself;
+							cell8.innerHTML=data.permission1;
+							cell9.innerHTML=data.permission2;
+							cell10.innerHTML=data.permission3;
+							cell11.innerHTML=data.permission4;
+							cell12.innerHTML=data.permission5;
+							cell13.innerHTML=data.permission6;
+							cell14.innerHTML=data.permission7;
+							cell15.innerHTML=data.permission8;
+							cell16.innerHTML=data.permission9;
+							cell17.innerHTML=data.permission10;
+
+							//cell18.innerHTML=strbutton;
+							hideColumnInTable(idMainTable);
+						}
+
+						$('#btnUpdate').click(function() {
+							$(this).prop('disabled',true);
+							saveUpdate();
+						});
+
+						function saveUpdate() {
+							let data=getDataForm();
+							if(data==false) {
+								$('#btnUpdate').prop('disabled',false);
+								return false;
+							}
+							if(data._idHidden=="") {
+								$('#btnUpdate').prop('disabled',false);
+								showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+								return false;
+							}
+							var link=linkPrefix+'update';
+							$.ajax({
+								type: 'put',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(response) {
+									var success=response.success;
+									var result=response.data;
+									if((success=='false')||(success==false)) {
+										showNoticeDanger(language.Message_UpdateError);
+										return false;
+									}
+									else if((success!=true)&&(success!='true')) {
+										showNoticeDanger(result.message);
+										return false;
+									}
+									else {
+										updateRow(result.data);
+										clearForm();
+									}
+								},
+								failure: function(response) {
+									showErrorMessageSave(response,language.Message_UpdateError);
+								},
+								error: function(response) {
+									showErrorMessageSave(response,language.Message_UpdateError);
+								}
+							});
+							$('#btnUpdate').prop('disabled',false);
+						}
+
+						function updateRow(data) {
+							showNoticeSuccess(language.Message_UpdateSuccess);
+							showAllColumnInTable(idMainTable);
+							$("#modaMainForm").modal('hide');
+							var row=$("#tablesys_permissions button[data-id='"+data._id+"']").parents("tr")[0];
+							var tr="<tr>"+
+								"<td class=\"text-center\">"+
+								"<div class=\"custom-control custom-checkbox\">"+
+								"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\""+data._id+"\" value=\""+data._id+"\"> "+
+								"<label for=\""+data._id+"\" class=\"custom-control-label\"></label> "+
+								"</div>"+
+								" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+								" <i class=\"fas fa-pencil-alt\"></i>"+
+								" </a>"+
+								" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.fullauthority+"')\">"+
+								" <i class=\"fas fa-trash-alt\"></i> "+
+								" </button> "+
+								"</td>";
+							if(data.user_id==$('#user_id').val()) {
+								tr+="<td class=\"text-center\">"+$('#fullName').val()+"</td>";
+							}
+							if(data.functions==$('#functions').val()) {
+								tr+="<td class=\"text-center\">"+$('#description').val()+"</td>";
+							}
+							tr+="<td class=\"text-center\">"+data.fullauthority+"</td>";
+							tr+="<td class=\"text-center\">"+data.addnew+"</td>";
+							tr+="<td class=\"text-center\">"+data.updates+"</td>";
+							tr+="<td class=\"text-center\">"+data.readonly+"</td>";
+							tr+="<td class=\"text-center\">"+data.full_of_yourself+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission1+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission2+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission3+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission4+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission5+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission6+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission7+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission8+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission9+"</td>";
+							tr+="<td class=\"text-center\">"+data.permission10+"</td>";
+							// tr+="<td class=\"text-center\">"+
+							// 	" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+							// 	" <i class=\"fas fa-pencil-alt\"></i>"+
+							// 	" </a>"+
+							// 	" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.fullauthority+"')\">"+
+							// 	" <i class=\"fas fa-trash-alt\"></i> "+
+							// 	" </button> "+
+							// 	" </td>"+
+							tr+=" </tr>";
+							$(row).after(tr);
+							$(row).remove();
+							hideColumnInTable(idMainTable);
+						}
+						function deleteById(row,objectId,objectName) {
+							var message=language.Message_DoYouWantToDeleteById+' '+objectName+'?';
+							var answer=confirm(message)
+							if(!answer) {return false;}
+							let data={
+								'_id': objectId
+							};
+							var link=linkPrefix+'deleteById';
+							$.ajax({
+								type: 'delete',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									var success=resultdata.success;
+									var message=resultdata.message;
+									var notice={};
+									if((success=='true')||(success==true)) {
+										showNoticeSuccess(language.Message_DeleteSuccess);
+										var i=row.parentNode.parentNode.rowIndex;
+										document.getElementById("tablesys_permissions").deleteRow(i);
+										return true;
+									}
+									else if((success=='false')||(success==false)) {
+										showNoticeDanger(language.Message_DeleteFail);
+										return false;
+									}
+									else if(message.length>10) {
+										showNoticeDanger(message);
+										return false;
+									}
+									else {
+										showNoticeDanger(language.Message_DeleteFail);
+										return false;
+									}
+								},
+								failure: function(response) {
+									showNoticeDanger(language.Message_DeleteFail);
+								},
+								error: function(response) {
+									showNoticeDanger(language.Message_DeleteFail);
+								}
+							});
+						}
+
+						$('#btnDelete').click(function() {
+							$(this).prop('disabled',true);
+							deleteList();
+							$(this).prop('disabled',false);
+						});
+						function deleteList() {
+							var arrayId=[];
+							var listId=" ";
+							$("input:checkbox[name=chkListData]:checked").each(function() {
+								arrayId.push($(this).val());
+								listId+=$(this).val()+',';
+							});
+							let message=language.Message_DoYouWantToDeleteInTheList+'?';
+							var answer=confirm(message)
+							if(!answer) {return false;}
+							let data={arrayId};
+							var link=linkPrefix+'deleteList';
+							$.ajax({
+								type: 'delete',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									var result=resultdata.data;
+									var success=result.success;
+									var message=result.message;
+									if((success=='true')||(success==true)) {
+										let deleteSuccess=result.deleteSuccess;
+										let deleteError=result.deleteError;
+										if(deleteSuccess.length>0) {
+											let message=language.Message_DeleteSuccess;
+											message+=" "+deleteSuccess.toString();
+											if(deleteError.length>0) {
+												message+=" \n"+language.Message_DeleteFail+" "+deleteError.toString();
+											}
+											showNoticeSuccess(message);
+											deleteRows(arrayId,"bodyTablesys_permissions");
+											return true;
+										}
+										else if(deleteError.length>0) {
+											let message=language.Message_DeleteFail+" "+deleteError.toString();
+											showNoticeDanger(message);
+										}
+										else {
+											showNoticeDanger(language.Message_DeleteFail);
+										}
+									}
+									else if((success=='false')||(success==false)) {
+										showNoticeDanger(language.Message_DeleteFail);
+										return false;
+									}
+								},
+								failure: function(response) {
+									showNoticeDanger(language.Message_DeleteFail);
+								},
+								error: function(response) {
+									showNoticeDanger(language.Message_DeleteFail);
+								}
+							});
+						}
+
+						$('#btnExport').click(function() {
+							$(this).prop('disabled',true);
+							exportData();
+							$(this).prop('disabled',false);
+						});
+
+						function exportData() {
+							let data={
+								'user_id': $('#user_id').val(),
+								'functions': $('#functions').val(),
+							}
+							var link=linkPrefix+'exportData';
+							$.ajax({
+								type: 'post',
+								url: link,
+								data: data,
+								dataType: "json",
+								success: function(resultdata) {
+									$('#btnExport').prop('disabled',false);
+									let result=resultdata.data;
+									showNoticeSuccess(language.Message_CompletedGetData);
+									ExportToExcel(result);
+								},
+								failure: function(response) {
+									$('#btnExport').prop('disabled',false);
+									showNoticeDanger('Export Error');
+								},
+								error: function(response) {
+									$('#btnExport').prop('disabled',false);
+									showNoticeDanger('Export Error');
+								}
+							});
+							$('#btnExport').prop('disabled',false);
+						}
+
+						function ExportToExcel(datas) {
+							let itemCount=datas.length;
+							if(itemCount>1000) {
+								showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+							}
+							if(itemCount<1) {
+								showNoticeDanger(language.Message_NotFoundData);
+							}
+							var strTable='<style type="text/css">';
+							strTable+=' .Border { ';
+							strTable+='         color: windowtext; ';
+							strTable+='         font-size: 11.0pt; ';
+							strTable+='         word-break:break-all;';
+							strTable+='         font-style: normal; ';
+							strTable+='         text-decoration: none; ';
+							strTable+='         font-family: "Times New Roman", serif; ';
+							strTable+='         text-align: left; ';
+							strTable+='         vertical-align: bottom;';
+							strTable+='         border-left: .5pt solid windowtext; ';
+							strTable+='         border-right: .5pt solid windowtext; ';
+							strTable+='         border-top: .5pt solid windowtext; ';
+							strTable+='         border-bottom: .5pt solid windowtext; ';
+							strTable+='         padding-left: 1px; ';
+							strTable+='         padding-right: 1px; ';
+							strTable+='         padding-top: 1px; ';
+							strTable+='     } ';
+
+							strTable+=' .BorderHeader { ';
+							strTable+='        color: white; ';
+							strTable+='         background-color:#0026ff; ';
+							strTable+='        font-size: 11.0pt; ';
+							strTable+='        text-align: center; ';
+							strTable+='        font-style: normal; ';
+							strTable+='        text-decoration: none; ';
+							strTable+='        font-family: "Times New Roman", serif; ';
+							strTable+='        vertical-align: bottom;';
+							strTable+='        border-left: .5pt solid windowtext; ';
+							strTable+='        border-right: .5pt solid windowtext; ';
+							strTable+='        border-top: .5pt solid windowtext; ';
+							strTable+='        border-bottom: .5pt solid windowtext; ';
+							strTable+='        padding-left: 1px; ';
+							strTable+='        padding-right: 1px; ';
+							strTable+='        padding-top: 1px; ';
+							strTable+='     } ';
+							strTable+='  </style> ';
+							strTable+=' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+							strTable+='<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+							strTable+='<th class="BorderHeader" >Order</th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> User </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Functions </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Fullauthority </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Add New </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Updates </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Readonly </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Full Of Yourself </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 1 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 2 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 3 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 4 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 5 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 6 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 7 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 8 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 9 </th> ';
+							strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Permission 10 </th> ';
+							strTable+='</tr> ';
+							var n=0;
+							var currentRow=4;
+							for(var i=0;i<itemCount;i++) {
+								var vTemp=datas[i];
+								currentRow+=1;
+								n+=1;
+								strTable+='<tr >';
+								strTable+='<th class="Border" > '+n+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.user_id+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.functions+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.fullauthority+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.addnew+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.updates+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.readonly+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.full_of_yourself+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission1+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission2+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission3+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission4+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission5+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission6+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission7+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission8+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission9+' </th> ';
+								strTable+='<th  class="Border" > '+vTemp.permission10+' </th> ';
+								strTable+='</tr>';
+							}
+							strTable+=' </table> ';
+							ExportHtmlToExcel(strTable,'sys_permissions');
+							showNoticeSuccess(language.Message_ExportSuccess);
+						}
+
+					</script>

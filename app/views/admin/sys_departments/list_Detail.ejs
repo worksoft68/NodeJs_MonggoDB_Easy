@@ -1,0 +1,403 @@
+	<!--**************************************************************************************************************************
+			   This file cannot be used directly. You copy and paste this source to where you need it if needed 
+			   After you have copied the source code, you can delete this file
+		**************************************************************************************************************************-->
+
+	<!--  sys_departments  ===================================================================== -->
+	<div class="card card-info card-outline collapsed-card">
+		<div class="card-header">
+			<h6 class="card-title">Management sys_departments</h6>
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+					<i class="fas fa-plus"></i>
+				</button>
+			</div>
+		</div>
+		<div class="card-body" style="display: none; ">
+			<div class="row justify-content-between">
+					<label id="labcompany_idsys_departments" class="col-sm-2 col-form-label text-sm-right required">Company</label>
+					<div class="col-xs-2 col-sm-2">
+						<div class="dropdown">
+							<div id="divDropdownname" class="dropdown-content">
+								<input type="text" id="name" name="name" onkeyup="filterSelectBox('name')" onfocus="focusDropdown('name')" onblur="blurDropdown('name')" class="form-control form-control-sm">
+								<input  id="company_idsys_departments" name = "company_idsys_departments" type="hidden">
+								<div id="DivContenname" class="Divdropdown-content">
+								</div>
+							</div>
+						 </div>
+					</div>
+					<label id="labdepartment_namesys_departments" class="col-sm-2 col-form-label text-sm-right required">Department Name</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="department_namesys_departments"  id="department_namesys_departments"  value="<%= item.department_name %>" class="form-control form-control-sm">
+					</div>
+					<label id="lababbreviationsys_departments" class="col-sm-2 col-form-label text-sm-right ">Abbreviation</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="abbreviationsys_departments"  id="abbreviationsys_departments"  value="<%= item.abbreviation %>" class="form-control form-control-sm">
+					</div>
+					<label id="laborderingsys_departments" class="col-sm-2 col-form-label text-sm-right ">Ordering</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="number"  name="orderingsys_departments"  id="orderingsys_departments" value="<%= item.ordering %>" class="form-control form-control-sm">
+					</div>
+					<label id="labstatussys_departments" class="col-sm-2 col-form-label text-sm-right ">Status Use</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="checkbox"  name="statussys_departments"  id="statussys_departments" class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-2 col-sm-2"></div>
+					<div class="col-xs-10 col-sm-10">
+						<input type="button" id = "btnSavesys_departments" class="btn-sm btn-success" value="Save">
+						&nbsp; <input type="button" id = "btnUpdatesys_departments" class="btn-sm btn-primary" value="Update">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class = "text-success" id = "divMessagesys_departments"></div>
+				</div>
+						<input name="_idsys_departmentsHidden" id="_idsys_departmentsHidden" type="hidden">
+			<div>
+				<div class="DivWide2">
+					<table id="tablesys_departments" class="table table-bordered table-hover btn-table mb-0">
+						<thead>
+							<tr>
+								<th class="text-center">Action</a></th>
+								<th class="text-center"><label id="labcompany_idsys_departments_tb">Company</label></a></th>
+								<th class="text-center"><label id="labdepartment_namesys_departments_tb">Department Name</label></a></th>
+								<th class="text-center"><label id="lababbreviationsys_departments_tb">Abbreviation</label></a></th>
+								<th class="text-center"><label id="laborderingsys_departments_tb">Ordering</label></a></th>
+								<th class="text-center"><label id="labstatussys_departments_tb">Status Use</label></a></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th class="text-center"></a></th>
+								<th class="text-center"></a></th>
+								<th class="text-center"></a></th>
+								<th class="text-center"></a></th>
+								<th class="text-center"></a></th>
+								<th class="text-center"></a></th>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- end  sys_departments ===================================================================== -->
+
+<script type="application/javascript">
+
+function displayDataToTablesys_departments(datas){
+	var table = document.getElementById("tablesys_departments");
+	var lengthtable= table.rows.length-1;
+	for(var n = lengthtable; n > 0; n--) {
+		table.deleteRow(n);
+	}
+	datas.forEach(function(data) {
+		var row = table.insertRow(1);
+		var cell0 = row.insertCell(0);
+		var cell1 = row.insertCell(1);
+		var cell2 = row.insertCell(2);
+		var cell3 = row.insertCell(3);
+		var cell4 = row.insertCell(4);
+		var cell5 = row.insertCell(5);
+		var cell6 = row.insertCell(6);
+		let strbutton = " <a  onclick=\"getByIdsys_departments('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+			"<i class=\"fas fa-pencil-alt\"></i>" + 
+			"</a> " + 
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-idsys_departments =\""+data._id+"\" title=\"Delete\"  onclick=\"deleteByIdsys_departments(this,'"+data._id+"')\">";
+			strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+		strbutton += " </ button > ";
+		cell0.innerHTML = strbutton;
+		cell1.innerHTML = data.name;
+		cell2.innerHTML = data.department_name;
+		cell3.innerHTML = data.abbreviation;
+		cell4.innerHTML = data.ordering;
+		cell5.innerHTML = data.status;
+	});
+}
+
+createDataForDropdownListssys_departments();
+function createDataForDropdownListssys_departments(){
+	var strCatalogue = $('#listDataCatalogue').val();
+	arrCatalogue = JSON.parse(strCatalogue);
+	createDataForDropdown(arrCatalogue[0],'company_idsys_departments','_id', 'name', 'name','-- Chose --');  
+}
+
+closeAllDropdownsys_departments();
+function closeAllDropdownsys_departments(){
+	var DivContenname = document.getElementById('DivContenname');
+	DivContenname.hidden = true;
+
+}
+
+function getByIdsys_departments(Id){
+	var link = $('#linkPrefix').val() + 'getByIdsys_departments/'+Id;
+	$.ajax({
+		type: 'GET',
+		url: link,
+		dataType: "json",
+		success: function(resultdata){
+			var success = resultdata.success;
+			if(success == true){
+				showDataToFormsys_departments(resultdata.data);
+			}
+		},
+		failure: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+		error: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+	});
+}
+
+function showDataToFormsys_departments(data){
+	try{
+		$('#btnUpdatesys_departments').prop('hidden', false);
+		$('#_idsys_departmentsHidden').val(data._id);
+		$("#_idsys_departments").prop("readonly", true);
+		$('#company_idsys_departments').val(data.company_id);
+		$('#namesys_departments').val(data.name);
+		$('#department_namesys_departments').val(data.department_name);
+		$('#abbreviationsys_departments').val(data.abbreviation);
+		$('#orderingsys_departments').val(data.ordering);
+		if((data.status == "true") || (data.status == true) || (data.status == "active")|| (data.status == "yes")|| (data.status == "1"))
+			$("#statussys_departments").prop("checked", true);
+		else $("#statussys_departments").prop("checked", false);
+	}
+	catch(error){}
+}
+
+function clearFormsys_departments(){
+	try{
+		$('#_idsys_departmentsHidden').val('');
+		 $("#_idsys_departments").prop("readonly", false);
+		$('#company_idsys_departments').val('');
+		$('#namesys_departments').val('');
+		$('#department_namesys_departments').val('');
+		$('#abbreviationsys_departments').val('');
+		$('#orderingsys_departments').val('');
+		$("#statussys_departments").prop("checked", false);
+	}
+	catch(error){}
+}
+
+$('#btnSavesys_departments').click(function(){
+	$(this).prop('disabled', true);
+	saveInsertsys_departments();
+	$(this).prop('disabled', false);
+});
+
+function getDataFormsys_departments(){
+	if(($('#company_idsys_departments').val().length < 1) || ($('#company_idsys_departments').val().length > 50)) {
+		var message = formatMessage(language.company_id + ": "+ language.Message_Invalid_company_id, '1','50');
+		alert(message);
+		return false;
+	}
+	if(($('#department_namesys_departments').val().length < 1) || ($('#department_namesys_departments').val().length > 50)) {
+		var message = formatMessage(language.department_name + ": "+ language.Message_Invalid_department_name, '1','50');
+		alert(message);
+		return false;
+	}
+	return {
+		'_idHidden' : $('#_idsys_departmentsHidden').val(),
+		'company_id' : $('#company_idsys_departments').val(),
+		'department_name' : $('#department_namesys_departments').val(),
+		'abbreviation' : $('#abbreviationsys_departments').val(),
+		'ordering' : $('#orderingsys_departments').val(),
+		'status' : $('#statussys_departments').is (":checked"),
+	}
+}
+
+function saveInsertsys_departments(){
+	let data = getDataFormsys_departments();
+	if(data == false) {
+		$('#btnSave').prop('disabled', false);
+		return false;
+	}
+	var link = $('#linkPrefix').val() + 'savesys_departments';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false)){
+				 $("#divMessagesys_departments").html(language.Message_AddNewError + ' ('+response.message+')');
+				showNoticeDanger(language.Message_AddNewError + ' ('+response.message+')');
+			}
+			else if((success != true) && (success != 'true')){
+				 $("#divMessagesys_departments").html(result.message);
+				showNoticeDanger(result.message);
+			}
+			else {
+				insertRowsys_departments(result.data);
+				clearFormsys_departments();
+			}
+		},
+		failure: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_AddNewError);
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+		error: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_AddNewError);
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+	});
+	$('#btnSave').prop('disabled', false);
+}
+
+function insertRowsys_departments(data){
+				 $("#divMessagesys_departments").html(language.Message_AddNewSuccess);
+	showNoticeSuccess(language.Message_AddNewSuccess);
+	var table = document.getElementById("tablesys_departments");
+	var row = table.insertRow(1);
+	var cell0 = row.insertCell(0);
+	var cell1 = row.insertCell(1);
+	var cell2 = row.insertCell(2);
+	var cell3 = row.insertCell(3);
+	var cell4 = row.insertCell(4);
+	var cell5 = row.insertCell(5);
+	var cell6 = row.insertCell(6);
+	let strbutton = " <a  onclick=\"getByIdsys_departments('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+		"<i class=\"fas fa-pencil-alt\"></i>" + 
+		"</a> " + 
+		" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-idsys_departments =\""+data._id+"\" title=\"Delete\"  onclick=\"deleteByIdsys_departments(this,'"+data._id+"')\">";
+	strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+	strbutton += " </ button > ";
+	cell0.innerHTML = strbutton;
+	if(data.company_id == $('#company_idsys_departments').val()){
+		cell1.innerHTML = $('#name').val();
+	}
+	cell2.innerHTML = data.department_name;
+	cell3.innerHTML = data.abbreviation;
+	cell4.innerHTML = data.ordering;
+	cell5.innerHTML = data.status;
+}
+
+$('#btnUpdatesys_departments').click(function(){
+	$(this).prop('disabled', true);
+	saveUpdatesys_departments();
+	$(this).prop('disabled', false);
+});
+
+function saveUpdatesys_departments(){
+	let data = getDataFormsys_departments();
+	if(data == false) {
+		$('#btnUpdatesys_departments').prop('disabled', false);
+		return false;
+	}
+	if(data._idsys_departmentsHidden == ""){
+		$('#btnUpdatesys_departments').prop('disabled', false);
+				 $("#divMessagesys_departments").html(language.Message_HaveNotSelectedItemUpdate);
+		showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+		return false;
+	}
+	var link = $('#linkPrefix').val() + 'updatesys_departments';
+	$.ajax({
+		type: 'put',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false) ){
+				 $("#divMessagesys_departments").html(language.Message_UpdateError);
+				showNoticeDanger(language.Message_UpdateError);
+				return false;
+			}
+			else if((success != true) && (success != 'true')){
+				 $("#divMessagesys_departments").html(language.message);
+				showNoticeDanger(result.message);
+				return false;
+			}
+			else {
+				updateRowsys_departments(result.data);
+				clearFormsys_departments();
+			}
+		},
+		failure: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_UpdateErrore);
+			showErrorMessageSave(response, language.Message_UpdateError);
+		},
+		error: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_UpdateErrore);
+			showErrorMessageSave(response, language.Message_UpdateError);
+		}
+	});
+	$('#btnUpdatesys_departments').prop('disabled', false);
+}
+
+function updateRowsys_departments(data){
+				 $("#divMessagesys_departments").html(language.Message_UpdateSucces);
+	showNoticeSuccess(language.Message_UpdateSuccess);
+	var row = $("#tablesys_departments button[data-idsys_departments = '" + data._id + "']").parents("tr")[0];
+	var tr = "<tr>"+
+			"<td class=\"text-center\">" +
+			" <a  onclick=\"getByIdsys_departments('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+				" <i class=\"fas fa-pencil-alt\"></i>" +
+			" </a>" +
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-idsys_departments =\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"')\">" +
+				" <i class=\"fas fa-trash-alt\"></i> " +
+			" </button> " +
+		" </td>";
+		if(data.company_id == $('#company_idsys_departments').val()){
+			tr += "<td class=\"text-center\">" + $('#name').val() + "</td>";
+		}
+		tr +=  "<td class=\"text-center\">" + data.department_name + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.abbreviation + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.ordering + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.status + "</td>";
+	"tr += </tr>";
+	$(row).after(tr);
+	$(row).remove();
+}
+function deleteByIdsys_departments(row,IdObject){
+	let message =  language.Message_DoYouWantToDeleteById  +' '+ IdObject+'?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = {
+		'_id' : IdObject
+	};
+	var link = $('#linkPrefix').val()+'deleteByIdsys_departments';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var success = resultdata.success;
+			var message = resultdata.message;
+			var notice 	= {};
+			if((success == 'true') || (success == true)){
+				 $("#divMessagesys_departments").html(language.Message_DeleteSuccess);
+				showNoticeSuccess(language.Message_DeleteSuccess);
+				var i = row.parentNode.parentNode.rowIndex;
+				document.getElementById("tablesys_departments").deleteRow(i);
+				return true;
+			}
+			else if(message.length > 10){
+				 $("#divMessagesys_departments").html(message);
+				showNoticeDanger(message);
+				return false;
+			}
+			else {
+				 $("#divMessagesys_departments").html(language.Message_DeleteFail);
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_DeleteFail);
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+				 $("#divMessagesys_departments").html(language.Message_DeleteFail);
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+</script>

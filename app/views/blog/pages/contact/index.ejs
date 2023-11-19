@@ -1,0 +1,138 @@
+
+<% const collection="contact" ; 
+const linkPrefix=systemConfig.prefixBlog + `/${collection}/`; %>
+<script src="admin/js/sha1.js"></script>
+<script src="admin/js/me.js"></script>
+
+<script src="admin/js/jquery/jquery.min.js"></script>
+<script src="admin/js/jquery-ui/jquery-ui.min.js"></script>
+<script src="admin/js/custom.js"></script>
+
+<div class="col-lg-8 post-list">	
+	<!-- Start single-post Area -->
+	<div class="single-post-wrap">
+		<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+
+		<div class="form-group row">
+			<label class="col-xs-12 col-sm-12 col-form-label required">Họ & tên</label>
+			<div class="col-xs-12 col-sm-12">
+				<input type="text" name="Fullname" id="Fullname" size="75"
+					class="form-control form-control-sm">
+			</div>
+			<label class="col-xs-12 col-sm-12 col-form-label required">Email</label>
+			<div class="col-xs-12 col-sm-12">
+				<input type="text" name="Email" id="Email" size="75"
+					class="form-control form-control-sm">
+			</div>
+			<label class="col-xs-12 col-sm-12 col-form-label required">Điện thoại</label>
+			<div class="col-xs-12 col-sm-12">
+				<input type="text" name="Phone" id="Phone" size="75"
+					class="form-control form-control-sm">
+			</div>
+			<label class="col-xs-12 col-sm-12 col-form-label required">Nội dung</label>
+			<div class="col-xs-12 col-sm-12">
+				<textarea rows="8" cols="75" id="ContentMessage" name="ContentMessage"
+				class="form-control form-control-sm"></textarea>
+			</div>
+			<div class="col-xs-12 col-sm-12">
+				&nbsp;
+			</div>
+			<div class="col-xs-12 col-sm-12">
+			<input type="button" id = "SendContact" class="btn btn-success" value="Gửi">
+				
+			</div>
+			<div class="col-xs-12 col-sm-12">
+				<div class="text-success" id="divMessage"></div>
+			</div><div class="col-xs-12 col-sm-12">
+				&nbsp;
+			</div>
+		</div>				
+	</div>
+</div>
+<script type="application/javascript">
+	
+	$('#SendContact').click(function() {
+		SendContact();
+	});
+	function SendContact() {
+		var strThoiGianTruoc = getCookie('SendContact_NodeEasy');
+		var ThoiGianTruoc =  new Date(strThoiGianTruoc);				
+		var HienTai = new Date();
+		let ThoiGianTruoc_ = ThoiGianTruoc.setMinutes(ThoiGianTruoc.getMinutes() + 16);
+		let HienTai_ = HienTai.setMinutes(HienTai.getMinutes() +1);				
+		if(ThoiGianTruoc_>=HienTai_){
+			var message='Error! Each comment submission must be spaced at least 15 minutes apart';
+			alert(message);
+			return false;
+		}
+
+		let Fullname = $('#Fullname').val();
+		let Email = $('#Email').val();
+		let Phone = $('#Phone').val();
+		let ContentMessage = $('#ContentMessage').val();
+		
+		if((Fullname.length < 10)||(Fullname.length > 100)) {
+			var message='Full name: must be from 10 to 50 characters';
+			alert(message);
+			return false;
+		}
+		if((Email.length < 13) || (Email.length > 50)) {
+			var message='Email: must be between 13 and 50 characters';
+			alert(message);
+			return false;
+		}
+
+		if((Phone.length < 8) || (Phone.length > 25)) {
+			var message='Phone: must be from 8 to 25 characters';
+			alert(message);
+			return false;
+		}
+
+		if((ContentMessage.length < 30) || (ContentMessage.length > 2000)) {
+			var message='Content must be between 30 and 2000 characters';
+			alert(message);
+			return false;
+		}
+		let data = {
+			fullname: Fullname,
+			email: Email,
+			phone: Phone,
+			content_message: ContentMessage
+		}
+		let thisPrefix = $('#linkPrefix').val();
+		var url = thisPrefix + 'SendContact';			
+		$.ajax({
+			type: 'post',
+			url: url,
+			data: data,
+			dataType: "json",
+			success: function(response) { 
+				let success = response.success; 						
+				var notice={}; 
+				console.log(response); 
+				if(success == false){
+					let msg = 'Sent error, can`t send';
+					alert(msg);
+					$("#divMessage").html(msg);
+				}
+				else{
+					var d = new Date();
+					setCookie('SendContact_NodeEasy',d,1);
+					let msg = 'Sent successfully, thank you very much';	
+					alert(msg);					
+					$("#divMessage").html(msg);			
+				}
+			},
+			failure: function(response) {
+				let msg = 'Sent error, can`t send';
+					alert(msg);
+					$("#divMessage").html(msg);
+			},
+			error: function(response) {
+				let msg = 'Sent error, can`t send';
+					alert(msg);
+					$("#divMessage").html(msg);						
+			},
+		});
+	}
+</script>

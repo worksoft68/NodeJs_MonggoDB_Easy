@@ -1,0 +1,29 @@
+create TRIGGER [dbo].[SystemLog_Backup]
+   ON  [dbo].[SystemLog]
+   AFTER INSERT
+AS 
+  DECLARE @Id bigint
+  DECLARE @Action nvarchar(30);
+  DECLARE @ImpactZone nvarchar(30);
+  DECLARE @IdTable nvarchar(15);
+  DECLARE @ContentLog nvarchar(2000);
+  DECLARE @ContentLogMax nvarchar(max);
+  DECLARE @IP nvarchar(15);
+  DECLARE @MacAddress nvarchar(20);
+  DECLARE @HostName nvarchar(200);
+  DECLARE @UserId int;
+  DECLARE @FullName nvarchar(30);
+	DECLARE @DateTimeLog datetime;
+BEGIN	
+	 SELECT @Action = Action, @ImpactZone = ImpactZone, @IdTable = IdTable
+			,@ContentLog = ContentLog, @ContentLogMax = ContentLogMax
+			,@IP = IP, @MacAddress = MacAddress, @HostName = HostName, @UserId = UserId, @FullName = FullName
+			,@DateTimeLog = DateTimeLog, @Id = Id	 
+	  FROM INSERTED;
+	
+		Insert into [FutureOffice_Log]..SystemLog
+		(Action, ImpactZone, IdTable, ContentLog, ContentLogMax, IP, MacAddress, HostName, UserId, FullName, DateTimeLog)
+		 VALUES(@Action, @ImpactZone, @IdTable, @ContentLog, @ContentLogMax, @IP, @MacAddress, @HostName, @UserId, @FullName, @DateTimeLog)
+
+		 delete from SystemLog where (id < @Id-20)
+END

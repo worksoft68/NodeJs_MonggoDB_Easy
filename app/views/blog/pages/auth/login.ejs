@@ -1,0 +1,336 @@
+<% const linkPrefix=systemConfig.prefixAdmin + `/auth/`; %>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <%- include ('./../../../admin/elements/header') %>
+            <script src="admin/js/sha1.js"></script>
+            <script src="admin/js/me.js"></script>
+
+            <script src="admin/js/jquery/jquery.min.js"></script>
+            <script src="admin/js/jquery-ui/jquery-ui.min.js"></script>
+            </head>
+
+    <body class="login-page">
+        <input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+        <input name="resetPassword" id="resetPassword" type="hidden" value="<%= item.resetPassword %>">
+        <input name="token" id="token" type="hidden" value="<%= item.token %>">
+
+        <div class="login-box">
+            <!-- <div class="login-logo">
+            ĐĂNG NHẬP
+       
+        </div> -->
+            <!-- /.login-logo -->
+            <div class="card" style="width:450px">
+                <div class="card-body login-card-body" style="width:450px">
+                    <%- include ('./../../elements/errors-login') %>
+                        <%- include ('./../../elements/notify') %>
+                            <div id="divLogin">
+                                <p class="login-box-msg" id="TitlePage">Log In To The System</p>
+
+                                <form role="form" action="<%= linkPrefix %>login/" method="POST" id="form-login" onsubmit="return encrypt()">
+                                    <!-- USERNAME -->
+                                
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Username" name="username" id="username" value="hoa.huynh">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        
+                                        <!-- PASSWORD -->
+                                        <div class="input-group mb-3">
+                                        <input type="password" class="form-control" placeholder="Password" name="password" id="password" value="123456">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                    <button type="submit" id="btnLogin" class="btn btn-sm btn btn-info">Login</button>
+                                    &nbsp; &nbsp; &nbsp; <input type="button" id="btnForgotPassword" class="btn btn-sm btn btn-success"
+                                        value="Forgot Password">
+
+                                    <br />
+                                    <div class="text-success" id="divMessage"></div>
+                                    <!-- /.col -->
+                                    </form>
+                                    </div>
+                            <div id="divResetNewPassword">
+
+                                <div class="form-group row">
+                                    <div class="col-xs-2 col-sm-2"> </div>
+                                    <div class="col-xs-10 col-sm-10">
+                                        <label id="labPasswordSettingRules" class="col-form-label"> The password must satisfy the
+                                            following 5 conditions:
+                                            <br /> 1/ Have a length of 8 characters or more.
+                                            <br /> 2/ Contains at least 1 CAPITAL letter.
+                                            <br /> 2/ Contains at least 1 lowercase letter.
+                                            <br /> 4/ Contains digits.
+                                            <br /> 5/ Contains at least 1 SPECIAL character.
+                                        </label>
+                                        </div>
+                                        </div>
+
+                                <div class="form-group row">
+
+                                    <label id="labNewPassword" class="col-sm-6 col-form-label text-sm-right required">New
+                                        Password</label>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <input type="password" class="form-control" value="" name="newPassword" Id="newPassword">
+                                        </div>
+                                        </div>
+                                        
+                                        <div class="form-group row">
+                                    <label id="labconfirmNewPassword" class="col-sm-6 col-form-label text-sm-right required">Confirm New
+                                        Password</label>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <input type="password" class="form-control" value="" name="confirmNewPassword" Id="confirmNewPassword">
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                    <div class="col-xs-6 col-sm-6" id="divBackToLoginPage">
+                                        <input type="button" id="btnBackToLoginPage" class="btn btn-sm btn btn-info" value="Back To Login Page">
+
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <input type="button" id="btnChangePassword" class="btn btn-sm btn-success" value="Change Password">
+                                        </div>
+                                        </div>
+                                        <div class="form-group row">
+                                    <div class="text-success" id="divMessageChangePassword"></div>
+                                    </div>
+                                    </div>
+                                    </div>
+
+            </div>
+            <!-- /.login-card-body -->
+            <input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+        </div>
+        <!-- script -->
+        <script>
+
+    var language={};
+    getLanguage();
+    setInterfaceText()
+    function getLanguage() {
+        var languageString=$('#sysLanguage').val();
+        language=JSON.parse(languageString);
+    }
+
+    function setInterfaceText() {
+        $("#pageTitle").html(language.TitlePage);
+        $("#labPasswordSettingRules").html(language.PasswordSettingRules);
+        $("#labOldPassword").text(language.OldPassword);
+        $("#labNewPassword").text(language.NewPassword);
+        $("#labConfirmNewPassword").text(language.ConfirmNewPassword);
+        // $("#btnChangePassword").text(language.ChangePassword);
+    }
+
+    $('#btnBackToLoginPage').click(function() {
+        var link=$('#linkPrefix').val();
+        window.location=link;
+    });
+
+                $('#btnChangePassword').click(function() {
+                    $(this).prop('disabled',true); //disable clicked button
+                ChangePassword();
+            });
+                function ChangePassword() {
+                //$('#MatKhauCu').val(shd)
+
+                var newPassword=$('#newPassword').val();
+                var confirmNewPassword=$('#confirmNewPassword').val();
+
+                newPassword=replaceAll(newPassword,' ','');
+                confirmNewPassword=replaceAll(confirmNewPassword,' ','');
+
+                if(confirmNewPassword.length<8) {
+                    var msg=language.Message_Password_Length;
+                    $("#divMessageChangePassword").html(msg);
+                    alert(msg)
+                    // showNoticeDanger(msg);                   
+                    $('#btnChangePassword').prop('disabled',false);
+                    return false;
+                }
+
+                if(newPassword!=confirmNewPassword) {
+                    var msg=language.Message_Confirm_Not_Match_Password;
+                    $("#divMessageChangePassword").html(msg);
+                    //showNoticeDanger(msg);
+                    alert(msg);   
+                    $('#btnChangePassword').prop('disabled',false);
+                    return false;
+                }
+                var decimal=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+                if(!confirmNewPassword.match(decimal)) {
+                    var msg=language.Message_Password_Not_Match_Rules;
+                    $("#divMessageChangePassword").html(msg);
+                    //showNoticeDanger(msg);    
+                    alert(msg);                   
+                    $('#btnChangePassword').prop('disabled',false);
+                    return false;
+                }
+
+                newPassword=hex_sha1(newPassword);
+                confirmNewPassword=hex_sha1(confirmNewPassword);
+                let data={
+                    newPassword: newPassword,
+                    confirmNewPassword: confirmNewPassword,
+                    token: $('#token').val()
+                }
+
+                var link=$('#linkPrefix').val()+'resetNewPassword';
+                $.ajax({
+                    type: 'PUT',
+                    url: link,
+                    data: data,
+                    dataType: "json",
+                    success: function(resultdata) {
+                        let result=resultdata.result;
+
+                        if((result=='false')||(result==false)) {
+                            var msg=language.Message_Change_Password_Error;
+                            $("#divMessageChangePassword").html(msg);
+                            //showNoticeDanger(msg);
+                            alert(msg); 
+                            $('#btnChangePassword').prop('disabled',false);
+                            return false;
+                        }
+                        else if((result=='true')||(result==true)) {
+                            $('#btnBackToLoginPage').prop('disabled',false);
+                            var msg=language.Message_Change_Password_Successfully;
+                            $("#divMessageChangePassword").html(msg);
+                            //showNoticeDanger(msg);
+                            alert(msg); 
+                            return false;
+                        }
+                    },
+                    failure: function(response) {
+                        var msg=language.Message_Change_Password_Error;
+                        // showNoticeDanger(msg);     
+                        alert(msg);
+                        $('#btnForgotPassword').prop('disabled',false);
+                    },
+                    error: function(response) {
+                        var msg=language.Message_Change_Password_Error;
+                        //showNoticeDanger(msg);
+                        alert(msg);
+                        $('#btnForgotPassword').prop('disabled',false);
+                    }
+                });
+                return true;
+            }
+
+
+
+                interfaceSettings();
+                function interfaceSettings() {
+                    var resetPassword=$('#resetPassword').val();
+                    if(resetPassword=="true") {
+                        var token=$('#token').val();
+                    var divLogin=document.getElementById('divLogin');
+                    divLogin.hidden=true;
+                    $('#btnBackToLoginPage').prop('disabled',true);
+                }
+                else {
+                    var divResetNewPassword=document.getElementById('divResetNewPassword');
+                    divResetNewPassword.hidden=true;
+                }
+
+            }
+
+                $('#btnForgotPassword').click(function() {
+                    $(this).prop('disabled',true); //disable clicked button
+                ForgotPassword();
+            });
+                function ForgotPassword() {
+                    let $elmInputUsername=$('input[name="username"]');
+                    var strUsername=$elmInputUsername.val();
+                    strUsername=replaceAll(strUsername,' ','');
+                    strUsername=strUsername.toLowerCase();
+                    if(strUsername.length<4) {
+                        var msg=language.Message_Account_Invalid;
+                        $("#btnForgotPassword").html(msg);
+                        //showNoticeDanger(msg);  
+                        alert(msg);                   
+                    $('#btnForgotPassword').prop('disabled',false);
+                    return false;
+                }
+
+                var msg=language.Message_Please_Wait_Send_Email;
+
+                $("#divMessage").html(msg);
+
+
+                strUsername=hex_sha1(strUsername);
+                let data={
+                    Username: strUsername,
+                }
+                var link=$('#linkPrefix').val()+'ForgotPassword';
+                $.ajax({
+                    type: 'PUT',
+                    url: link,
+                    data: data,
+                    dataType: "json",
+                    success: function(resultdata) {
+                        let result=resultdata.result;                              
+                        let notice={};
+                        if((result=='false')||(result==false)) {
+                            let msg=language.Message_Send_Email_Error;
+                            $("#divMessage").html(msg);
+                            alert(msg);
+                            //showNoticeDanger(msg);                            
+                            $('#btnForgotPassword').prop('disabled',false);
+                            return false;
+                        }
+                        else if((result=='true')||(result==true)) {
+                            let msg=language.Message_SystemHasSentEmail;
+                            $("#divMessage").html(msg);
+                            alert(msg);
+                            //showNoticeDanger(msg);
+                            return false;
+                        }
+                    },
+                    failure: function(response) {
+                        var msg=language.Message_System_Error;
+                        alert(msg);
+                        //showNoticeDanger(msg);                       
+                        $('#btnForgotPassword').prop('disabled',false);
+                    },
+                    error: function(response) {
+                        var msg=language.Message_System_Error;
+                        alert(msg);
+                        //showNoticeDanger(msg);  
+                        $('#btnForgotPassword').prop('disabled',false);
+                    }
+                });
+                                return true;
+                            }
+                        
+
+                function encrypt() {
+                    let $elmInputPassword=$('input[name="password"]');
+                    let $elmInputUsername=$('input[name="username"]');
+                    var strPassword=$elmInputPassword.val();
+                    var strUsername=$elmInputUsername.val();
+                    strPassword=replaceAll(strPassword,' ','');
+                    strUsername=replaceAll(strUsername,' ','');
+                    strUsername=strUsername.toLowerCase();
+                    strPassword=hex_sha1(strPassword);
+                    strUsername=hex_sha1(strUsername);
+                    $elmInputUsername.val(strUsername);
+                    $elmInputPassword.val(strPassword);
+                    return true;
+                }
+                function replaceAll(str,find,replace) {
+                    return str.replace(new RegExp(find,'g'),replace);
+                }
+            </script>
+    </body>
+
+    </html>

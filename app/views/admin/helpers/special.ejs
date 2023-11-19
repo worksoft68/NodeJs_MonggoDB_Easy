@@ -1,0 +1,43 @@
+
+<% specialHelper = (linkPrefix, special, id) => {   
+     let link       = linkPrefix + 'change-special/' + id + '/' + special ;   
+        let classStatus = 'btn-success';
+        let classStatusCheck = 'fa-check';       
+        if(special == "inactive")
+        {
+             classStatus = 'btn-danger';
+             classStatusCheck = 'fa-minus';
+        }
+        return `
+        <a  href="${link}" 
+            data-active = 'btn-success'
+            data-icon-active = 'fa-check'
+            data-inactive = 'btn-danger'
+            data-icon-inactive = 'fa-minus'
+            data-current = ${classStatus}
+            data-icon-current = ${classStatusCheck}
+            class="ajax-status my-btn-state rounded-circle btn btn-sm ${classStatus}">
+            <i class="fas ${classStatusCheck}"></i>
+        </a>
+        `;
+    // let link       = linkPrefix + 'change-special/' + id + '/' + special ;
+    // // let xhtmlResult = '';
+    
+    // if(special == "active")
+    // {        
+    //    return `<a href="${link}" class="my-btn-state rounded-circle btn btn-sm btn-success"><i class="fas fa-check"></i></a>`;
+    // }
+
+    // else
+    // {
+    //     return `<a href="${link}" class="my-btn-state rounded-circle btn btn-sm btn-danger"><i class="fas fa-minus"></i></a>`;
+    // }
+}    
+ %>
+
+
+
+ 
+
+
+

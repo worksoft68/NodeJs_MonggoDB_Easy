@@ -1,0 +1,782 @@
+<%- include ('./../helpers/pagination') %>
+<%
+	const collection = "systemLog";
+	const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`; 
+%>
+<%- include ('./../elements/notify') %>
+<div class="container-fluid">
+	<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+	<input name="params" id="params" type="hidden" value="<%= params %>">
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			 <h6 class="card-title">Form</h6>
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+					<i class="fas fa-minus"></i>
+				</button>
+			</div>
+		</div>
+		<div class="card-body" style="display: block;">
+			<form action =" <%= linkPrefix %>" method = "GET">
+				<div class="form-group row">
+					<label id="labId" class="col-sm-2 col-form-label text-sm-right ">Id</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="number" readonly name="Id"  id="Id" value="<%= item.Id %>" class="form-control form-control-sm">
+					</div>
+					<label id="labAction" class="col-sm-2 col-form-label text-sm-right ">Action</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="Action"  id="Action"  value="<%= item.Action %>" class="form-control form-control-sm">
+					</div>
+					<label id="labImpactZone" class="col-sm-2 col-form-label text-sm-right ">Impact Zone</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="ImpactZone"  id="ImpactZone"  value="<%= item.ImpactZone %>" class="form-control form-control-sm">
+					</div>
+					<label id="labIdTable" class="col-sm-2 col-form-label text-sm-right ">Id Table</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="IdTable"  id="IdTable"  value="<%= item.IdTable %>" class="form-control form-control-sm">
+					</div>
+					<label id="labContentLog" class="col-sm-2 col-form-label text-sm-right ">Content</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="ContentLog"  id="ContentLog"  value="<%= item.ContentLog %>" class="form-control form-control-sm">
+					</div>
+					<label id="labContentLogMax" class="col-sm-2 col-form-label text-sm-right ">Content Max</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="ContentLogMax"  id="ContentLogMax"  value="<%= item.ContentLogMax %>" class="form-control form-control-sm">
+					</div>
+					<label id="labIP" class="col-sm-2 col-form-label text-sm-right ">IP</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="IP"  id="IP"  value="<%= item.IP %>" class="form-control form-control-sm">
+					</div>
+					<label id="labMacAddress" class="col-sm-2 col-form-label text-sm-right ">Mac Address</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="MacAddress"  id="MacAddress"  value="<%= item.MacAddress %>" class="form-control form-control-sm">
+					</div>
+					<label id="labHostName" class="col-sm-2 col-form-label text-sm-right ">Host Name</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="HostName"  id="HostName"  value="<%= item.HostName %>" class="form-control form-control-sm">
+					</div>
+					<label id="labUserId" class="col-sm-2 col-form-label text-sm-right ">User Id</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="number"  name="UserId"  id="UserId" value="<%= item.UserId %>" class="form-control form-control-sm">
+					</div>
+					<label id="labFullName" class="col-sm-2 col-form-label text-sm-right ">Full Name</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="FullName"  id="FullName"  value="<%= item.FullName %>" class="form-control form-control-sm">
+					</div>
+					<label id="labDateTimeLog" class="col-sm-2 col-form-label text-sm-right ">DateTime Log</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="date" name="DateTimeLog"  id="DateTimeLog"  class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-2 col-sm-2"></div>
+					<div class="col-xs-10 col-sm-10">
+						<input type="button" id = "btnSave" class="btn-sm btn-success" value="Save">
+						 &nbsp; <input type="button" id = "btnSaveAs" class="btn-sm btn-danger" value="Save as">
+						&nbsp; <input type="button" id = "btnUpdate" class="btn-sm btn-primary" value="Update">
+						&nbsp; <input type="button" id = "btnDelete" class="btn-sm btn-danger" value="Delete">
+						&nbsp; <input type="button" id = "btnSearchPost" class="btn-sm btn-info" value="Search">
+						&nbsp; <input type="submit" id = "btnSearchGet" class="btn-sm btn-warning" value="Search Get">
+						&nbsp; <input type="button" id = "btnExport" class="btn-sm btn-success" value="Export">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class = "text-success" id = "divMessage"></div>
+				</div>
+			</form>
+						<input name="IdHidden" id="IdHidden" type="hidden">
+						<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+						<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+		</div>
+	</div>
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			<h4 class="card-title">List data</h4>
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fas fa-minus"></i></button>
+			</div>
+		</div>
+		<div class="card-body">
+			<table id="tableSystemLog" class="table table-bordered table-hover btn-table mb-0">
+				<thead>
+					<tr>
+						<th class="text-center">
+							<div class="custom-control custom-checkbox">
+								<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+								<label for="check-all" class="custom-control-label"></label>
+							</div>
+						</th>
+						<th class="text-center"><label id="labId_tb">Id</label></a></th>
+						<th class="text-center"><label id="labAction_tb">Action</label></a></th>
+						<th class="text-center"><label id="labImpactZone_tb">Impact Zone</label></a></th>
+						<th class="text-center"><label id="labIdTable_tb">Id Table</label></a></th>
+						<th class="text-center"><label id="labContentLog_tb">Content</label></a></th>
+						<th class="text-center"><label id="labContentLogMax_tb">Content Max</label></a></th>
+						<th class="text-center"><label id="labIP_tb">IP</label></a></th>
+						<th class="text-center"><label id="labMacAddress_tb">Mac Address</label></a></th>
+						<th class="text-center"><label id="labHostName_tb">Host Name</label></a></th>
+						<th class="text-center"><label id="labUserId_tb">User Id</label></a></th>
+						<th class="text-center"><label id="labFullName_tb">Full Name</label></a></th>
+						<th class="text-center"><label id="labDateTimeLog_tb">DateTime Log</label></a></th>
+						<th class="text-center">Action</a></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="card-footer clearfix" id = "paginationSystemLog">
+	</div>
+</div>
+<script type="application/javascript">
+var language = {};
+
+onLoadData();
+function onLoadData(){
+	getLanguage();
+	setUpdateButtonStatus(false)
+	setInterfaceText();
+	var strData = $('#listData').val();
+	const arrData = JSON.parse(strData);
+	if(arrData.length>0){
+		displayDataToTable(arrData);
+		var paramsString = $('#params').val();
+		const params = JSON.parse(paramsString);
+		var linkPrefix = $('#linkPrefix').val();
+		paginationHelper(params.pagination, "SystemLog", params.currentStatus, params.keyword,linkPrefix,  "paginationSystemLog");
+	}
+}
+
+function displayDataToTable(datas){
+	var table = document.getElementById("tableSystemLog");
+	var lengthtable= table.rows.length-1;
+	for(var n = lengthtable; n > 0; n--) {
+		table.deleteRow(n);
+	}
+	var length = datas.length;
+	if(length <1 ) {
+		showNoticeDanger(language.Message_NotFoundData);
+		return false;
+	}
+	datas.forEach(function(data) {
+		var row = table.insertRow(1);
+		var cell0 = row.insertCell(0);
+		var cell1 = row.insertCell(1);
+		var cell2 = row.insertCell(2);
+		var cell3 = row.insertCell(3);
+		var cell4 = row.insertCell(4);
+		var cell5 = row.insertCell(5);
+		var cell6 = row.insertCell(6);
+		var cell7 = row.insertCell(7);
+		var cell8 = row.insertCell(8);
+		var cell9 = row.insertCell(9);
+		var cell10 = row.insertCell(10);
+		var cell11 = row.insertCell(11);
+		var cell12 = row.insertCell(12);
+		var cell13 = row.insertCell(13);
+		let check= `<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data.Id}" value="${data.Id}">
+				<label for="${data.Id}" class="custom-control-label"></label>
+			</div>`;
+		cell0.innerHTML = check;
+		cell1.innerHTML = data.Id;
+		cell2.innerHTML = data.Action;
+		cell3.innerHTML = data.ImpactZone;
+		cell4.innerHTML = data.IdTable;
+		cell5.innerHTML = data.ContentLog;
+		cell6.innerHTML = data.ContentLogMax;
+		cell7.innerHTML = data.IP;
+		cell8.innerHTML = data.MacAddress;
+		cell9.innerHTML = data.HostName;
+		cell10.innerHTML = data.UserId;
+		cell11.innerHTML = data.FullName;
+		cell12.innerHTML = data.DateTimeLog;
+		let strbutton = " <a  onclick=\"getById('"+data.Id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+			"<i class=\"fas fa-pencil-alt\"></i>" + 
+			"</a> " + 
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data.Id+"\" title=\"Delete\"  onclick=\"deleteById(this,"+data.Id+")\">";
+			strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+		strbutton += " </ button > ";
+		cell13.innerHTML = strbutton;
+	});
+}
+function setUpdateButtonStatus(statusUpdate){	
+	$('#btnSave').prop('hidden', statusUpdate);
+	$('#btnUpdate').prop('hidden', !statusUpdate);
+}
+
+function getLanguage(){
+	var languageString = $('#sysLanguage').val();	
+	language = JSON.parse(languageString);
+}
+
+function setInterfaceText(){
+	$("#pageTitle").html(language.TitlePage);
+	$("#labId").text(language.Id);
+	$("#labAction").text(language.Action);
+	$("#labImpactZone").text(language.ImpactZone);
+	$("#labIdTable").text(language.IdTable);
+	$("#labContentLog").text(language.ContentLog);
+	$("#labContentLogMax").text(language.ContentLogMax);
+	$("#labIP").text(language.IP);
+	$("#labMacAddress").text(language.MacAddress);
+	$("#labHostName").text(language.HostName);
+	$("#labUserId").text(language.UserId);
+	$("#labFullName").text(language.FullName);
+	$("#labDateTimeLog").text(language.DateTimeLog);
+	$("#labId_tb").text(language.Id);
+	$("#labAction_tb").text(language.Action);
+	$("#labImpactZone_tb").text(language.ImpactZone);
+	$("#labIdTable_tb").text(language.IdTable);
+	$("#labContentLog_tb").text(language.ContentLog);
+	$("#labContentLogMax_tb").text(language.ContentLogMax);
+	$("#labIP_tb").text(language.IP);
+	$("#labMacAddress_tb").text(language.MacAddress);
+	$("#labHostName_tb").text(language.HostName);
+	$("#labUserId_tb").text(language.UserId);
+	$("#labFullName_tb").text(language.FullName);
+	$("#labDateTimeLog_tb").text(language.DateTimeLog);
+}
+
+function getById(Id){
+	var link = $('#linkPrefix').val() + 'getById/'+Id;
+	$.ajax({
+		type: 'GET',
+		url: link,
+		dataType: "json",
+		success: function(resultdata){
+			var success = resultdata.success;
+			if(success == true){
+				showDataToForm(resultdata.data);
+			}
+		},
+		failure: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+		error: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+	});
+}
+
+function showDataToForm(data){
+	try{
+		setUpdateButtonStatus(true)
+		$('#IdHidden').val(data.Id);
+		$('#Id').val(data.Id);
+		$('#Action').val(data.Action);
+		$('#ImpactZone').val(data.ImpactZone);
+		$('#IdTable').val(data.IdTable);
+		$('#ContentLog').val(data.ContentLog);
+		$('#ContentLogMax').val(data.ContentLogMax);
+		$('#IP').val(data.IP);
+		$('#MacAddress').val(data.MacAddress);
+		$('#HostName').val(data.HostName);
+		$('#UserId').val(data.UserId);
+		$('#FullName').val(data.FullName);
+		$('#DateTimeLog').val(data.DateTimeLog);
+	}
+	catch(error){}
+}
+
+function clearForm(){
+	try{
+		$('#IdHidden').val('');
+		setUpdateButtonStatus(false)
+		$('#Id').val('');
+		$('#Action').val('');
+		$('#ImpactZone').val('');
+		$('#IdTable').val('');
+		$('#ContentLog').val('');
+		$('#ContentLogMax').val('');
+		$('#IP').val('');
+		$('#MacAddress').val('');
+		$('#HostName').val('');
+		$('#UserId').val('');
+		$('#FullName').val('');
+		$('#DateTimeLog').val('');
+	}
+	catch(error){}
+}
+
+$('#btnSearchPost').click(function(){
+	$(this).prop('disabled', true);
+	getContentPages(1);
+});
+
+function getContentPages(page){
+	let data = {
+		'Page' : page,
+		'Action' : $('#Action').val(),
+		'ImpactZone' : $('#ImpactZone').val(),
+		'IdTable' : $('#IdTable').val(),
+		'ContentLog' : $('#ContentLog').val(),
+		'ContentLogMax' : $('#ContentLogMax').val(),
+		'IP' : $('#IP').val(),
+		'MacAddress' : $('#MacAddress').val(),
+		'HostName' : $('#HostName').val(),
+		'FullName' : $('#FullName').val(),
+	}
+	var link = $('#linkPrefix').val() + 'search';
+	$.ajax({
+		type: 'POST',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnSearchPost').prop('disabled', false);
+			let result = resultdata.result;
+			displayDataToTable(result);
+			var linkPrefix = $('#linkPrefix').val();
+			let params = resultdata.params;
+			paginationHelper(params.pagination, "SystemLog", "", "", linkPrefix, "paginationSystemLog");
+
+			if(params.pagination.totalItems > 0 ) {
+				var message = language.Message_Find + params.pagination.totalItems + language.Message_Words_records;
+				showNoticeSuccess(message);
+			}
+		},
+		failure: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		},
+		error: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		}
+	});
+	$('#btnSearchPost').prop('disabled', false);
+}
+
+$('#btnSave').click(function(){
+	$(this).prop('disabled', true);
+	saveInsert();
+});
+
+function getDataForm(){
+	return {
+		'IdHidden' : $('#IdHidden').val(),
+		'Id' : $('#Id').val(),
+		'Action' : $('#Action').val(),
+		'ImpactZone' : $('#ImpactZone').val(),
+		'IdTable' : $('#IdTable').val(),
+		'ContentLog' : $('#ContentLog').val(),
+		'ContentLogMax' : $('#ContentLogMax').val(),
+		'IP' : $('#IP').val(),
+		'MacAddress' : $('#MacAddress').val(),
+		'HostName' : $('#HostName').val(),
+		'UserId' : $('#UserId').val(),
+		'FullName' : $('#FullName').val(),
+		'DateTimeLog' : $('#DateTimeLog').val(),
+	}
+}
+
+function saveInsert(){
+	let data = getDataForm();
+	if(data == false) {
+		$('#btnSave').prop('disabled', false);
+		return false;
+	}
+	var link = $('#linkPrefix').val() + 'save';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false))
+				showNoticeDanger(language.Message_AddNewError);
+			else if((success != true) && (success != 'true'))
+				showNoticeDanger(result.message);
+			else {
+				clearForm();
+				insertRow(result.data);
+			}
+		},
+		failure: function (response) {
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+		error: function (response) {
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+	});
+	$('#btnSave').prop('disabled', false);
+}
+
+function insertRow(data){
+	showNoticeSuccess(language.Message_AddNewSuccess);
+	var table = document.getElementById("tableSystemLog");
+	var row = table.insertRow(1);
+	var cell0 = row.insertCell(0);
+	var cell1 = row.insertCell(1);
+	var cell2 = row.insertCell(2);
+	var cell3 = row.insertCell(3);
+	var cell4 = row.insertCell(4);
+	var cell5 = row.insertCell(5);
+	var cell6 = row.insertCell(6);
+	var cell7 = row.insertCell(7);
+	var cell8 = row.insertCell(8);
+	var cell9 = row.insertCell(9);
+	var cell10 = row.insertCell(10);
+	var cell11 = row.insertCell(11);
+	var cell12 = row.insertCell(12);
+	var cell13 = row.insertCell(13);
+	let check= `<div class="custom-control custom-checkbox"> 
+					<input class="custom-control-input" type="checkbox" name="chkListData" id="${data.Id}" value="${data.Id}">
+					<label for="${data.Id}" class="custom-control-label"></label>
+				</div>`;
+	cell0.innerHTML = check;
+	cell1.innerHTML = data.Id;
+	cell2.innerHTML = data.Action;
+	cell3.innerHTML = data.ImpactZone;
+	cell4.innerHTML = data.IdTable;
+	cell5.innerHTML = data.ContentLog;
+	cell6.innerHTML = data.ContentLogMax;
+	cell7.innerHTML = data.IP;
+	cell8.innerHTML = data.MacAddress;
+	cell9.innerHTML = data.HostName;
+	cell10.innerHTML = data.UserId;
+	cell11.innerHTML = data.FullName;
+	cell12.innerHTML = data.DateTimeLog;
+	let strbutton = " <a  onclick=\"getById('"+data.Id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+		"<i class=\"fas fa-pencil-alt\"></i>" + 
+		"</a> " + 
+		" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data.Id+"\" title=\"Delete\"  onclick=\"deleteById(this,"+data.Id+")\">";
+	strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+	strbutton += " </ button > ";
+	cell13.innerHTML = strbutton;
+}
+
+$('#btnUpdate').click(function(){
+	$(this).prop('disabled', true);
+	saveUpdate();
+});
+
+function saveUpdate(){
+	let data = getDataForm();
+	if(data == false) {
+		$('#btnUpdate').prop('disabled', false);
+		return false;
+	}
+	if(data.IdHidden == ""){
+		$('#btnUpdate').prop('disabled', false);
+		showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+		return false;
+	}
+	var link = $('#linkPrefix').val() + 'update';
+	$.ajax({
+		type: 'put',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false) ){
+				showNoticeDanger(language.Message_UpdateError);
+				return false;
+			}
+			else if((success != true) && (success != 'true')){
+				showNoticeDanger(result.message);
+				return false;
+			}
+			else {
+				clearForm();
+				updateRow(result.data);
+			}
+		},
+		failure: function (response) {
+			showErrorMessageSave(response, language.Message_UpdateError);
+		},
+		error: function (response) {
+			showErrorMessageSave(response, language.Message_UpdateError);
+		}
+	});
+	$('#btnUpdate').prop('disabled', false);
+}
+
+function updateRow(data){
+	showNoticeSuccess(language.Message_UpdateSuccess);
+	var row = $("#tableSystemLog button[data-id='" + data.Id + "']").parents("tr")[0];
+	var tr = "<tr>"+
+		"<td class=\"text-center\">" +
+			"<div class=\"custom-control custom-checkbox\">"+ 
+				"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\"" + data.Id + "\" value=\"" + data.Id + "\"> "+
+				"<label for=\"" + data.Id + "\" class=\"custom-control-label\"></label> "+
+			"</div>"+
+		"</td>"+
+		" <td class=\"text-center\">" + data.Id + "</td>" +
+		" <td class=\"text-center\">" + data.Action + "</td>" +
+		" <td class=\"text-center\">" + data.ImpactZone + "</td>" +
+		" <td class=\"text-center\">" + data.IdTable + "</td>" +
+		" <td class=\"text-center\">" + data.ContentLog + "</td>" +
+		" <td class=\"text-center\">" + data.ContentLogMax + "</td>" +
+		" <td class=\"text-center\">" + data.IP + "</td>" +
+		" <td class=\"text-center\">" + data.MacAddress + "</td>" +
+		" <td class=\"text-center\">" + data.HostName + "</td>" +
+		" <td class=\"text-center\">" + data.UserId + "</td>" +
+		" <td class=\"text-center\">" + data.FullName + "</td>" +
+		" <td class=\"text-center\">" + data.DateTimeLog + "</td>" +
+		" <td class=\"text-center\">" +
+			" <a  onclick=\"getById('"+data.Id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+				" <i class=\"fas fa-pencil-alt\"></i>" +
+			" </a>" +
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data.Id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data.Id+"')\">" +
+				" <i class=\"fas fa-trash-alt\"></i> " +
+			" </button> " +
+		" </td>" +
+	" </tr>";
+	$(row).after(tr);
+	$(row).remove();
+}
+function deleteById(row,IdObject){
+	let message =  language.Message_DoYouWantToDeleteById  +' '+ IdObject+'?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = {
+		'Id' : IdObject
+	};
+	var link = $('#linkPrefix').val()+'deletebyid';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var success = resultdata.success;
+			var message = resultdata.message;
+			var notice 	= {};
+			if((success == 'true') || (success == true)){
+				showNoticeSuccess(language.Message_DeleteSuccess);
+				var i = row.parentNode.parentNode.rowIndex;
+				document.getElementById("tableSystemLog").deleteRow(i);
+				return true;
+			}
+			else if(message.length > 10){
+				showNoticeDanger(message);
+				return false;
+			}
+			else {
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnDelete').click(function(){
+	$(this).prop('disabled', true);
+	deleteList();
+	$(this).prop('disabled', false);
+});
+function deleteList(){
+	var arrayId = [];
+	var listId 	= " ";
+	$("input:checkbox[name=chkListData]:checked").each(function(){
+		arrayId.push($(this).val());
+		listId += $(this).val() + ' ';
+	});
+	let message =  language.Message_DoYouWantToDeleteInTheList  +' '+ listId+'?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = { arrayId };
+	var link = $('#linkPrefix').val()+'deletelist';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var result = resultdata.result;
+			var success = result.success;
+			var message = result.message;
+			if((success == 'true') || (success == true)){
+				let deleteSuccess = result.deleteSuccess;
+				let deleteError = result.deleteError;
+				if(deleteSuccess.length > 0){
+					let message = language.Message_DeleteSuccess;
+					message += " "+ deleteSuccess.toString();
+					if(deleteError.length > 0){
+						message += " \n"+  language.Message_DeleteFail + " "+ deleteError.toString();
+					}
+					showNoticeSuccess(message);
+					deleteRows(arrayId,"tableSystemLog");
+					return true;
+				}
+				else if(deleteError.length > 0){
+					let message = language.Message_DeleteFail + " "+ deleteError.toString();
+					showNoticeDanger(message);
+				}
+				else{
+					showNoticeDanger(language.Message_DeleteFail);
+				}
+			}
+			else if((success == 'false') || (success == false)){
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnExport').click(function(){
+	$(this).prop('disabled', true);
+	exportData();
+	$(this).prop('disabled', false);
+});
+
+function exportData(){
+	let data = {
+		'Action' : $('#Action').val(),
+		'ImpactZone' : $('#ImpactZone').val(),
+		'IdTable' : $('#IdTable').val(),
+		'ContentLog' : $('#ContentLog').val(),
+		'ContentLogMax' : $('#ContentLogMax').val(),
+		'IP' : $('#IP').val(),
+		'MacAddress' : $('#MacAddress').val(),
+		'HostName' : $('#HostName').val(),
+		'FullName' : $('#FullName').val(),
+	}
+	var link = $('#linkPrefix').val() + 'exportData';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnExport').prop('disabled', false);
+			let result = resultdata.result;
+			showNoticeSuccess(language.Message_CompletedGetData);
+			ExportToExcel(result);
+		},
+		failure: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		},
+		error: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		}
+	});
+	$('#btnExport').prop('disabled', false);
+}
+
+function ExportToExcel(datas){
+	let itemCount = datas.length; 
+	if(itemCount > 1000) {
+		showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+	}
+	if(itemCount < 1) {
+		showNoticeDanger(language.Message_NotFoundData);
+	}
+	var strTable = '<style type="text/css">';
+	strTable += ' .Border { ';
+	strTable += '         color: windowtext; ';
+	strTable += '         font-size: 11.0pt; ';
+	strTable += '         word-break:break-all;';
+	strTable += '         font-style: normal; ';
+	strTable += '         text-decoration: none; ';
+	strTable += '         font-family: "Times New Roman", serif; ';
+	strTable += '         text-align: left; ';
+	strTable += '         vertical-align: bottom;';
+	strTable += '         border-left: .5pt solid windowtext; ';
+	strTable += '         border-right: .5pt solid windowtext; ';
+	strTable += '         border-top: .5pt solid windowtext; ';
+	strTable += '         border-bottom: .5pt solid windowtext; ';
+	strTable += '         padding-left: 1px; ';
+	strTable += '         padding-right: 1px; ';
+	strTable += '         padding-top: 1px; ';
+	strTable += '     } ';
+
+	strTable += ' .BorderHeader { ';
+	strTable += '        color: white; ';
+	strTable += '         background-color:#0026ff; ';
+	strTable += '        font-size: 11.0pt; ';
+	strTable += '        text-align: center; ';
+	strTable += '        font-style: normal; ';
+	strTable += '        text-decoration: none; ';
+	strTable += '        font-family: "Times New Roman", serif; ';
+	strTable += '        vertical-align: bottom;';
+	strTable += '        border-left: .5pt solid windowtext; ';
+	strTable += '        border-right: .5pt solid windowtext; ';
+	strTable += '        border-top: .5pt solid windowtext; ';
+	strTable += '        border-bottom: .5pt solid windowtext; ';
+	strTable += '        padding-left: 1px; ';
+	strTable += '        padding-right: 1px; ';
+	strTable += '        padding-top: 1px; ';
+	strTable += '     } ';
+	strTable += '  </style> ';
+	strTable += ' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+	strTable += '<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+	strTable += '<th class="BorderHeader" >Order</th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Id </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Action </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Impact Zone </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Id Table </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Content </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Content Max </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> IP </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Mac Address </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Host Name </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> User Id </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Full Name </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> DateTime Log </th> ';
+	strTable += '</tr> ';
+	var n = 0;
+	var currentRow = 4;
+	for(var i = 0; i < itemCount; i++) {
+		var vTemp = datas[i];
+		currentRow += 1;
+		 n += 1;
+		strTable += '<tr >';
+		strTable += '<th class="Border" > ' + n + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.Id + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.Action + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.ImpactZone + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.IdTable + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.ContentLog + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.ContentLogMax + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.IP + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.MacAddress + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.HostName + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.UserId + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.FullName + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.DateTimeLog + ' </th> ';
+		strTable += '</tr>';
+	}
+	strTable += ' </table> ';
+	ExportHtmlToExcel(strTable, 'SystemLog');
+	showNoticeSuccess(language.Message_ExportSuccess);
+}
+
+</script>

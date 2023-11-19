@@ -1,0 +1,48 @@
+{
+    "getAll": {
+        "type": "object",
+        "properties": {
+            "Page": {
+                "type": "integer"
+            }
+        }
+    },
+    "idNumber": {
+        "type": "object",
+        "properties": {
+            "Id": {
+                "type": "integer"
+            }
+        }
+    },
+    "idString": {
+        "type": "object",
+        "properties": {
+            "Id": {
+                "type": "string"
+            }
+        }
+    },
+    "listIdNumber": {
+        "type": "object",
+        "properties": {
+            "arrayId[]": {
+                "type": "array",
+                "items": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "listIdString": {
+        "type": "object",
+        "properties": {
+            "arrayId[]": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

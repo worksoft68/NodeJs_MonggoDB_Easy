@@ -1,0 +1,14 @@
+<%
+ highlightHelper = (data, keyword) =>{
+    if(keyword.length >0)
+    return data.replace(new RegExp(keyword, "ig"), (searchResult) => {
+        return `<span class ='highlight'>${searchResult}</span>`;
+    });
+    return data;   
+}
+
+
+%>
+
+
+

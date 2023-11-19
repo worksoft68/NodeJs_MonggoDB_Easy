@@ -1,0 +1,8 @@
+Your CA files:
+
+your_domain_name.key
+star_your_domain_name_cert.pem
+RootCA
+ChainCA2
+ChainCA1
+Chain_RootCA_Bundle

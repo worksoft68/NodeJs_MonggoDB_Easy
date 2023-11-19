@@ -1,0 +1,87 @@
+<%- include ('./../../helpers/format-date') %>
+    <%- include ('./../../helpers/format-summary') %>
+        <% const linkPrefix=systemConfig.prefixBlog; const folder_uploads='uploads/articles/' ; %>
+
+            <div class="col-lg-8 post-list">
+                <div class="single-post-wrap">
+
+                    <div class="content-wrap">
+                        <ul class="tags mt-10">
+                            <li><a
+                                    href="<%= linkPrefix %>/categories/<%= itemArticle[0].categorie_id %>-<%= itemArticle[0].categorie_id %>">
+                                    <%= itemArticle[0].categories.name %>
+                                </a></li>
+                        </ul>
+                        <h3>
+                            <%= itemArticle[0].title %>
+                        </h3>
+                        <ul class="meta pb-20">
+                            <li><a href="#"><span class="lnr lnr-user"></span>
+                                    <%= itemArticle[0].create.user_name_created %>
+                                </a></li>
+                            <li><a href="#"><span class="lnr lnr-calendar-full"></span>
+                                    <%= formatDate(itemArticle[0].create.datetime_created) %>
+                                </a></li>
+                        </ul>
+                        <p class="excert">
+                        <h4>
+                            <%- itemArticle[0].summary %>
+                        </h4>
+                        </p>
+                        <div class="feature-img-thumb relative">
+                            <div class="overlay overlay-bg"></div>
+                            <img class="img-fluid" src="<%= folder_uploads + itemArticle[0].thumb %>"
+                                alt="<%= itemArticle[0].title %>">
+                        </div>
+                        <p>
+                            <%- itemArticle[0].content_articles %>
+                        </p>
+                    </div>
+
+                    <div class="relavent-story-post-wrap mt-30">
+                        <% if(itemsOthers.length> 0) { %>
+                            <h4 class="title">Relavent Stories</h4>
+                            <div class="relavent-story-list-wrap">
+                                <% for(let i=0; i < itemsOthers.length; i++){ %>
+
+                                    <div class="single-relavent-post row ">
+                                        <div class="col-lg-5 post-left">
+                                            <div class="feature-img relative">
+                                                <div class="overlay overlay-bg"></div>
+                                                <img class="img-fluid"
+                                                    src="<%= folder_uploads + itemsOthers[i].thumb %>"
+                                                    alt="<%= itemsOthers[i].title %>">
+                                            </div>
+                                            <ul class="tags">
+                                                <li><a
+                                                        href="<%= linkPrefix %>/categories/<%= itemsOthers[i].categorie_id %>-<%= itemsOthers[i].categorie_id %>">
+                                                        <%= itemsOthers[i].categories.name %>
+                                                    </a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-lg-7 post-right">
+                                            <a
+                                                href="<%= linkPrefix %>/articles/<%= itemsOthers[i].slug %>-<%= itemsOthers[i].id %>">
+                                                <h4>
+                                                    <%= itemsOthers[i].title %>
+                                                </h4>
+                                            </a>
+                                            <ul class="meta">
+                                                <li><a href="#"><span class="lnr lnr-user"></span>
+                                                        <%= itemsOthers[i].create.user_name_created %>
+                                                    </a></li>
+                                                <li><a href="#"><span class="lnr lnr-calendar-full"></span>
+                                                        <%= formatDate(itemsOthers[i].create.datetime_created) %>
+                                                    </a></li>
+                                            </ul>
+                                            <p class="excert">
+                                                <%- itemsOthers[i].summary %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+            </div>

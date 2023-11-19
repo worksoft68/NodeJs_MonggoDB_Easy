@@ -1,0 +1,48 @@
+<!--<h3> Back end1234</h3>-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include ('./elements/header') %>
+        <%- include ('./elements/script') %>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed text-sm">
+    <%- include ('./elements/notifyPopup') %>
+
+
+
+        <div class="wrapper">
+
+            <!-- Navbar -->
+            <%- include ('./elements/navbar') %>
+
+                <!-- /.navbar -->
+
+                <!-- Main Sidebar Container -->
+                <%- include ('./elements/sidebar') %>
+
+                    <!-- Content Wrapper. Contains page content -->
+                    <div class="content-wrapper">
+                        <!-- Content Header (Page header) -->
+                        <%- include ('./elements/title-page') %>
+                            <!-- /.content-header -->
+
+                            <!-- Main content -->
+
+                            <%- body %>
+                                <!-- /.content -->
+                    </div>
+                    <!-- /.content-wrapper -->
+                    <%- include ('./elements/footer') %>
+                        <script src="admin/js/showNotify/showNotify.js"></script>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- script -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,273 @@
+{
+	"/sys_roles": {
+		"get": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Returns list data from the system that the user has access to",
+			"requestBody": {
+				"description": "page on load"
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_roles.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/getAll": {
+		"post": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Returns list data from the system, the list of data is retrieved by page-by-page",
+			"requestBody": {
+				"description": "Page number  to get data",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/getAll"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_roles.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/{Id}": {
+		"get": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Get data by Id",
+			"parameters": [
+				{
+					"name": "Id",
+					"in": "path",
+					"description": "The id that you need to get data", 
+					"required": true,
+					"schema": {
+						"type": "string"
+					}
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/save": {
+		"post": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Insert new data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_rolesFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"201": {
+					"description": "Save was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/update": {
+		"put": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Update data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_rolesFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Update was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/deleteById": {
+		"delete": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Delete by id",
+			"requestBody": {
+				"description": "The Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/idString"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/deleteList": {
+		"delete": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Delete by list id",
+			"requestBody": {
+				"description": "The list Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/listIdString"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/search": {
+		"post": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Search data by content entered on the form",
+			"requestBody": {
+				"description": "The list of data is retrieved by page-by-page",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_rolesFromSearch"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_roles can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_roles/exportData": {
+		"post": {
+			"tags": [
+				"sys_roles"
+			],
+			"summary": "Export data by content entered on the form",
+			"requestBody": {
+				"description": "All data is retrieved",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_rolesFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_roles can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_roles"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

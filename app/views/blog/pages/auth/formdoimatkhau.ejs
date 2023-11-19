@@ -1,0 +1,189 @@
+<% 
+	const linkPrefix = systemConfig.prefixAdmin + `/auth/`;
+%>
+<script src="admin/js/sha1.js"></script>
+
+<div class="container-fluid">
+ <input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+   
+
+  <div class="card card-info card-outline">
+        <div class="card-body">  
+         <div class="form-group row">
+               
+                <label class="col-sm-4 col-form-label text-sm-right"> </label>
+                 <div class="col-xs-8 col-sm-8">
+                <label class="col-form-label"> Mật khẩu phải đảm bảo đủ 5 điều kiện sau: 
+                    <br/> 1/ Có chiều dài từ 8 ký tự trở lên. 
+                    <br/> 2/ Có chứa chữ IN HOA. 
+                    <br/> 3/ Có chữ thường. 
+                    <br/> 4/ Có chứa chữ số. 
+                    <br/> 5/ Có ký tự ĐẶC BIỆT
+                </label>
+                    
+                </div>
+                   
+            </div>            
+            <div class="form-group row">
+                <div class="col-xs-3 col-sm-2">
+                </div>
+                <label class="col-sm-2 col-form-label text-sm-right required">Mật khẩu cũ</label>
+                <div class="col-xs-3 col-sm-2">
+                    <input type="password" class="form-control" value = "" name="MatKhauCu" Id = "MatKhauCu">
+                </div> 
+                 <div class="col-xs-3 col-sm-2">
+                </div>   
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-3 col-sm-2">
+                </div>
+                <label  class="col-sm-2 col-form-label text-sm-right required">Mật khẩu mới</label>
+                <div class="col-xs-3 col-sm-2">
+                    <input type="password" class="form-control" value = "" name="MatKhauMoi" Id = "MatKhauMoi">
+                </div> 
+                 <div class="col-xs-3 col-sm-2">
+                </div>   
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-3 col-sm-2">
+                </div>
+                <label  class="col-sm-2 col-form-label text-sm-right required">Xác nhận khẩu mới</label>
+                <div class="col-xs-3 col-sm-2">
+                    <input type="password" class="form-control" value = "" name="XacNhanMatKhauMoi" Id = "XacNhanMatKhauMoi">
+                </div> 
+                 <div class="col-xs-3 col-sm-2">
+                </div>   
+            </div>
+            <div class="form-group row">                 
+                <div class="col-xs-3 col-sm-2">
+                </div>    
+                 <div class="col-xs-2 col-sm-2">
+                </div>              
+                <div class="col-xs-2 col-sm-2">
+                    <input type="button" id = "btnDoiMatKhau" class="btn btn-sm btn-success" value="Đổi mật khẩu"> 
+                </div> 
+                 <div class="col-xs-3 col-sm-2">
+                </div>   
+            </div>  
+             <div class="form-group row">
+             <div class="col-xs-3 col-sm-2">
+                </div> 
+                <div class="col-xs-3 col-sm-2">
+                </div>
+                <div class = "col-xs-8 col-sm-8 text-success" id = "divThongBao"></div>     
+             </div> 
+        </div>
+    </div>
+</div>
+    <!-- script -->
+   <script>
+$('#btnDoiMatKhau').click(function(){
+    $(this).prop('disabled', true); //disable clicked button
+    DoiMatKhau();
+});
+function DoiMatKhau(){
+    //$('#MatKhauCu').val(shd)
+    var MatKhauCu	        = $('#MatKhauCu').val();
+    var MatKhauMoi	        = $('#MatKhauMoi').val();
+    var XacNhanMatKhauMoi	= $('#XacNhanMatKhauMoi').val();
+
+    MatKhauCu               = replaceAll(MatKhauCu, ' ', '');
+    MatKhauMoi              = replaceAll(MatKhauMoi, ' ', '');
+    XacNhanMatKhauMoi       = replaceAll(XacNhanMatKhauMoi, ' ', '');
+
+    if(XacNhanMatKhauMoi.length<8) {
+         var msg = "Mật khẩu mới phải có chiều dài từ 8 ký tự trở lên. Mật khẩu bạn nhập chỉ có "+ XacNhanMatKhauMoi.length + " ký tự" ;
+        $("#divThongBao").html(msg); 
+        alert(msg);
+        notice["title"] = msg; 
+        notice["class"] = "danger"; 
+        showNotice(notice); 
+        $('#btnDoiMatKhau').prop('disabled', false);
+        return false;
+    }  
+    
+    if(MatKhauMoi != XacNhanMatKhauMoi){
+        var msg = "Xác nhận lại mật khẩu không khớp với mật khẩu mới";
+        $("#divThongBao").html(msg); 
+        alert(msg);
+        notice["title"] = msg; 
+        notice["class"] = "danger"; 
+        showNotice(notice); 
+        $('#btnDoiMatKhau').prop('disabled', false);
+         return false;
+    }
+//123!@Qazxc
+  //  var decimal=  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,15}$/;
+  // var decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    var decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    if(!XacNhanMatKhauMoi.match(decimal)) 
+    { 
+        var msg = "Mật khẩu phải từ 8 ký tự trở lên, có chứa chữ IN HOA, chữ thường, có số và KÝ TỰ ĐẶC BIỆT";
+        $("#divThongBao").html(msg); 
+        alert(msg);
+        notice["title"] = msg; 
+        notice["class"] = "danger"; 
+        showNotice(notice); 
+        return false;
+        $('#btnDoiMatKhau').prop('disabled', false);
+         return false;
+    }
+
+
+    MatKhauCu               = hex_sha1(MatKhauCu);
+    MatKhauMoi              = hex_sha1(MatKhauMoi);
+    XacNhanMatKhauMoi       = hex_sha1(XacNhanMatKhauMoi);
+    let data = {
+        MatKhauCu           : MatKhauCu,
+        MatKhauMoi          : MatKhauMoi,
+        XacNhanMatKhauMoi   : XacNhanMatKhauMoi,
+    }
+
+    var link = $('#linkPrefix').val()+'doimatkhau';
+    $.ajax({
+        type: 'PUT',
+        url: link,
+        data: data,
+        dataType: "json",
+        success: function(resultdata){ 
+            let result=resultdata.result;  
+            let notice = {};
+            if((result=='false') ||(result==false)){
+                let msg = "Đã có lỗi, vui lòng thử lại 1 lần nữa";
+                $("#divThongBao").html(msg); 
+                alert(msg);
+                notice["title"] = msg; 
+                notice["class"] = "danger"; 
+                showNotice(notice); 
+                $('#btnDoiMatKhau').prop('disabled', false);
+                return false;
+            }
+            else if((result=='true') || (result==true)){
+                 let msg = "Đã thay đổi mật khẩu thành công";
+                $("#divThongBao").html(msg); 
+                alert(msg);
+                notice["title"] = msg; 
+                notice["class"] = "danger"; 
+                showNotice(notice); 
+                return false; 
+            } 
+        },
+        failure: function (response) {
+            alert('Đã có lỗi');
+             $('#btnDoiMatKhau').prop('disabled', false);
+        },
+        error: function (response) {
+            alert('Đã có lỗi');
+             $('#btnDoiMatKhau').prop('disabled', false);
+        }
+    });  
+    return true;
+
+}
+  
+function replaceAll(str, find, replace){	
+    return str.replace(new RegExp(find, 'g'), replace);
+}
+   </script>
+
+

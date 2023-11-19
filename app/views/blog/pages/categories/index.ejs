@@ -1,0 +1,10 @@
+<%- include ('./../../helpers/format-date') %>
+    <%- include ('./../../helpers/format-summary') %>
+    <% const linkPrefix=systemConfig.prefixBlog; %>
+    <% const sublink=linkPrefix+'/articles'; %>
+    <% const folder_uploads='uploads/articles/' ; %>
+            <% if(view_type==="view-list" ){ %>
+                <%- include ('./../../pages/categories/view-list') %>
+                    <%} else { %>
+                        <%- include ('./../../pages/categories/view-thumb') %>
+                            <%}%>

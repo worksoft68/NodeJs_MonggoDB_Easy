@@ -1,0 +1,1174 @@
+<%- include ('./../helpers/pagination') %>
+	<% const collection="sys_customsettings" ; const linkPrefix=systemConfig.prefixAdmin + `/${collection}/`; %>
+		<%- include ('./../elements/notify') %>
+			<div class="container-fluid">
+				<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+				<input name="params" id="params" type="hidden" value="<%= params %>">
+				&nbsp; &nbsp; <button type="button" id="btnOpenMainModalForm" class="btn btn-primary">
+					<i class="fas fa-plus"></i> Add new
+				</button>
+				&nbsp; <button type="button" id="btnDelete" class="btn-sm btn-danger" title="Delete">
+					<i class="fas fa-trash-alt"></i> Delete
+				</button>
+				&nbsp; <button type="button" id="btnSearchPost_OpenForm" class="btn-sm btn-info" title="Search">
+					<i class="fa fa-search"></i> Search
+				</button>
+				&nbsp; <button type="button" id="btnExport_OpenForm" class="btn-sm btn-success" title="Export">
+					<i class="fa fa-download"></i> Export
+				</button>
+				&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh"
+					onclick="RefreshPage()">
+					<i class="fa fa-refresh"></i> Refresh
+				</button>
+				<!-- ================ Modal From ======================== -->
+				<div class="modal fade" id="modaMainForm" data-backdrop="static" data-keyboard="true" tabindex="- 1"
+					role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Add New & Edit</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form role="form" name="formsys_customsettings" id="formsys_customsettings"
+									enctype="multipart/form-data" action=" <%= linkPrefix %>save" method="post">
+									<div class="form-group row">
+										<label id="labkeySettings"
+											class="col-sm-2 col-form-label text-sm-right required">Key Settings</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="text" name="keySettings" id="keySettings"
+												value="<%= item.keySettings %>" class="form-control form-control-sm">
+										</div>
+										<label id="labimage_setting"
+											class="col-sm-2 col-form-label text-sm-right ">Image</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="file" name="image_setting" id="image_setting"
+												class="form-control form-control-sm">
+											<input type="hidden" name="image_setting_old" id="image_setting_old"
+												value="<%= item.image_setting %>">
+										</div>
+										<label id="labis_use_ckeditor"
+											class="col-sm-2 col-form-label text-sm-right required">Use Ckeditor</label>
+										<div class="col-xs-10 col-sm-10">
+											<label><input type="radio" name="is_use_ckeditor" id="is_use_ckeditor_true"
+													value="true"> Yes</label> &nbsp;&nbsp;&nbsp;
+											<label><input type="radio" name="is_use_ckeditor" id="is_use_ckeditor_false"
+													value="false"> No</label>
+										</div>
+										<label id="labvalue_setting"
+											class="col-sm-2 col-form-label text-sm-right required">Value</label>
+										<div class="col-xs-10 col-sm-10">
+											<textarea class="form-control" name="value_setting" id="value_setting"
+												rows="5"><%= item.value_setting %></textarea>
+										</div>
+										<label id="labdefault_value"
+											class="col-sm-2 col-form-label text-sm-right required">Default Value</label>
+										<div class="col-xs-10 col-sm-10">
+											<textarea class="form-control" name="default_value" id="default_value"
+												rows="5"><%= item.default_value %></textarea>
+										</div>
+										<label id="lablocation"
+											class="col-sm-2 col-form-label text-sm-right required">Location</label>
+										<div class="col-xs-10 col-sm-10">
+											<select id="location" name="location"
+												class="custom-select custom-select-sm">
+												<option value="novalue" selected="">- Select location -</option>
+												<option value="General" <%=(item.location=="General"
+													)? 'selected="selected"' : '' %>
+													>General</option>
+												<option value="Banner left" <%=(item.location=="Banner left" )
+													? 'selected="selected"' : '' %> >Banner left</option>
+												<option value="Banner right" <%=(item.location=="Banner right" )
+													? 'selected="selected"' : '' %> >Banner right</option>
+												<option value="Sidebar right" <%=(item.location=="Sidebar right" )
+													? 'selected="selected"' : '' %> >Sidebar right</option>
+												<option value="Adertisement end-of-page"
+													<%=(item.location=="Adertisement end-of-page" )
+													? 'selected="selected"' : '' %> >Adertisement end-of-page</option>
+												<option value="Footer" <%=(item.location=="Footer" )
+													? 'selected="selected"' : '' %>
+													>Footer</option>
+											</select>
+										</div>
+										<label id="labstart_time" class="col-sm-2 col-form-label text-sm-right ">Start
+											Time</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="date" name="start_time" id="start_time"
+												class="form-control form-control-sm">
+										</div>
+										<div class="col-xs-8 col-sm-8">
+										</div>
+										<label id="labend_time" class="col-sm-2 col-form-label text-sm-right ">End
+											Time</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="date" name="end_time" id="end_time"
+												class="form-control form-control-sm">
+										</div>
+										<div class="col-xs-8 col-sm-8">
+										</div>
+										<label id="labdescription"
+											class="col-sm-2 col-form-label text-sm-right ">Description</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="text" name="description" id="description"
+												value="<%= item.description %>" class="form-control form-control-sm">
+										</div>
+										<label id="labstatus"
+											class="col-sm-2 col-form-label text-sm-right ">Status</label>
+										<div class="col-xs-10 col-sm-10">
+											<label><input type="radio" name="status" id="status_true" value="true">
+												Yes</label> &nbsp;&nbsp;&nbsp;
+											<label><input type="radio" name="status" id="status_false" value="false">
+												No</label>
+										</div>
+										<label id="labordering"
+											class="col-sm-2 col-form-label text-sm-right ">Ordering</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="number" name="ordering" id="ordering"
+												value="<%= item.ordering %>" class="form-control form-control-sm">
+										</div>
+										<label id="labis_system" class="col-sm-2 col-form-label text-sm-right ">Is
+											System</label>
+										<div class="col-xs-10 col-sm-10">
+											<label><input type="radio" name="is_system" id="is_system_true"
+													value="true"> Yes</label> &nbsp;&nbsp;&nbsp;
+											<label><input type="radio" name="is_system" id="is_system_false"
+													value="false"> No</label>
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="text-success" id="divMessage"></div>
+									</div>
+									<input name="_idHidden" id="_idHidden" type="hidden">
+									<div class="modal-footer">
+										&nbsp; <button type="button" id="btnCloseMainMoal" data-dismiss="modal"
+											class="btn btn-sm btn-primary" title="Close">
+											<i class="fa fa-mail-reply"></i> Close
+										</button>
+										<button type="button" id="btnSave" class="btn-sm btn-success" title="Save">
+											<i class="fa fa-save"></i> Save
+										</button>
+										&nbsp; <button type="button" id="btnUpdate" class="btn-sm btn-primary"
+											title="Update">
+											<i class="fa fa-save"></i> Update
+										</button>
+										&nbsp; <button type="button" id="btnSearchPost" class="btn-sm btn-info"
+											title="Search">
+											<i class="fa fa-search"></i> Search
+										</button>
+										&nbsp; <button type="submit" id="btnSearchGet" class="btn-sm btn-warning"
+											title="Search Get">
+											<i class="fa fa-search"></i> Search Get
+										</button>
+										&nbsp; <button type="button" id="btnExport" class="btn-sm btn-success"
+											title="Export">
+											<i class="fa fa-download"></i> Export
+										</button>
+									</div>
+								</form>
+								<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+								<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+								<!-- // Underline -->
+								<!--<div class="card card-info card-outline collapsed-card"></div>-->
+							</div> <!-- End <div class="modal-body">  -->
+							<!-- ================= Other information ==============================-->
+							<div class="card card-info card-outline collapsed-card">
+								<div class="card-header">
+									<h6 class="card-title">Other information</h6>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse"
+											data-toggle="tooltip" title="Collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="card-body" style="display: none;">
+									<div class="row justify-content-between">
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_created_Text">User name created: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_created_Value">User name
+											created: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_created_Text">Datetime created: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_created_Value">Datetime
+											created:</label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_modified_Text">User name modifiedd: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_modified_Value">User
+											name modifiedd: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_modified_Text">DateTime modified: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_modified_Value">DateTime
+											modified: </label>
+									</div>
+								</div>
+
+							</div>
+							<!-- ================= End Other information ==================== -->
+						</div> <!-- End <div class="modal-content">  -->
+					</div>
+				</div>
+				<!-- ================ End Modal From ============================= -->
+
+				<div class="card card-info card-outline">
+					<div class="card-header">
+						<h4 class="card-title">List data &nbsp;</h4>
+						<!-- //===========================================-->
+						<div class="button-group card-title">
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+								<span class="fas fa-cog"></span>
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="width: 300px;">
+								<li>
+									<a href="#" class="small" data-value="keySettings" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnkeySettings" />&nbsp;
+										<label id="labkeySettings_CheckboxShow">Key Settings </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="image_setting" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnimage_setting" />&nbsp;
+										<label id="labimage_setting_CheckboxShow">Image </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="is_use_ckeditor" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnis_use_ckeditor" />&nbsp;
+										<label id="labis_use_ckeditor_CheckboxShow">Use Ckeditor </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="value_setting" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnvalue_setting" />&nbsp;
+										<label id="labvalue_setting_CheckboxShow">Value </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="default_value" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumndefault_value" />&nbsp;
+										<label id="labdefault_value_CheckboxShow">Default Value </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="location" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnlocation" />&nbsp;
+										<label id="lablocation_CheckboxShow">Location </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="start_time" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnstart_time" />&nbsp;
+										<label id="labstart_time_CheckboxShow">Start Time </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="end_time" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnend_time" />&nbsp;
+										<label id="labend_time_CheckboxShow">End Time </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="description" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumndescription" />&nbsp;
+										<label id="labdescription_CheckboxShow">Description </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="status" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnstatus" />&nbsp;
+										<label id="labstatus_CheckboxShow">Status </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="ordering" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnordering" />&nbsp;
+										<label id="labordering_CheckboxShow">Ordering </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="is_system" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnis_system" />&nbsp;
+										<label id="labis_system_CheckboxShow">Is System </label>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //=========================================================== -->
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+								title="Collapse"><i class="fas fa-minus"></i></button>
+						</div>
+					</div>
+					<div class="card-body">
+						<table id="tablesys_customsettings" class="table table-bordered table-hover btn-table mb-0">
+							<thead>
+								<tr>
+									<th class="text-center">
+										<div class="custom-control custom-checkbox">
+											<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+											<label for="check-all" class="custom-control-label"></label>
+										</div>
+									</th>
+									<th class="text-center" data-sort="" data-column="keySettings" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labkeySettings_tb">
+											Key Settings <i class="fa fa-fw" data-column="keySettings"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="image_setting"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labimage_setting_tb">
+											Image <i class="fa fa-fw" data-column="image_setting"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="is_use_ckeditor"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labis_use_ckeditor_tb">
+											Use Ckeditor <i class="fa fa-fw" data-column="is_use_ckeditor"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="value_setting"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labvalue_setting_tb">
+											Value <i class="fa fa-fw" data-column="value_setting"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="default_value"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labdefault_value_tb">
+											Default Value <i class="fa fa-fw" data-column="default_value"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="location" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="lablocation_tb">
+											Location <i class="fa fa-fw" data-column="location"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="start_time" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labstart_time_tb">
+											Start Time <i class="fa fa-fw" data-column="start_time"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="end_time" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labend_time_tb">
+											End Time <i class="fa fa-fw" data-column="end_time"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="description" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labdescription_tb">
+											Description <i class="fa fa-fw" data-column="description"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="status" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labstatus_tb">
+											Status <i class="fa fa-fw" data-column="status"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="ordering" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labordering_tb">
+											Ordering <i class="fa fa-fw" data-column="ordering"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="is_system" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labis_system_tb">
+											Is System <i class="fa fa-fw" data-column="is_system"></i>
+										</label>
+									</th>
+									<th class="text-center">#</a></th>
+								</tr>
+							</thead>
+							<tbody id="bodyTablesys_customsettings">
+								<tr>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+					<div class="col-xs-1 col-sm-1">
+						<input type="number" class="form-control form-control-sm" name="numberItemPerPage"
+							id="numberItemPerPage" size="4">
+					</div>
+					<div class="col-xs-9 col-sm-9" id="paginationsys_customsettings">
+					</div>
+				</div>
+			</div>
+			<script type="application/javascript">
+				var language={};
+				var listData;
+				var linkPrefix=$('#linkPrefix').val();
+				var idMainTable="tablesys_customsettings";
+				setSelectedColumnToShowInterface(idMainTable);
+
+				onLoadData();
+				function onLoadData() {
+					getLanguage();
+					setUpdateButtonStatus(false)
+					setInterfaceText();
+					getNumberItemPerPage();
+					var strData=$('#listData').val();
+					listData=JSON.parse(strData);
+					if(listData.length>0) {
+						displayDataToTable();
+						var paramsString=$('#params').val();
+						const params=JSON.parse(paramsString);
+						paginationHelper(params.pagination,"sys_customsettings",params.currentStatus,params.keyword,linkPrefix,"paginationsys_customsettings");
+					}
+				}
+
+				function displayDataToTable() {
+					sortDataJson();
+					showAllColumnInTable(idMainTable);
+					link=createLinkImage("sys_customsettings");
+					var table=document.getElementById("bodyTablesys_customsettings");
+					var lengthtable=table.rows.length-1;
+					for(var n=lengthtable;n>=0;n--) {
+						table.deleteRow(n);
+					}
+					var length=listData.length;
+					if(length<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+						return false;
+					}
+					$("#modaMainForm").modal('hide');
+					listData.forEach(function(data) {
+						var row=table.insertRow(0);
+						var cell0=row.insertCell(0);
+						var cell1=row.insertCell(1);
+						var cell2=row.insertCell(2);
+						var cell3=row.insertCell(3);
+						var cell4=row.insertCell(4);
+						var cell5=row.insertCell(5);
+						var cell6=row.insertCell(6);
+						var cell7=row.insertCell(7);
+						var cell8=row.insertCell(8);
+						var cell9=row.insertCell(9);
+						var cell10=row.insertCell(10);
+						var cell11=row.insertCell(11);
+						var cell12=row.insertCell(12);
+						var cell13=row.insertCell(13);
+						let check=`<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+				<label for="${data._id}" class="custom-control-label"></label>
+			</div>`;
+
+						let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+							"<i class=\"fas fa-pencil-alt\"></i>"+
+							"</a> "+
+							" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.keySettings+"')\">";
+						strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+						strbutton+=" </ button > ";
+
+						cell0.innerHTML=check+strbutton;
+						cell1.innerHTML=data.keySettings;
+						//1. display value
+						//cell2.innerHTML = data.image_setting;
+
+						//2. display image
+						cell2.innerHTML=`<img src="${link}${data.image_setting}" alt="" width="100" >`;
+
+						//3. display full link
+						//cell2.innerHTML = `${link}${data.image_setting}`;
+
+						//4. display download file
+						//cell2.innerHTML=`<a href="${link}${data.image_setting}" target="_blank">Download</a>`;
+						cell3.innerHTML=data.is_use_ckeditor;
+						cell4.innerHTML=data.value_setting;
+						cell5.innerHTML=data.default_value;
+						cell6.innerHTML=data.location;
+						cell7.innerHTML=dateToStringMMM(data.start_time,'-');
+						cell8.innerHTML=dateToStringMMM(data.end_time,'-');
+						cell9.innerHTML=data.description;
+						cell10.innerHTML=data.status;
+						cell11.innerHTML=data.ordering;
+						cell12.innerHTML=data.is_system;
+
+						//cell13.innerHTML=strbutton;
+					});
+					hideColumnInTable(idMainTable);
+				}
+				function setUpdateButtonStatus(statusUpdate) {
+					$('#btnSave').prop('hidden',statusUpdate);
+					$('#btnUpdate').prop('hidden',!statusUpdate);
+				}
+
+				function getLanguage() {
+					var languageString=$('#sysLanguage').val();
+					language=JSON.parse(languageString);
+				}
+
+				function setInterfaceText() {
+					$("#pageTitle").html(language.TitlePage);
+					$("#labkeySettings").text(language.keySettings);
+					$("#labimage_setting").text(language.image_setting);
+					$("#labis_use_ckeditor").text(language.is_use_ckeditor);
+					$("#labvalue_setting").text(language.value_setting);
+					$("#labdefault_value").text(language.default_value);
+					$("#lablocation").text(language.location);
+					$("#labstart_time").text(language.start_time);
+					$("#labend_time").text(language.end_time);
+					$("#labdescription").text(language.description);
+					$("#labstatus").text(language.status);
+					$("#labordering").text(language.ordering);
+					$("#labis_system").text(language.is_system);
+
+					$("#labkeySettings_tb").html(language.keySettings+"<i class=\"fa fa-fw\" data-column=\"keySettings\"></i>");
+					$("#labimage_setting_tb").html(language.image_setting+"<i class=\"fa fa-fw\" data-column=\"image_setting\"></i>");
+					$("#labis_use_ckeditor_tb").html(language.is_use_ckeditor+"<i class=\"fa fa-fw\" data-column=\"is_use_ckeditor\"></i>");
+					$("#labvalue_setting_tb").html(language.value_setting+"<i class=\"fa fa-fw\" data-column=\"value_setting\"></i>");
+					$("#labdefault_value_tb").html(language.default_value+"<i class=\"fa fa-fw\" data-column=\"default_value\"></i>");
+					$("#lablocation_tb").html(language.location+"<i class=\"fa fa-fw\" data-column=\"location\"></i>");
+					$("#labstart_time_tb").html(language.start_time+"<i class=\"fa fa-fw\" data-column=\"start_time\"></i>");
+					$("#labend_time_tb").html(language.end_time+"<i class=\"fa fa-fw\" data-column=\"end_time\"></i>");
+					$("#labdescription_tb").html(language.description+"<i class=\"fa fa-fw\" data-column=\"description\"></i>");
+					$("#labstatus_tb").html(language.status+"<i class=\"fa fa-fw\" data-column=\"status\"></i>");
+					$("#labordering_tb").html(language.ordering+"<i class=\"fa fa-fw\" data-column=\"ordering\"></i>");
+					$("#labis_system_tb").html(language.is_system+"<i class=\"fa fa-fw\" data-column=\"is_system\"></i>");
+
+					$("#labkeySettings_CheckboxShow").text(language.keySettings);
+					$("#labimage_setting_CheckboxShow").text(language.image_setting);
+					$("#labis_use_ckeditor_CheckboxShow").text(language.is_use_ckeditor);
+					$("#labvalue_setting_CheckboxShow").text(language.value_setting);
+					$("#labdefault_value_CheckboxShow").text(language.default_value);
+					$("#lablocation_CheckboxShow").text(language.location);
+					$("#labstart_time_CheckboxShow").text(language.start_time);
+					$("#labend_time_CheckboxShow").text(language.end_time);
+					$("#labdescription_CheckboxShow").text(language.description);
+					$("#labstatus_CheckboxShow").text(language.status);
+					$("#labordering_CheckboxShow").text(language.ordering);
+					$("#labis_system_CheckboxShow").text(language.is_system);
+				}
+
+				function getById(Id) {
+					var link=linkPrefix+'getById/'+Id;
+					$.ajax({
+						type: 'GET',
+						url: link,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							if(success==true) {
+								showDataToForm(resultdata.data);
+							}
+						},
+						failure: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+						error: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+					});
+				}
+
+				function showDataToForm(data) {
+					//alert(123);
+					try {
+						setUpdateButtonStatus(true);
+						$("#modaMainForm").modal('show');
+						$('#_idHidden').val(data._id);
+						$('#keySettings').val(data.keySettings);
+						$('#image_setting_old').val(data.image_setting);
+
+						if(data.is_use_ckeditor==true) {
+							document.getElementById('is_use_ckeditor_true').checked=true;
+						} else {
+							document.getElementById('is_use_ckeditor_false').checked=true;
+						}
+
+						$('#value_setting').val(data.value_setting);
+						$('#default_value').val(data.default_value);
+						$('#location').val(data.location);
+
+						$('#start_time').val(getDate(data.start_time));
+						$('#end_time').val(getDate(data.end_time));
+						$('#description').val(data.description);
+
+						if(data.status==true) {
+							document.getElementById('status_true').checked=true;
+						} else {
+							document.getElementById('status_false').checked=true;
+						}
+
+						$('#ordering').val(data.ordering);
+						if(data.is_system==true) {
+							document.getElementById('is_system_true').checked=true;
+						} else {
+							document.getElementById('is_system_false').checked=true;
+						}
+
+						create=data.create;
+						if(create!=undefined) {
+							$('#labuser_name_created_Value').text(create.user_name_created);
+							$('#labdatetime_created_Value').text(create.datetime_created);
+						}
+						modified=data.modified;
+						if(modified!=undefined) {
+							$('#labuser_name_modified_Value').text(modified.user_name_modified);
+							$('#labdatetime_modified_Value').text(modified.datetime_modified);
+						}
+					}
+					catch(error) {}
+				}
+
+				$('#btnOpenMainModalForm').click(function() {
+					$("#modaMainForm").modal('show');
+					clearForm();
+				});
+
+				$('#btnSearchPost_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				$('#btnExport_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				function clearForm() {
+					try {
+						$('#_idHidden').val('');
+						setUpdateButtonStatus(false)
+						$('#keySettings').val('');
+						$('#image_setting').val('');
+						$('#is_use_ckeditor').val('');
+						$('#value_setting').val('');
+						$('#default_value').val('');
+						$('#location').val('');
+						$('#start_time').val('');
+						$('#end_time').val('');
+						$('#description').val('');
+						$('#status').val('');
+						$('#ordering').val('');
+						$('#is_system').val('');
+					}
+					catch(error) {}
+				}
+
+				$('#btnSearchPost').click(function() {
+					$(this).prop('disabled',true);
+					getContentPages(1);
+				});
+
+				function getContentPages(page) {
+					var sortStorage=getSortType(linkPrefix);
+					let data={
+						keySettings: $('#keySettings').val(),
+						image_setting: $('#image_setting').val(),
+						value_setting: $('#value_setting').val(),
+						default_value: $('#default_value').val(),
+						location: $('#location').val(),
+						description: $('#description').val(),
+						status: $('#status').val(),
+						Page: page,
+						sortColumn: sortStorage.sortColumn,
+						sortType: sortStorage.sortType,
+						numberItemPerPage: $('#numberItemPerPage').val()
+					}
+					var link=linkPrefix+'search';
+					$.ajax({
+						type: 'POST',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnSearchPost').prop('disabled',false);
+							listData=resultdata.data;
+							displayDataToTable();
+							let params=resultdata.params;
+							paginationHelper(params.pagination,"sys_customsettings","","",linkPrefix,"paginationsys_customsettings");
+
+							if(params.pagination.totalItems>0) {
+								var message=language.Message_Find+params.pagination.totalItems+language.Message_Words_records;
+								showNoticeSuccess(message);
+							}
+						},
+						failure: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						},
+						error: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						}
+					});
+					$('#btnSearchPost').prop('disabled',false);
+				}
+
+				$('#btnSave').click(function() {
+					$(this).prop('disabled',true);
+					chekValueAndSubmit();
+					$(this).prop('disabled',false);
+				});
+
+				function chekValueAndSubmit() {
+					if(($('#keySettings').val().length<1)||($('#keySettings').val().length>50)) {
+						var message=formatMessage(language.keySettings+": "+language.Message_Invalid_keySettings,'1','50');
+						alert(message);
+						return false;
+					}
+					if(($('#value_setting').val().length<1)||($('#value_setting').val().length>1000)) {
+						var message=formatMessage(language.value_setting+": "+language.Message_Invalid_value_setting,'1','1000');
+						alert(message);
+						return false;
+					}
+					if(($('#default_value').val().length<1)||($('#default_value').val().length>1000)) {
+						var message=formatMessage(language.default_value+": "+language.Message_Invalid_default_value,'1','1000');
+						alert(message);
+						return false;
+					}
+					if(($('#location').val().length<1)||($('#location').val().length>50)) {
+						var message=formatMessage(language.location+": "+language.Message_Invalid_location,'1','50');
+						alert(message);
+						return false;
+					}
+					document.getElementById("formsys_customsettings").submit();
+				}
+
+				function getDataForm() {
+					if(($('#keySettings').val().length<1)||($('#keySettings').val().length>50)) {
+						var message=formatMessage(language.keySettings+": "+language.Message_Invalid_keySettings,'1','50');
+						alert(message);
+						return false;
+					}
+					if(($('#value_setting').val().length<1)||($('#value_setting').val().length>1000)) {
+						var message=formatMessage(language.value_setting+": "+language.Message_Invalid_value_setting,'1','1000');
+						alert(message);
+						return false;
+					}
+					if(($('#default_value').val().length<1)||($('#default_value').val().length>1000)) {
+						var message=formatMessage(language.default_value+": "+language.Message_Invalid_default_value,'1','1000');
+						alert(message);
+						return false;
+					}
+					if(($('#location').val().length<1)||($('#location').val().length>50)) {
+						var message=formatMessage(language.location+": "+language.Message_Invalid_location,'1','50');
+						alert(message);
+						return false;
+					}
+					return {
+						'_idHidden': $('#_idHidden').val(),
+						'keySettings': $('#keySettings').val(),
+						'image_setting': $('#image_setting').val(),
+						'is_use_ckeditor': $('#is_use_ckeditor').val(),
+						'value_setting': $('#value_setting').val(),
+						'default_value': $('#default_value').val(),
+						'location': $('#location').val(),
+						'start_time': $('#start_time').val(),
+						'end_time': $('#end_time').val(),
+						'description': $('#description').val(),
+						'status': $('#status').val(),
+						'ordering': $('#ordering').val(),
+						'is_system': $('#is_system').val(),
+					}
+				}
+
+				function saveInsert() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnSave').prop('disabled',false);
+						return false;
+					}
+					var link=linkPrefix+'save';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false))
+								showNoticeDanger(language.Message_AddNewError+' ('+response.message+')');
+							else if((success!=true)&&(success!='true'))
+								showNoticeDanger(result.message);
+							else {
+								insertRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+					});
+					$('#btnSave').prop('disabled',false);
+				}
+
+				function insertRow(data) {
+					showAllColumnInTable(idMainTable);
+					showNoticeSuccess(language.Message_AddNewSuccess);
+					var table=document.getElementById("bodyTablesys_customsettings");
+					var row=table.insertRow(0);
+					var cell0=row.insertCell(0);
+					var cell1=row.insertCell(1);
+					var cell2=row.insertCell(2);
+					var cell3=row.insertCell(3);
+					var cell4=row.insertCell(4);
+					var cell5=row.insertCell(5);
+					var cell6=row.insertCell(6);
+					var cell7=row.insertCell(7);
+					var cell8=row.insertCell(8);
+					var cell9=row.insertCell(9);
+					var cell10=row.insertCell(10);
+					var cell11=row.insertCell(11);
+					var cell12=row.insertCell(12);
+					var cell13=row.insertCell(13);
+					let check=`<div class="custom-control custom-checkbox"> 
+					<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+					<label for="${data._id}" class="custom-control-label"></label>
+				</div>`;
+					cell0.innerHTML=check;
+					cell1.innerHTML=data.keySettings;
+					cell2.innerHTML=data.image_setting;
+					cell3.innerHTML=data.is_use_ckeditor;
+					cell4.innerHTML=data.value_setting;
+					cell5.innerHTML=data.default_value;
+					cell6.innerHTML=data.location;
+					cell7.innerHTML=data.start_time;
+					cell8.innerHTML=data.end_time;
+					cell9.innerHTML=data.description;
+					cell10.innerHTML=data.status;
+					cell11.innerHTML=data.ordering;
+					cell12.innerHTML=data.is_system;
+					let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						"<i class=\"fas fa-pencil-alt\"></i>"+
+						"</a> "+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.keySettings+"')\">";
+					strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+					strbutton+=" </ button > ";
+					cell13.innerHTML=strbutton;
+					hideColumnInTable(idMainTable);
+				}
+
+				$('#btnUpdate').click(function() {
+					$(this).prop('disabled',true);
+					chekValueAndSubmit();
+					$(this).prop('disabled',false);
+				});
+
+				function saveUpdate() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnUpdate').prop('disabled',false);
+						return false;
+					}
+					if(data._idHidden=="") {
+						$('#btnUpdate').prop('disabled',false);
+						showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+						return false;
+					}
+					var link=linkPrefix+'update';
+					$.ajax({
+						type: 'put',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_UpdateError);
+								return false;
+							}
+							else if((success!=true)&&(success!='true')) {
+								showNoticeDanger(result.message);
+								return false;
+							}
+							else {
+								updateRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						}
+					});
+					$('#btnUpdate').prop('disabled',false);
+				}
+
+				function updateRow(data) {
+					showNoticeSuccess(language.Message_UpdateSuccess);
+					showAllColumnInTable(idMainTable);
+					$("#modaMainForm").modal('hide');
+					var row=$("#tablesys_customsettings button[data-id='"+data._id+"']").parents("tr")[0];
+					var tr="<tr>"+
+						"<td class=\"text-center\">"+
+						"<div class=\"custom-control custom-checkbox\">"+
+						"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\""+data._id+"\" value=\""+data._id+"\"> "+
+						"<label for=\""+data._id+"\" class=\"custom-control-label\"></label> "+
+						"</div>"+
+						"</td>";
+					tr+="<td class=\"text-center\">"+data.keySettings+"</td>";
+					tr+="<td class=\"text-center\">"+data.image_setting+"</td>";
+					tr+="<td class=\"text-center\">"+data.is_use_ckeditor+"</td>";
+					tr+="<td class=\"text-center\">"+data.value_setting+"</td>";
+					tr+="<td class=\"text-center\">"+data.default_value+"</td>";
+					tr+="<td class=\"text-center\">"+data.location+"</td>";
+					tr+="<td class=\"text-center\">"+data.start_time+"</td>";
+					tr+="<td class=\"text-center\">"+data.end_time+"</td>";
+					tr+="<td class=\"text-center\">"+data.description+"</td>";
+					tr+="<td class=\"text-center\">"+data.status+"</td>";
+					tr+="<td class=\"text-center\">"+data.ordering+"</td>";
+					tr+="<td class=\"text-center\">"+data.is_system+"</td>";
+					tr+="<td class=\"text-center\">"+
+						" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						" <i class=\"fas fa-pencil-alt\"></i>"+
+						" </a>"+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.keySettings+"')\">"+
+						" <i class=\"fas fa-trash-alt\"></i> "+
+						" </button> "+
+						" </td>"+
+						" </tr>";
+					$(row).after(tr);
+					$(row).remove();
+					hideColumnInTable(idMainTable);
+				}
+				function deleteById(row,objectId,objectName) {
+					var message=language.Message_DoYouWantToDeleteById+' '+objectName+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={
+						'_id': objectId
+					};
+					var link=linkPrefix+'deleteById';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							var message=resultdata.message;
+							var notice={};
+							if((success=='true')||(success==true)) {
+								showNoticeSuccess(language.Message_DeleteSuccess);
+								var i=row.parentNode.parentNode.rowIndex;
+								document.getElementById("tablesys_customsettings").deleteRow(i);
+								return true;
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+							else if(message.length>10) {
+								showNoticeDanger(message);
+								return false;
+							}
+							else {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnDelete').click(function() {
+					$(this).prop('disabled',true);
+					deleteList();
+					$(this).prop('disabled',false);
+				});
+				function deleteList() {
+					var arrayId=[];
+					var listId=" ";
+					$("input:checkbox[name=chkListData]:checked").each(function() {
+						arrayId.push($(this).val());
+						listId+=$(this).val()+',';
+					});
+					let message=language.Message_DoYouWantToDeleteInTheList+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={arrayId};
+					var link=linkPrefix+'deleteList';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var result=resultdata.data;
+							var success=result.success;
+							var message=result.message;
+							if((success=='true')||(success==true)) {
+								let deleteSuccess=result.deleteSuccess;
+								let deleteError=result.deleteError;
+								if(deleteSuccess.length>0) {
+									let message=language.Message_DeleteSuccess;
+									message+=" "+deleteSuccess.toString();
+									if(deleteError.length>0) {
+										message+=" \n"+language.Message_DeleteFail+" "+deleteError.toString();
+									}
+									showNoticeSuccess(message);
+									deleteRows(arrayId,"bodyTablesys_customsettings");
+									return true;
+								}
+								else if(deleteError.length>0) {
+									let message=language.Message_DeleteFail+" "+deleteError.toString();
+									showNoticeDanger(message);
+								}
+								else {
+									showNoticeDanger(language.Message_DeleteFail);
+								}
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnExport').click(function() {
+					$(this).prop('disabled',true);
+					exportData();
+					$(this).prop('disabled',false);
+				});
+
+				function exportData() {
+					let data={
+						'keySettings': $('#keySettings').val(),
+						'image_setting': $('#image_setting').val(),
+						'value_setting': $('#value_setting').val(),
+						'default_value': $('#default_value').val(),
+						'location': $('#location').val(),
+						'description': $('#description').val(),
+					}
+					var link=linkPrefix+'exportData';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnExport').prop('disabled',false);
+							let result=resultdata.data;
+							showNoticeSuccess(language.Message_CompletedGetData);
+							ExportToExcel(result);
+						},
+						failure: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						},
+						error: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						}
+					});
+					$('#btnExport').prop('disabled',false);
+				}
+
+				function ExportToExcel(datas) {
+					let itemCount=datas.length;
+					if(itemCount>1000) {
+						showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+					}
+					if(itemCount<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+					}
+					var strTable='<style type="text/css">';
+					strTable+=' .Border { ';
+					strTable+='         color: windowtext; ';
+					strTable+='         font-size: 11.0pt; ';
+					strTable+='         word-break:break-all;';
+					strTable+='         font-style: normal; ';
+					strTable+='         text-decoration: none; ';
+					strTable+='         font-family: "Times New Roman", serif; ';
+					strTable+='         text-align: left; ';
+					strTable+='         vertical-align: bottom;';
+					strTable+='         border-left: .5pt solid windowtext; ';
+					strTable+='         border-right: .5pt solid windowtext; ';
+					strTable+='         border-top: .5pt solid windowtext; ';
+					strTable+='         border-bottom: .5pt solid windowtext; ';
+					strTable+='         padding-left: 1px; ';
+					strTable+='         padding-right: 1px; ';
+					strTable+='         padding-top: 1px; ';
+					strTable+='     } ';
+
+					strTable+=' .BorderHeader { ';
+					strTable+='        color: white; ';
+					strTable+='         background-color:#0026ff; ';
+					strTable+='        font-size: 11.0pt; ';
+					strTable+='        text-align: center; ';
+					strTable+='        font-style: normal; ';
+					strTable+='        text-decoration: none; ';
+					strTable+='        font-family: "Times New Roman", serif; ';
+					strTable+='        vertical-align: bottom;';
+					strTable+='        border-left: .5pt solid windowtext; ';
+					strTable+='        border-right: .5pt solid windowtext; ';
+					strTable+='        border-top: .5pt solid windowtext; ';
+					strTable+='        border-bottom: .5pt solid windowtext; ';
+					strTable+='        padding-left: 1px; ';
+					strTable+='        padding-right: 1px; ';
+					strTable+='        padding-top: 1px; ';
+					strTable+='     } ';
+					strTable+='  </style> ';
+					strTable+=' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+					strTable+='<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+					strTable+='<th class="BorderHeader" >Order</th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Key Settings </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Image </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Use Ckeditor </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Value </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Default Value </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Location </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Start Time </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> End Time </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Description </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Status </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Ordering </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Is System </th> ';
+					strTable+='</tr> ';
+					var n=0;
+					var currentRow=4;
+					for(var i=0;i<itemCount;i++) {
+						var vTemp=datas[i];
+						currentRow+=1;
+						n+=1;
+						strTable+='<tr >';
+						strTable+='<th class="Border" > '+n+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.keySettings+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.image_setting+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.is_use_ckeditor+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.value_setting+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.default_value+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.location+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.start_time+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.end_time+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.description+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.status+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.ordering+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.is_system+' </th> ';
+						strTable+='</tr>';
+					}
+					strTable+=' </table> ';
+					ExportHtmlToExcel(strTable,'sys_customsettings');
+					showNoticeSuccess(language.Message_ExportSuccess);
+				}
+
+			</script>

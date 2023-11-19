@@ -1,0 +1,631 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API with 'Developer NodeJs Easy'",
+    "description": "This is a sample server for a pet store.",
+    "termsOfService": "http://example.com/terms/",
+    "contact": {
+      "name": "API Support",
+      "url": "http://www.example.com/support",
+      "email": "support@example.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:6969/api/",
+      "description": "Localhost API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "categories",
+      "description": "ghi chú"
+    },
+    {
+      "name": "loaiHangHoa",
+      "description": "Loại hàng hóa"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/categories": {
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "get all",
+        "requestBody": {
+          "description": "categories body",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/categoriesGetAll"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "get 1 categories",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of pet that needs to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/search": {
+      "post": {
+        "tags": [
+          "categories"
+        ],
+        "summary": "search categories",
+        "requestBody": {
+          "description": "categories body",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/categoriesFrom"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/categories"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa": {
+      "get": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Returns list data from the system that the user has access to",
+        "requestBody": {
+          "description": "page on load"
+        },
+        "responses": {
+          "200": {
+            "description": "A list of loaiHangHoa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/getAll": {
+      "post": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Returns list data from the system, the list of data is retrieved by page-by-page",
+        "requestBody": {
+          "description": "The list of data is retrieved by page-by-page",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/getAll"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of loaiHangHoa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/{Id}": {
+      "get": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Get data by Id",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "description": "Id of loaiHangHoa that needs to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/save": {
+      "post": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Insert new data",
+        "requestBody": {
+          "description": "Data input interface",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/loaiHangHoaFrom"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Save was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/update": {
+      "put": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Update data",
+        "requestBody": {
+          "description": "Data input interface",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/loaiHangHoaFrom"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/deleteById": {
+      "delete": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Delete by id",
+        "requestBody": {
+          "description": "The Id will be deleted",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/idNumber"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delete was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/deleteList": {
+      "delete": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Delete by list id",
+        "requestBody": {
+          "description": "The list Id will be deleted",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/listIdNumber"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delete was successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/search": {
+      "post": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Search data by content entered on the form",
+        "requestBody": {
+          "description": "The list of data is retrieved by page-by-page",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/loaiHangHoaFromSearch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of loaiHangHoa can be looked up on the system.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/loaiHangHoa/exportData": {
+      "post": {
+        "tags": [
+          "loaiHangHoa"
+        ],
+        "summary": "Export data by content entered on the form",
+        "requestBody": {
+          "description": "All data is retrieved",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schema/loaiHangHoaFrom"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A list of loaiHangHoa can be looked up on the system.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schema/loaiHangHoa"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schema": {
+      "getAll": {
+        "type": "object",
+        "properties": {
+          "Page": {
+            "type": "integer"
+          }
+        }
+      },
+      "idNumber": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          }
+        }
+      },
+      "idString": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          }
+        }
+      },
+      "listIdNumber": {
+        "type": "object",
+        "properties": {
+          "arrayId[]": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "listIdString": {
+        "type": "object",
+        "properties": {
+          "arrayId[]": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "categories": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Slug": {
+            "type": "string"
+          },
+          "Thumbnail": {
+            "type": "string"
+          },
+          "ViewType": {
+            "type": "string"
+          },
+          "ShowHomePage": {
+            "type": "string"
+          },
+          "Ordering": {
+            "type": "integer"
+          },
+          "Description": {
+            "type": "string"
+          }
+        }
+      },
+      "categoriesFrom": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Slug": {
+            "type": "string"
+          },
+          "ViewType": {
+            "type": "string"
+          },
+          "ShowHomePage": {
+            "type": "string"
+          },
+          "Page": {
+            "type": "integer"
+          }
+        }
+      },
+      "categoriesGetAll": {
+        "type": "object",
+        "properties": {
+          "Page": {
+            "type": "integer"
+          }
+        }
+      },
+      "loaiHangHoa": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "Id": {
+                "type": "integer"
+              },
+              "TenGoi": {
+                "type": "string"
+              },
+              "FileDinhKem": {
+                "type": "string"
+              },
+              "GhiChu": {
+                "type": "string"
+              },
+              "STT": {
+                "type": "integer"
+              },
+              "TrangThai": {
+                "type": "boolean"
+              },
+              "User_Id_Created": {
+                "type": "integer"
+              },
+              "User_Name_Created": {
+                "type": "string"
+              },
+              "DateTime_Created": {
+                "type": "string"
+              },
+              "User_Id_Modified": {
+                "type": "integer"
+              },
+              "User_Name_Modified": {
+                "type": "string"
+              },
+              "DateTime_Modified": {
+                "type": "string"
+              }
+            }
+          },
+          "option": {
+            "type": "object",
+            "properties": {
+              "option1": {
+                "type": "string"
+              },
+              "optionx": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "loaiHangHoaFrom": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          },
+          "TenGoi": {
+            "type": "string"
+          },
+          "FileDinhKem": {
+            "type": "string"
+          },
+          "GhiChu": {
+            "type": "string"
+          },
+          "STT": {
+            "type": "integer"
+          },
+          "TrangThai": {
+            "type": "boolean"
+          }
+        }
+      },
+      "loaiHangHoaFromSearch": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          },
+          "TenGoi": {
+            "type": "string"
+          },
+          "FileDinhKem": {
+            "type": "string"
+          },
+          "GhiChu": {
+            "type": "string"
+          },
+          "STT": {
+            "type": "integer"
+          },
+          "TrangThai": {
+            "type": "boolean"
+          },
+          "Page": {
+            "type": "integer"
+          },
+          "sortColumn": {
+            "type": "string"
+          },
+          "sortType": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

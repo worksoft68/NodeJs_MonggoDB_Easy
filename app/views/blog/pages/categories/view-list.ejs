@@ -1,0 +1,56 @@
+<%- include ('./../../helpers/highlignt') %>
+<% const linkPrefix=systemConfig.prefixBlog; 
+        const sublink=linkPrefix+'articles'; 
+        const folder_uploads='uploads/articles/' ; %>
+
+
+        <div class="col-lg-8 post-list">
+            <!-- Start latest-post Area -->
+            <div class="latest-post-wrap">
+                <% if(itemsInCategory.length> 0) { %>
+                    <h4 class="cat-title">
+                        <%= itemsInCategory[0].categories.name %>
+                    </h4>
+                    <% itemsInCategory.forEach((item)=> { %>
+                        <div class="single-latest-post row">
+                            <div class="col-lg-5 post-left">
+                                <div class="feature-img relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="<%= folder_uploads + item.thumb %>" alt="<%= item.title %>">
+                                </div>
+                            </div>
+                            <div class="col-lg-7 post-right">
+                                <a href="/<%= sublink %>/<%= item.slug %>-<%= item._id %>">
+                                    <h4>
+                                        <%- highlightHelper(item.title, keyword) %>
+                                    </h4>
+                                </a>
+                                <ul class="meta">
+                                    <li>
+                                        <a href="#"><span class="lnr lnr-user"></span>
+                                            <%= item.create.user_name_created %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><span class="lnr lnr-calendar-full"></span>
+                                            <%= formatDate(item.create.datetime_createde) %>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <p class="excert">
+    
+                                    <%- highlightHelper(item.summary, keyword) %>
+    
+                                </p>
+                            </div>
+                        </div>
+                        <% }) %>
+    
+    
+                            <% }else{ %>
+                                <h4 class="cat-title">There are no posts</h4>
+    
+                                <% } %>
+            </div>
+        </div>
+        <!-- End latest-post Area -->

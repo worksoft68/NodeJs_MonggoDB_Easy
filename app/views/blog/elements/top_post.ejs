@@ -1,0 +1,69 @@
+<%- include ('./../helpers/format-date') %>
+<%
+    const linkPrefix     = systemConfig.prefixBlog;
+    const folder_uploads = 'uploads/articles/';
+%>
+<section class="top-post-area pt-10">
+    <div class="container no-padding">
+            <div class="row small-gutters">
+                <div class="col-lg-8 top-post-left">
+                <div class="feature-image-thumb relative mt-10">
+                    <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="<%= folder_uploads + itemsSpecial[0].thumb %>" alt="<%= itemsSpecial[0].categories.name %>">
+                </div>
+                <div class="top-post-details">
+                    <ul class="tags">
+                        <li><a href="<%= linkPrefix %>/categories/<%= itemsSpecial[0].slug %>-<%= itemsSpecial[0].categorie_id %>">
+                                <%= itemsSpecial[0].categories.name %>
+                            </a></li>
+                    </ul>
+                    <a href="<%= linkPrefix %>/articles/<%= itemsSpecial[0].slug %>-<%= itemsSpecial[0]._id %>">
+                        <h3>
+                            <%= itemsSpecial[0].title %>
+                        </h3>
+                    </a>
+                    <ul class="meta">
+                        <li><a href="#"><span class="lnr lnr-user"></span>
+                                <%= itemsSpecial[0].create.user_name_created %>
+                            </a></li>
+                        <li><a href="#"><span class="lnr lnr-calendar-full"></span>
+                                <%= formatDate(itemsSpecial[0].create.datetime_created) %>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-4 top-post-right">
+                <% for(let i = 1; i < itemsSpecial.length; i++){ %>
+                    <div class="single-top-post mt-10">
+                        <div class="feature-image-thumb relative">
+                            <div class="overlay overlay-bg"></div>
+                            <img class="img-fluid" src="<%= folder_uploads + itemsSpecial[i].thumb %>" alt="<%= itemsSpecial[i].title %>">
+                        </div>
+                        <div class="top-post-details">
+                            <ul class="tags">
+                                <li><a href="<%= linkPrefix %>/categories/<%= itemsSpecial[i].slug %>-<%= itemsSpecial[i].categorie_id %>">
+                                        <%= itemsSpecial[i].categories.name %>
+                                    </a></li>
+                            </ul>
+                            <a href="<%= linkPrefix %>/articles/<%= itemsSpecial[i].slug %>-<%= itemsSpecial[i]._id %>">
+                                <h4>
+                                    <%= itemsSpecial[i].title %>
+                                </h4>
+                            </a>
+                            <ul class="meta">
+                                <li><a href="#"><span class="lnr lnr-user"></span>
+                                        <%= itemsSpecial[i].create.user_name_created %>
+                                    </a></li>
+                                <li><a href="#"><span class="lnr lnr-calendar-full"></span>
+                                        <%= formatDate(itemsSpecial[i].create.datetime_created) %>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>

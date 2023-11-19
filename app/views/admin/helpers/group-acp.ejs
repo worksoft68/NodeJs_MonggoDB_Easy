@@ -1,0 +1,43 @@
+<% 
+    groupACPHelper = (linkPrefix, group_acp, id) => { 
+        let link       = linkPrefix + 'change-group-acp/' + id + '/' + group_acp ; 
+        let classGroupAcp = 'btn-success';
+        let classGroupAcpCheck = 'fa-check';       
+        if(group_acp == 'no')
+        {
+             classGroupAcp = 'btn-danger';
+             classGroupAcpCheck = 'fa-minus';
+        }
+        return `
+        <a  href="${link}" 
+            data-yes = 'btn-success'
+            data-icon-yes = 'fa-check'
+            data-no = 'btn-danger'
+            data-icon-no = 'fa-minus'
+            data-current = ${classGroupAcp}
+            data-icon-current = ${classGroupAcpCheck}
+            class="ajax-group-acp my-btn-state rounded-circle btn btn-sm ${classGroupAcp}">
+            <i class="fas ${classGroupAcpCheck}"></i>
+        </a>
+        `;
+        
+        
+        // if(group_acp == 'yes')
+        // {        
+        // return `<a href="${link}" class="my-btn-state rounded-circle btn btn-sm btn-success"><i class="fas fa-check"></i></a>`;
+        // }
+
+        // else
+        // {
+        //     return `<a href="${link}" class="my-btn-state rounded-circle btn btn-sm btn-danger"><i class="fas fa-minus"></i></a>`;
+        // }
+    }
+
+%>
+
+
+
+
+ 
+
+

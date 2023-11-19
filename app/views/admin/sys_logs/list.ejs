@@ -1,0 +1,695 @@
+<%- include ('./../helpers/pagination') %>
+<%
+	const collection = "sys_logs";
+	const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`; 
+%>
+<%- include ('./../elements/notify') %>
+<div class="container-fluid">
+	<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+	<input name="params" id="params" type="hidden" value="<%= params %>">
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			 <h6 class="card-title">Form</h6>
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+					<i class="fas fa-minus"></i>
+				</button>
+			</div>
+		</div>
+		<div class="card-body" style="display: block;">
+			<form role="form" name="formsys_logs" id="formsys_logs"  action =" <%= linkPrefix %>searchGet" method="get">
+				<div class="form-group row">
+					<label id="labid" class="col-sm-2 col-form-label text-sm-right ">Id</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text" readonly name="id"  id="id" value="<%= item._id %>" class="form-control form-control-sm">
+					</div>
+					<label id="labaction_user" class="col-sm-2 col-form-label text-sm-right ">Action</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="action_user"  id="action_user"  value="<%= item.action_user %>" class="form-control form-control-sm">
+					</div>
+					<label id="labimpact_zone" class="col-sm-2 col-form-label text-sm-right ">Impact Zone</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="impact_zone"  id="impact_zone"  value="<%= item.impact_zone %>" class="form-control form-control-sm">
+					</div>
+					<label id="labid_collection" class="col-sm-2 col-form-label text-sm-right ">id_collection</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="id_collection"  id="id_collection"  value="<%= item.id_collection %>" class="form-control form-control-sm">
+					</div>
+					<label id="labcontent_log" class="col-sm-2 col-form-label text-sm-right ">Content Log</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="content_log"  id="content_log"  value="<%= item.content_log %>" class="form-control form-control-sm">
+					</div>
+					<label id="labip" class="col-sm-2 col-form-label text-sm-right ">IP</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="ip"  id="ip"  value="<%= item.ip %>" class="form-control form-control-sm">
+					</div>
+					<label id="labmac_address" class="col-sm-2 col-form-label text-sm-right ">Mac Address</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="mac_address"  id="mac_address"  value="<%= item.mac_address %>" class="form-control form-control-sm">
+					</div>
+					<label id="labhostname" class="col-sm-2 col-form-label text-sm-right ">Hostname</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="hostname"  id="hostname"  value="<%= item.hostname %>" class="form-control form-control-sm">
+					</div>
+					<label id="labid_user" class="col-sm-2 col-form-label text-sm-right ">Id User</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="id_user"  id="id_user" value="<%= item.id_user %>" class="form-control form-control-sm">
+					</div>
+					<label id="labfullname" class="col-sm-2 col-form-label text-sm-right ">Fullname</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="text"  name="fullname"  id="fullname"  value="<%= item.fullname %>" class="form-control form-control-sm">
+					</div>
+					<label id="labdatetime_log" class="col-sm-2 col-form-label text-sm-right ">Datetime Log</label>
+					<div class="col-xs-2 col-sm-2">
+						<input type="date" name="datetime_log"  id="datetime_log"  class="form-control form-control-sm">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-2 col-sm-2"></div>
+					<div class="col-xs-10 col-sm-10">						
+						&nbsp; <button type="button" id = "btnDelete" class="btn-sm btn-danger" title="Delete">
+							<i class="fas fa-trash-alt"></i> Delete
+						</button>
+						&nbsp; <button type="button" id = "btnSearchPost" class="btn-sm btn-info" title="Search">
+							<i class="fa fa-search"></i> Search
+						</button>
+						&nbsp; <button type="submit" id = "btnSearchGet" class="btn-sm btn-warning" title="Search Get">
+							<i class="fa fa-search"></i> Search Get
+						</button>
+						&nbsp; <button type="button" id = "btnExport" class="btn-sm btn-success" title="Export">
+							<i class="fa fa-download"></i> Export
+						</button>
+						&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh" onclick="RefreshPage()">
+							<i class="fa fa-refresh"></i> Refresh
+						</button>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class = "text-success" id = "divMessage"></div>
+				</div>
+						<input name="idHidden" id="idHidden" type="hidden">
+			</form>
+						<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+						<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+		
+		</div>
+	</div>
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			<h4 class="card-title">List data &nbsp;</h4>
+			<!-- //===========================================-->
+			<div class="button-group card-title">
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle"
+					data-toggle="dropdown">
+					<span class="fas fa-cog"></span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" style="width: 300px;">
+					<li>
+						<a href="#" class="small" data-value="id" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnid" />&nbsp;
+							<label id="labid_CheckboxShow">Id </label>
+						</a> &nbsp; &nbsp;
+						<a href="#" class="small" data-value="action_user" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnaction_user" />&nbsp;
+							<label id="labaction_user_CheckboxShow">Action </label>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="small" data-value="impact_zone" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnimpact_zone" />&nbsp;
+							<label id="labimpact_zone_CheckboxShow">Impact Zone </label>
+						</a> &nbsp; &nbsp;
+						<a href="#" class="small" data-value="id_collection" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnid_collection" />&nbsp;
+							<label id="labid_collection_CheckboxShow">id_collection </label>
+						</a>
+					</li>										
+					<li>
+						<a href="#" class="small" data-value="id_user" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnid_user" />&nbsp;
+							<label id="labid_user_CheckboxShow">Id User </label>
+						</a> &nbsp; &nbsp;
+						<a href="#" class="small" data-value="fullname" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnfullname" />&nbsp;
+							<label id="labfullname_CheckboxShow">Fullname </label>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="small" data-value="datetime_log" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumndatetime_log" />&nbsp;
+							<label id="labdatetime_log_CheckboxShow">Datetime Log </label>
+						</a> &nbsp; &nbsp;
+					</li>
+				</ul>
+			</div>
+			<!-- //=========================================================== -->
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fas fa-minus"></i></button>
+			</div>
+		</div>
+		<div class="card-body">
+			<table id="tablesys_logs" class="table table-bordered table-hover btn-table mb-0">
+				<thead>
+					<tr>
+						<th class="text-center">
+							<div class="custom-control custom-checkbox">
+								<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+								<label for="check-all" class="custom-control-label"></label>
+							</div>
+						</th>
+						<th class="text-center" data-sort="" data-column="id" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labid_tb">
+								Id <i class="fa fa-fw" data-column="id"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="action_user" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labaction_user_tb">
+								Action <i class="fa fa-fw" data-column="action_user"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="impact_zone" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labimpact_zone_tb">
+								Impact Zone <i class="fa fa-fw" data-column="impact_zone"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="id_collection" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labid_collection_tb">
+								id_collection <i class="fa fa-fw" data-column="id_collection"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="id_user" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labid_user_tb">
+								Id User <i class="fa fa-fw" data-column="id_user"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="fullname" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labfullname_tb">
+								Fullname <i class="fa fa-fw" data-column="fullname"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="datetime_log" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labdatetime_log_tb">
+								Datetime Log <i class="fa fa-fw" data-column="datetime_log"></i>
+							</label>
+						</th>
+						<th class="text-center">Action</a></th>
+					</tr>
+				</thead>
+				<tbody id="bodyTablesys_logs">
+					<tr>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+		<div class="col-xs-1 col-sm-1">
+			<input type="number" class="form-control form-control-sm" name="numberItemPerPage" id="numberItemPerPage" size="4">
+		</div>
+		<div class="col-xs-9 col-sm-9" id="paginationsys_logs">
+		</div>
+	</div>
+</div>
+<script type="application/javascript">
+var language = {};
+var listData;
+var linkPrefix=$('#linkPrefix').val();
+var idMainTable="tablesys_logs";
+setSelectedColumnToShowInterface(idMainTable);
+
+onLoadData();
+function onLoadData(){
+	getLanguage();
+	setUpdateButtonStatus(false)
+	setInterfaceText();
+	getNumberItemPerPage();
+	var strData = $('#listData').val();
+	listData = JSON.parse(strData);
+	if(listData.length>0){
+		displayDataToTable();
+		var paramsString = $('#params').val();
+		const params = JSON.parse(paramsString);
+		paginationHelper(params.pagination, "sys_logs", params.currentStatus, params.keyword,linkPrefix,  "paginationsys_logs");
+	}
+}
+
+function displayDataToTable(){
+	sortDataJson();
+	showAllColumnInTable(idMainTable);
+	var table = document.getElementById("bodyTablesys_logs");
+	var lengthtable= table.rows.length-1;
+	for(var n = lengthtable; n >= 0; n--) {
+		table.deleteRow(n);
+	}
+	var length = listData.length;
+	if(length <1 ) {
+		showNoticeDanger(language.Message_NotFoundData);
+		return false;
+	}
+
+	listData.forEach(function(data) {
+		var row = table.insertRow(0);
+		var cell0 = row.insertCell(0);
+		var cell1 = row.insertCell(1);
+		var cell2 = row.insertCell(2);
+		var cell3 = row.insertCell(3);
+		var cell4 = row.insertCell(4);
+		var cell5 = row.insertCell(5);
+		var cell6 = row.insertCell(6);
+		var cell7 = row.insertCell(7);
+		var cell8 = row.insertCell(8);		
+		let check= `<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+				<label for="${data._id}" class="custom-control-label"></label>
+			</div>`;
+		cell0.innerHTML = check;
+		cell1.innerHTML = data._id;
+		cell2.innerHTML = data.action_user;
+		cell3.innerHTML = data.impact_zone;
+		cell4.innerHTML = data.id_collection;	
+		cell5.innerHTML = data.id_user;
+		cell6.innerHTML = data.fullname;
+		cell7.innerHTML = data.datetime_log;
+		let strbutton = " <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+			"<i class=\"fas fa-pencil-alt\"></i>" + 
+			"</a> " + 
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','" + data.action_user + "')\">";
+			strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+		strbutton += " </ button > ";
+		cell8.innerHTML = strbutton;
+	});
+	hideColumnInTable(idMainTable);
+}
+
+function getLanguage(){
+	var languageString = $('#sysLanguage').val();	
+	language = JSON.parse(languageString);
+}
+
+function setInterfaceText(){
+	$("#pageTitle").html(language.TitlePage);
+	$("#labid").text(language.id);
+	$("#labaction_user").text(language.action_user);
+	$("#labimpact_zone").text(language.impact_zone);
+	$("#labid_collection").text(language.id_collection);
+	$("#labcontent_log").text(language.content_log);
+	$("#labip").text(language.ip);
+	$("#labmac_address").text(language.mac_address);
+	$("#labhostname").text(language.hostname);
+	$("#labid_user").text(language.id_user);
+	$("#labfullname").text(language.fullname);
+	$("#labdatetime_log").text(language.datetime_log);
+
+	$("#labid_tb").html(language.id+"<i class=\"fa fa-fw\" data-column=\"id\"></i>");
+	$("#labaction_user_tb").html(language.action_user+"<i class=\"fa fa-fw\" data-column=\"action_user\"></i>");
+	$("#labimpact_zone_tb").html(language.impact_zone+"<i class=\"fa fa-fw\" data-column=\"impact_zone\"></i>");
+	$("#labid_collection_tb").html(language.id_collection+"<i class=\"fa fa-fw\" data-column=\"id_collection\"></i>");
+	
+	$("#labid_user_tb").html(language.id_user+"<i class=\"fa fa-fw\" data-column=\"id_user\"></i>");
+	$("#labfullname_tb").html(language.fullname+"<i class=\"fa fa-fw\" data-column=\"fullname\"></i>");
+	$("#labdatetime_log_tb").html(language.datetime_log+"<i class=\"fa fa-fw\" data-column=\"datetime_log\"></i>");
+
+	$("#labid_CheckboxShow").text(language.id);
+	$("#labaction_user_CheckboxShow").text(language.action_user);
+	$("#labimpact_zone_CheckboxShow").text(language.impact_zone);
+	$("#labid_collection_CheckboxShow").text(language.id_collection);	
+	$("#labid_user_CheckboxShow").text(language.id_user);
+	$("#labfullname_CheckboxShow").text(language.fullname);
+	$("#labdatetime_log_CheckboxShow").text(language.datetime_log);
+}
+
+function getById(Id){
+	var link = linkPrefix + 'getById/'+Id;
+	$.ajax({
+		type: 'GET',
+		url: link,
+		dataType: "json",
+		success: function(resultdata){
+			var success = resultdata.success;
+			if(success == true){
+				showDataToForm(resultdata.data);
+			}
+		},
+		failure: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+		error: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+	});
+}
+
+function showDataToForm(data){
+	try{
+		setUpdateButtonStatus(true);
+
+		$('#idHidden').val(data._id);
+		$('#id').val(data._id);
+		$('#action_user').val(data.action_user);
+		$('#impact_zone').val(data.impact_zone);
+		$('#id_collection').val(data.id_collection);
+		$('#content_log').val(data.content_log);
+		$('#ip').val(data.ip);
+		$('#mac_address').val(data.mac_address);
+		$('#hostname').val(data.hostname);
+		$('#id_user').val(data.id_user);
+		$('#fullname').val(data.fullname);
+		$('#datetime_log_old').val(getDate(data.datetime_log));
+	}
+	catch(error){}
+}
+
+function clearForm(){
+	try{
+		$('#idHidden').val('');
+		setUpdateButtonStatus(false)
+		$('#id').val('');
+		$('#action_user').val('');
+		$('#impact_zone').val('');
+		$('#id_collection').val('');
+		$('#content_log').val('');
+		$('#ip').val('');
+		$('#mac_address').val('');
+		$('#hostname').val('');
+		$('#id_user').val('');
+		$('#fullname').val('');
+		$('#datetime_log').val('');
+	}
+	catch(error){}
+}
+
+$('#btnSearchPost').click(function(){
+	$(this).prop('disabled', true);
+	getContentPages(1);
+});
+
+function getContentPages(page){
+	var sortStorage=getSortType(linkPrefix);
+	let data = {
+		action_user : $('#action_user').val(),
+		impact_zone : $('#impact_zone').val(),
+		id_collection : $('#id_collection').val(),
+		content_log : $('#content_log').val(),
+		ip : $('#ip').val(),
+		mac_address : $('#mac_address').val(),
+		hostname : $('#hostname').val(),
+		fullname : $('#fullname').val(),
+		Page : page,
+		sortColumn: sortStorage.sortColumn,
+		sortType: sortStorage.sortType,
+		numberItemPerPage: $('#numberItemPerPage').val()
+	}
+	var link = linkPrefix + 'search';
+	$.ajax({
+		type: 'POST',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnSearchPost').prop('disabled', false);
+			listData = resultdata.data;
+			displayDataToTable();
+			let params = resultdata.params;
+			paginationHelper(params.pagination, "sys_logs", "", "", linkPrefix, "paginationsys_logs");
+
+			if(params.pagination.totalItems > 0 ) {
+				var message = language.Message_Find + params.pagination.totalItems + language.Message_Words_records;
+				showNoticeSuccess(message);
+			}
+		},
+		failure: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		},
+		error: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		}
+	});
+	$('#btnSearchPost').prop('disabled', false);
+}
+
+
+
+function getDataForm(){
+	return {
+		'idHidden' : $('#idHidden').val(),
+		'id' : $('#id').val(),
+		'action_user' : $('#action_user').val(),
+		'impact_zone' : $('#impact_zone').val(),
+		'id_collection' : $('#id_collection').val(),
+		'content_log' : $('#content_log').val(),
+		'ip' : $('#ip').val(),
+		'mac_address' : $('#mac_address').val(),
+		'hostname' : $('#hostname').val(),
+		'id_user' : $('#id_user').val(),
+		'fullname' : $('#fullname').val(),
+		'datetime_log' : $('#datetime_log').val(),
+	}
+}
+
+function deleteById(row, objectId, objectName){
+	var message =  language.Message_DoYouWantToDeleteById  +' '+ objectName+'?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = {
+		'id' : objectId
+	};
+	var link = linkPrefix+'deleteById';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var success = resultdata.success;
+			var message = resultdata.message;
+			var notice 	= {};
+			if((success == 'true') || (success == true)){
+				showNoticeSuccess(language.Message_DeleteSuccess);
+				var i = row.parentNode.parentNode.rowIndex;
+				document.getElementById("tablesys_logs").deleteRow(i);
+				return true;
+			}
+			else if((success=='false')||(success==false)) {
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+			else if(message.length > 10){
+				showNoticeDanger(message);
+				return false;
+			}
+			else {
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnDelete').click(function(){
+	$(this).prop('disabled', true);
+	deleteList();
+	$(this).prop('disabled', false);
+});
+function deleteList(){
+	var arrayId = [];
+	var listId 	= " ";
+	$("input:checkbox[name=chkListData]:checked").each(function(){
+		arrayId.push($(this).val());
+		listId += $(this).val() + ',';
+	});
+	
+	let message =  language.Message_DoYouWantToDeleteInTheList + '?' ;
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = { arrayId };
+	var link = linkPrefix+'deleteList';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var result = resultdata.data;
+			var success = result.success;
+			var message = result.message;
+			if((success == 'true') || (success == true)){
+				let deleteSuccess = result.deleteSuccess;
+				let deleteError = result.deleteError;
+				if(deleteSuccess.length > 0){
+					let message = language.Message_DeleteSuccess;
+					message += " "+ deleteSuccess.toString();
+					if(deleteError.length > 0){
+						message += " \n"+  language.Message_DeleteFail + " "+ deleteError.toString();
+					}
+					showNoticeSuccess(message);
+					deleteRows(arrayId,"bodyTablesys_logs");
+					return true;
+				}
+				else if(deleteError.length > 0){
+					let message = language.Message_DeleteFail + " "+ deleteError.toString();
+					showNoticeDanger(message);
+				}
+				else{
+					showNoticeDanger(language.Message_DeleteFail);
+				}
+			}
+			else if((success == 'false') || (success == false)){
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnExport').click(function(){
+	$(this).prop('disabled', true);
+	exportData();
+	$(this).prop('disabled', false);
+});
+
+function exportData(){
+	let data = {
+		'action_user' : $('#action_user').val(),
+		'impact_zone' : $('#impact_zone').val(),
+		'id_collection' : $('#id_collection').val(),
+		'content_log' : $('#content_log').val(),
+		'ip' : $('#ip').val(),
+		'mac_address' : $('#mac_address').val(),
+		'hostname' : $('#hostname').val(),
+		'fullname' : $('#fullname').val(),
+	}
+	var link = linkPrefix + 'exportData';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnExport').prop('disabled', false);
+			let result = resultdata.data;
+			showNoticeSuccess(language.Message_CompletedGetData);
+			ExportToExcel(result);
+		},
+		failure: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		},
+		error: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		}
+	});
+	$('#btnExport').prop('disabled', false);
+}
+
+function ExportToExcel(datas){
+	let itemCount = datas.length; 
+	if(itemCount > 1000) {
+		showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+	}
+	if(itemCount < 1) {
+		showNoticeDanger(language.Message_NotFoundData);
+	}
+	var strTable = '<style type="text/css">';
+	strTable += ' .Border { ';
+	strTable += '         color: windowtext; ';
+	strTable += '         font-size: 11.0pt; ';
+	strTable += '         word-break:break-all;';
+	strTable += '         font-style: normal; ';
+	strTable += '         text-decoration: none; ';
+	strTable += '         font-family: "Times New Roman", serif; ';
+	strTable += '         text-align: left; ';
+	strTable += '         vertical-align: bottom;';
+	strTable += '         border-left: .5pt solid windowtext; ';
+	strTable += '         border-right: .5pt solid windowtext; ';
+	strTable += '         border-top: .5pt solid windowtext; ';
+	strTable += '         border-bottom: .5pt solid windowtext; ';
+	strTable += '         padding-left: 1px; ';
+	strTable += '         padding-right: 1px; ';
+	strTable += '         padding-top: 1px; ';
+	strTable += '     } ';
+
+	strTable += ' .BorderHeader { ';
+	strTable += '        color: white; ';
+	strTable += '         background-color:#0026ff; ';
+	strTable += '        font-size: 11.0pt; ';
+	strTable += '        text-align: center; ';
+	strTable += '        font-style: normal; ';
+	strTable += '        text-decoration: none; ';
+	strTable += '        font-family: "Times New Roman", serif; ';
+	strTable += '        vertical-align: bottom;';
+	strTable += '        border-left: .5pt solid windowtext; ';
+	strTable += '        border-right: .5pt solid windowtext; ';
+	strTable += '        border-top: .5pt solid windowtext; ';
+	strTable += '        border-bottom: .5pt solid windowtext; ';
+	strTable += '        padding-left: 1px; ';
+	strTable += '        padding-right: 1px; ';
+	strTable += '        padding-top: 1px; ';
+	strTable += '     } ';
+	strTable += '  </style> ';
+	strTable += ' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+	strTable += '<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+	strTable += '<th class="BorderHeader" >Order</th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Id </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Action </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Impact Zone </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> id_collection </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Content Log </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> IP </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Mac Address </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Hostname </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Id User </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Fullname </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Datetime Log </th> ';
+	strTable += '</tr> ';
+	var n = 0;
+	var currentRow = 4;
+	for(var i = 0; i < itemCount; i++) {
+		var vTemp = datas[i];
+		currentRow += 1;
+		 n += 1;
+		strTable += '<tr >';
+		strTable += '<th class="Border" > ' + n + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp._id + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.action_user + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.impact_zone + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.id_collection + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.content_log + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.ip + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.mac_address + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.hostname + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.id_user + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.fullname + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.datetime_log + ' </th> ';
+		strTable += '</tr>';
+	}
+	strTable += ' </table> ';
+	ExportHtmlToExcel(strTable, 'sys_logs');
+	showNoticeSuccess(language.Message_ExportSuccess);
+}
+
+</script>

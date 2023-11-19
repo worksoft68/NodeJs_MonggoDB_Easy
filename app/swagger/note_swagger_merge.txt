@@ -1,0 +1,17 @@
+Command line to merger:
+
+swagger-merger -i ./app/swagger/swagger_merge.json -o ./app/lib/swagger.json
+
+
+
+If I run the swagger-merge command and get an error like:
+"swagger-merger : File C:\Users\...\AppData\Roaming\npm\swagger-merger.ps1 cannot be loaded because running scripts is disabled  on this system. For more information, see about_Execution_Policies at ..."
+
+
+The way to fix the error is as follows: 
+Open powershell in administrative mode and run the following command:
+
+"Set-ExecutionPolicy RemoteSigned"
+
+Choose yes or yes to all
+

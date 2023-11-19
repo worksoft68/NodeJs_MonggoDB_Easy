@@ -1,0 +1,8 @@
+<% 
+    showCustomSettings = (key, settings) => { 
+        var myInfo = settings.find(function (setting) {
+            return setting.keySettings == key;
+        });
+    return (myInfo == undefined)?'':myInfo.value_setting;
+    } 
+%>

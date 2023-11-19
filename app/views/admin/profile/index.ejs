@@ -1,0 +1,290 @@
+<%- include ('./../helpers/pagination') %>
+    <% const collection="profile" ; const linkPrefix=systemConfig.prefixAdmin + `/${collection}/`; %>
+        <% const linkPrefixChangePassword=systemConfig.prefixAdmin + `/auth/formchangepassword`; %>
+            <%- include ('./../elements/notify') %>
+                <%- include ('./../helpers/general') %>
+                    <script src="admin/js/sha1.js"></script>
+                    <div class="container-fluid">
+                        <input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+                        <input name="resultUpdate" id="resultUpdate" type="hidden" value="<%= resultUpdate %>">
+
+                        <div class="card card-info card-outline">
+                            <div class="card-header">
+                                <h6 class="card-title">Login account information</h6>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse"
+                                        data-toggle="tooltip" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="display: block;">
+                                <form role="form" name="formsys_users" action="<%= linkPrefix %>updateProfile/"
+                                    method="post" class="mb-0" id="formsys_users" enctype="multipart/form-data"
+                                    autocomplete="off">
+                                    <div class="form-group row">
+
+                                        <label id="labemployee_code"
+                                            class="col-sm-2 col-form-label text-sm-right required">Employee Code</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" name="employee_code" id="employee_code"
+                                                value="<%= item.employee_code %>" class="form-control form-control-sm">
+                                        </div>
+                                        <label id="labdepartment_id"
+                                            class="col-sm-2 col-form-label text-sm-right required">Department</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <div class="dropdown">
+                                                <div id="divDropdowndepartment_name" class="dropdown-content">
+                                                    <input type="text" size="75" id="department_name"
+                                                        name="department_name"
+                                                        onkeyup="filterSelectBox('department_name')"
+                                                        onfocus="focusDropdown('department_name')"
+                                                        onblur="blurDropdown('department_name')"
+                                                        class="form-control form-control-sm">
+                                                    <input id="id_department" name="id_department"
+                                                        value="<%= item.id_department %>" type="hidden">
+                                                    <div id="DivContendepartment_name" class="Divdropdown-content">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <label id="labfirstname"
+                                            class="col-sm-2 col-form-label text-sm-right required">First
+                                            Name</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" name="firstname" id="firstname"
+                                                value="<%= item.firstname %>" class="form-control form-control-sm">
+                                        </div>
+
+                                        <label id="lablastname"
+                                            class="col-sm-2 col-form-label text-sm-right required">Last
+                                            Name</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" name="lastname" id="lastname"
+                                                value="<%= item.lastname %>" class="form-control form-control-sm">
+                                        </div>
+
+                                        <label id="labusername"
+                                            class="col-sm-2 col-form-label text-sm-right required">Username</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" autocomplete="off" name="username" id="username"
+                                                value="<%= item.username %>" class="form-control form-control-sm">
+                                            <input name="username_encrypted" id="username_encrypted" type="hidden">
+                                        </div>
+                                        <label id="labbirthday"
+                                            class="col-sm-2 col-form-label text-sm-right ">Birthday</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="date" name="birthday" id="birthday"
+                                                value="<%= getDate(item.birthday) %>"
+                                                class="form-control form-control-sm">
+                                            <input name="birthday_" id="birthday_" value="<%= item.birthday %>"
+                                                type="hidden">
+                                        </div>
+
+                                        <label id="labsex" class="col-sm-2 col-form-label text-sm-right ">Sex</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <select id="sex" name="sex" class="custom-select custom-select-sm">
+                                                <option value="novalue">Choose Sex</option>
+                                                <option value="Male" <%=(item.sex=="Male" ) ? 'selected="selected"' : ''
+                                                    %>
+                                                    >Male</option>
+                                                <option value="Female" <%=(item.sex=="Female" ) ? 'selected="selected"'
+                                                    : '' %> >Female</option>
+
+                                                <option value="Other" <%=(item.sex=="Other" ) ? 'selected="selected"'
+                                                    : '' %>
+                                                    >Other</option>
+
+                                            </select>
+                                        </div>
+                                        <label id="labemail"
+                                            class="col-sm-2 col-form-label text-sm-right ">Email</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="email" name="email" id="email" value="<%= item.email %>"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                        <label id="labphonenumber" class="col-sm-2 col-form-label text-sm-right ">Phone
+                                            Number</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" name="phonenumber" id="phonenumber"
+                                                value="<%= item.phonenumber %>" class="form-control form-control-sm">
+                                        </div>
+
+                                        <label id="labaddress"
+                                            class="col-sm-2 col-form-label text-sm-right ">Address</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="text" name="address" id="address" value="<%= item.address %>"
+                                                class="form-control form-control-sm">
+                                        </div>
+
+                                        <label id="labavatar"
+                                            class="col-sm-2 col-form-label text-sm-right ">Avatar</label>
+                                        <div class="col-xs-4 col-sm-4">
+                                            <input type="file" name="avatar" id="avatar"
+                                                class="form-control form-control-sm">
+                                            <img src="" alt="" name="imgAvatar" id="imgAvatar" width="200">
+                                            <input name="avatar_old" id="avatar_old" value="<%= item.avatar %>"
+                                                type="hidden" />
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-xs-2 col-sm-2"></div>
+                                        <div class="col-xs-10 col-sm-10">
+                                            &nbsp; <button type="button" id="btnUpdate" class="btn-sm btn-primary"
+                                                title="Update">
+                                                <i class="fa fa-save"></i> Update
+                                            </button>
+                                            &nbsp; <button type="button" id="btnChangePassword"
+                                                class="btn-sm btn-success"
+                                                onclick="location.href='<%= linkPrefixChangePassword %>';"
+                                                title="Change Password">
+                                                <i class="fas fa-pencil-alt"></i> Change Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="text-success" id="divMessage"></div>
+                                    </div>
+                                    <input name="idHidden" id="idHidden" type="hidden" value="<%= item.id %>">
+                                </form>
+
+                                <input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+                                <input name="listDataCatalogue" id="listDataCatalogue" type="hidden"
+                                    value="<%= catalogue %>">
+                            </div>
+                        </div>
+                    </div>
+                    <script type="application/javascript">
+                        var language={};
+                        var linkPrefix=$('#linkPrefix').val();
+                        OnLoad();
+                        function OnLoad() {
+                            getLanguage();
+                            setInterfaceText();
+                            createDataForDropdownLists();
+                            closeAllDropdown();
+                            LoadImage();
+                            resultUpdate();
+                            // var birthdayString=$('#birthday_').val();
+                            // var birthday=new Date(birthdayString);
+                            // $('#birthday').val(birthday.toLocaleDateString('en-CA')); //;//YYYY-MM-dd  
+                        }
+                        function getLanguage() {
+                            var languageString=$('#sysLanguage').val();
+                            language=JSON.parse(languageString);
+                        }
+                        function setInterfaceText() {
+                            $("#labemployee_code").text(language.employee_code);
+                            $("#labdepartment_id").text(language.department_id);
+                            $("#labfirstname").text(language.firstname);
+                            $("#lablastname").text(language.lastname);
+                            $("#labusername").text(language.username);
+                            $("#labsex").text(language.sex);
+                            $("#labemail").text(language.email);
+                            $("#labphonenumber").text(language.phonenumber);
+                            $("#labbirthday").text(language.birthday);
+                            $("#labaddress").text(language.address);
+                            $("#labavatar").text(language.avatar);
+                        }
+
+                        function createDataForDropdownLists() {
+                            var strCatalogue=$('#listDataCatalogue').val();
+                            arrCatalogue=JSON.parse(strCatalogue);
+                            var arrDepartment=arrCatalogue[0];
+                            createDataForDropdown(arrDepartment,'id_department','_id','department_name','department_name','-- Chose --',{'showId': false});
+                            var id_department=$('#id_department').val();
+                            console.log(arrDepartment);
+                            arrDepartment.forEach(function(data) {
+                                if(id_department==data.id) {
+                                    $('#department_name').val(data.department_name);
+                                    return;
+                                }
+                            });
+
+
+
+                        }
+                        function closeAllDropdown() {
+                            var DivContendepartment_name=document.getElementById('DivContendepartment_name');
+                            DivContendepartment_name.hidden=true;
+                        }
+
+                        function LoadImage() {
+                            var Avatar=$('#avatar_old').val();
+                            var link=createLinkImage('sys_users');
+                            if(Avatar.length>3) {
+                                $("#imgAvatar").attr("src",link+Avatar);
+                            } else {
+                                $("#imgAvatar").attr("src",link+'User_no_avatar.png');
+                            }
+                        }
+
+                        $('#btnUpdate').click(function() {
+                            $(this).prop('disabled',true);
+                            chekValueAndSubmit();
+                            //saveUpdate();
+                            $(this).prop('disabled',false);
+                        });
+
+
+                        function chekValueAndSubmit() {
+                            var idHidden=$('#idHidden').val();
+                            if(($('#employee_code').val().length<1)||($('#employee_code').val().length>15)) {
+                                var message=formatMessage(language.employee_code+": "+language.Message_Invalid_employee_code,'1','15');
+                                alert(message);
+                                return false;
+                            }
+                            if(($('#department_id').val()<-2147483648)||($('#department_id').val()>4294967295)) {
+                                var message=formatMessage(language.department_id+": "+language.Message_Invalid_department_id,'-2147483648','4294967295');
+                                alert(message);
+                                return false;
+                            }
+
+                            if(($('#firstname').val().length<3)||($('#firstname').val().length>30)) {
+                                var message=formatMessage(language.firstname+": "+language.Message_Invalid_firstname,'1','30');
+                                alert(message);
+                                return false;
+                            }
+                            if(($('#lastname').val().length<3)||($('#lastname').val().length>30)) {
+                                var message=formatMessage(language.lastname+": "+language.Message_Invalid_lastname,'1','30');
+                                alert(message);
+                                return false;
+                            }
+
+                            if(($('#username').val().length<3)||($('#username').val().length>20)) {
+                                var message=formatMessage(language.username+": "+language.Message_Invalid_username,'1','20');
+                                alert(message);
+                                return false;
+                            }
+
+                            let username=$('#username').val();
+                            username=replaceAll(username,' ','');
+                            username=username.toLowerCase();
+                            $('#username').val(username);
+                            let username_encrypted=hex_sha1(username);
+                            $('#username_encrypted').val(username_encrypted);
+                            document.getElementById("formsys_users").submit();
+                        }
+
+                        function resultUpdate() {
+                            var resultString=$('#resultUpdate').val();
+                            if(resultString!='') {
+                                var result=JSON.parse(resultString);
+                                var success=result.success;
+                                if(success==true) {
+                                    alert(language.Message_UpdateSuccess);
+                                    $("#divMessage").html(language.Message_UpdateSuccess);
+                                    // showNoticeSuccess(language.Message_UpdateSuccess);
+                                }
+                                else if(success==false) {
+                                    alert(language.Message_UpdateError);
+                                    $("#divMessage").html(language.Message_UpdateError);
+                                    // showNoticeDanger(language.Message_UpdateError);
+                                }
+                            }
+                        }
+
+
+                    </script>

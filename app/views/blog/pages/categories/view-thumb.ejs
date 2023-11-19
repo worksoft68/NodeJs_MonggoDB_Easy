@@ -1,0 +1,155 @@
+
+<% const linkPrefix=systemConfig.prefixBlog; 
+        const sublink=linkPrefix+'articles'; 
+        const folder_uploads='uploads/articles/' ; %>
+        
+<% let categoryName='' ; let itemsLength=itemsInCategory.length; if(itemsLength> 0)
+    {
+    categoryName = itemsInCategory[0].categories.name;
+    item = itemsInCategory[0];
+    }
+    %>
+
+    <div class="popular-post-wrap">
+        <h4 class="title">
+            <%= categoryName %>
+        </h4>
+        <% if(itemsLength> 0) { %>
+            <div class="feature-post relative">
+                <div class="feature-img relative">
+                    <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="<%= folder_uploads + item.thumb %>"
+                        alt="<%= folder_uploads + item.title %>">
+                </div>
+                <div class="details">
+                    <!-- <ul class="tags">
+                <li>
+                    <a href="#">Food Habit</a>
+                </li>
+            </ul> -->
+                    <a href="/<%= sublink %>/<%= item.slug %>-<%= item._id %>">
+                        <h3>
+                            <%= item.title%>
+                        </h3>
+                    </a>
+                    <ul class="meta">
+                        <li>
+                            <a href="#">
+                                <span class="lnr lnr-user"></span>
+                                <%= item.create.user_name_created %>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="lnr lnr-calendar-full"></span>
+                                <%= formatDate(item.create.datetime_createde) %>
+                            </a>
+                        </li>
+                        <!-- <li>
+                    <a href="#">
+                        <span class="lnr lnr-bubble"></span>06 Comments
+                    </a>
+                </li> -->
+                    </ul>
+                </div>
+            </div>
+            <% } %>
+
+                <% for(let index=1; index < itemsLength; index=index+2) { item=itemsInCategory[index]; %>
+
+                    <div class="row mt-20 medium-gutters">
+
+
+                        <div class="col-lg-6 single-popular-post">
+                            <div class="feature-img-wrap relative">
+                                <div class="feature-img relative">
+                                    <div class="overlay overlay-bg"></div>
+                                    <img class="img-fluid" src="<%= folder_uploads + item.thumb %>"
+                                        alt="<%= folder_uploads + item.title %>">
+                                </div>
+                                <!-- <ul class="tags">
+                    <li>
+                        <a href="#">Travel</a>
+                    </li>
+                </ul> -->
+                            </div>
+                            <div class="details">
+                                <a href="/<%= sublink %>/<%= item.slug %>-<%= item._id %>">
+                                    <h4>
+                                        <%= item.title%>
+                                    </h4>
+                                </a>
+                                <ul class="meta">
+                                    <li>
+                                        <a href="#">
+                                            <span class="lnr lnr-user"></span>
+                                            <%= item.create.user_name_created %>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="lnr lnr-calendar-full"></span>
+                                            <%= formatDate(item.create.datetime_createde) %>
+                                        </a>
+                                    </li>
+                                    <!-- <li>
+                        <a href="#">
+                            <span class="lnr lnr-bubble"></span>06 </a>
+                    </li> -->
+                                </ul>
+                                <p class="excert">
+                                    <%= item.summary%>
+                                </p>
+                            </div>
+                        </div>
+                        <% if(index + 1 < itemsLength) { item=itemsInCategory[index+1]; %>
+
+                            <div class="col-lg-6 single-popular-post">
+                                <div class="feature-img-wrap relative">
+                                    <div class="feature-img relative">
+                                        <div class="overlay overlay-bg"></div>
+                                        <img class="img-fluid" src="<%= folder_uploads + item.thumb %>"
+                                            alt="<%= folder_uploads + item.title %>">
+                                    </div>
+                                    <!-- <ul class="tags">
+                    <li>
+                        <a href="#">Travel</a>
+                    </li>
+                </ul> -->
+                                </div>
+                                <div class="details">
+                                    <a href="/<%= sublink %>/<%= item.slug %>-<%= item._id %>">
+                                        <h4>
+                                            <%= item.title%>
+                                        </h4>
+                                    </a>
+                                    <ul class="meta">
+                                        <li>
+                                            <a href="#">
+                                                <span class="lnr lnr-user"></span>
+                                                <%= item.create.user_name_created %>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <span class="lnr lnr-calendar-full"></span>
+                                                <%= formatDate(item.create.datetime_createde) %>
+                                            </a>
+                                        </li>
+                                        <!-- <li>
+                        <a href="#">
+                            <span class="lnr lnr-bubble"></span>06 </a>
+                    </li> -->
+                                    </ul>
+                                    <p class="excert">
+                                        <%= item.summary%>
+                                    </p>
+                                </div>
+                            </div>
+                            <%} <!-- end if -->
+                                %>
+
+                    </div>
+                    <%} <!-- end for -->
+                        %>
+    </div>

@@ -1,0 +1,4 @@
+{
+    "$ref": "./categories.json",
+    "$ref": "./loaiHangHoa.json"
+}

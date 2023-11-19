@@ -1,0 +1,58 @@
+<%- include ('./../helpers/general') %>
+    <div class="card card-info card-outline">
+        <div class="card-body">
+            <!-- I.Thông tin tài khoản đăng nhập ===================================================================== -->
+            <!-- <div class="card card-info card-outline collapsed-card"> -->
+            <div class="card card-info card-outline">
+                <div class="card-header">
+                    <h6 class="card-title">Login account information</h6>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+                            title="Collapse">
+                            <!-- <i class="fas fa-plus"></i> -->
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- <div class="card-body" style="display: none;">   -->
+                <div class="card-body">
+                    <div class="row justify-content-between">
+                        <label class="col-sm-3 col-form-label text-sm-right">EmployeeCode: </label>
+                        <label class="col-sm-3 col-form-label text-sm-left">
+                            <%=userLogin.employee_code%>
+                        </label>
+                        <label class="col-sm-6 col-form-label text-sm-right "></label>
+                    </div>
+
+                    <div class="row justify-content-between">
+                        <label class="col-sm-3 col-form-label text-sm-right">Full Name: </label>
+                        <label class="col-sm-3 col-form-label text-sm-left">
+                            <%=userLogin.firstname%>
+                                <%=userLogin.lastname%>
+                        </label>
+                        <label class="col-sm-6 col-form-label text-sm-right "></label>
+                    </div>
+
+                    <div class="row justify-content-between">
+                        <label class="col-sm-3 col-form-label text-sm-right">User Name: </label>
+                        <label class="col-sm-3 col-form-label text-sm-left">
+                            <%=userLogin.username%>
+                        </label>
+                        <label class="col-sm-6 col-form-label text-sm-right "></label>
+                    </div>
+
+                    <div class="row justify-content-between">
+                        <label class="col-sm-3 col-form-label text-sm-right">Time Changed Password: </label>
+                        <label class="col-sm-3 col-form-label text-sm-left">
+                            <%=getDate(userLogin.time_changed_password)%>
+                                <%=getTime(userLogin.time_changed_password)%>
+                        </label>
+                        <label class="col-sm-6 col-form-label text-sm-right "></label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- end I.Thông tin tài khoản đăng nhập ===================================================================== -->

@@ -1,0 +1,552 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API with 'Developer NodeJs Easy'",
+        "description": "This is a sample server for a pet store.",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.example.com/support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:6969/api/",
+            "description": "Localhost API"
+        }
+    ],
+    "tags": [
+        {
+            "name": "categories",
+            "description": "ghi chú"
+        },
+        {
+            "name": "loaiHangHoa",
+            "description": "Loại hàng hóa"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/categories": {
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "get all",
+                "requestBody": {
+                    "description": "categories body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/categoriesGetAll"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "get 1 categories",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of pet that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/search": {
+            "post": {
+                "tags": [
+                    "categories"
+                ],
+                "summary": "search categories",
+                "requestBody": {
+                    "description": "categories body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/categoriesFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/categories"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa": {
+            "get": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "get all loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body"
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/getAll": {
+            "post": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "get all loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/getAll"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/{Id}": {
+            "get": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "get 1 loaiHangHoa",
+                "parameters": [
+                    {
+                        "name": "Id",
+                        "in": "path",
+                        "description": "ID of pet that needs to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/save": {
+            "post": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "save loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/loaiHangHoaFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/update": {
+            "put": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "save loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/loaiHangHoaFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/deleteById": {
+            "delete": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "delete by id",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/IdNumber"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/deleteList": {
+            "delete": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "delete list id",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/listIdNumber"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/search": {
+            "post": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "get all loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/loaiHangHoaFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/loaiHangHoa/exportData": {
+            "post": {
+                "tags": [
+                    "loaiHangHoa"
+                ],
+                "summary": "exportData loaiHangHoa",
+                "requestBody": {
+                    "description": "loaiHangHoa body",
+                    "required": true,
+                    "content": {
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schema/loaiHangHoaFrom"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/loaiHangHoa"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schema": {
+            "IdNumber": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "listIdNumber": {
+                "type": "object",
+                "properties": {
+                    "arrayId[]": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
+            "categories": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Slug": {
+                        "type": "string"
+                    },
+                    "Thumbnail": {
+                        "type": "string"
+                    },
+                    "ViewType": {
+                        "type": "string"
+                    },
+                    "ShowHomePage": {
+                        "type": "string"
+                    },
+                    "Ordering": {
+                        "type": "integer"
+                    },
+                    "Description": {
+                        "type": "string"
+                    }
+                }
+            },
+            "categoriesFrom": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "Name": {
+                        "type": "string"
+                    },
+                    "Slug": {
+                        "type": "string"
+                    },
+                    "ViewType": {
+                        "type": "string"
+                    },
+                    "ShowHomePage": {
+                        "type": "string"
+                    },
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "categoriesGetAll": {
+                "type": "object",
+                "properties": {
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "getAll": {
+                "type": "object",
+                "properties": {
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "loaiHangHoa": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "TenGoi": {
+                        "type": "string"
+                    },
+                    "FileDinhKem": {
+                        "type": "string"
+                    },
+                    "GhiChu": {
+                        "type": "string"
+                    },
+                    "STT": {
+                        "type": "integer"
+                    },
+                    "TrangThai": {
+                        "type": "string"
+                    },
+                    "User_Id_Created": {
+                        "type": "integer"
+                    },
+                    "User_Name_Created": {
+                        "type": "string"
+                    }
+                }
+            },
+            "loaiHangHoaFrom": {
+                "type": "object",
+                "properties": {
+                    "Id": {
+                        "type": "integer"
+                    },
+                    "TenGoi": {
+                        "type": "string"
+                    },
+                    "FileDinhKem": {
+                        "type": "string"
+                    },
+                    "GhiChu": {
+                        "type": "string"
+                    },
+                    "STT": {
+                        "type": "integer"
+                    },
+                    "TrangThai": {
+                        "type": "string"
+                    },
+                    "Page": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}

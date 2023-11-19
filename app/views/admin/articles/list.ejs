@@ -1,0 +1,1153 @@
+<%- include ('./../helpers/pagination') %>
+	<% const collection="articles" ; const linkPrefix=systemConfig.prefixAdmin + `/${collection}/`; %>
+		<%- include ('./../elements/notify') %>
+			<div class="container-fluid">
+				<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+				<input name="params" id="params" type="hidden" value="<%= params %>">
+				&nbsp; &nbsp; <button type="button" id="btnOpenMainModalForm" class="btn btn-primary">
+					<i class="fas fa-plus"></i> Add new
+				</button>
+				&nbsp; <button type="button" id="btnDelete" class="btn-sm btn-danger" title="Delete">
+					<i class="fas fa-trash-alt"></i> Delete
+				</button>
+				&nbsp; <button type="button" id="btnSearchPost_OpenForm" class="btn-sm btn-info" title="Search">
+					<i class="fa fa-search"></i> Search
+				</button>
+				&nbsp; <button type="button" id="btnExport_OpenForm" class="btn-sm btn-success" title="Export">
+					<i class="fa fa-download"></i> Export
+				</button>
+				&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh"
+					onclick="RefreshPage()">
+					<i class="fa fa-refresh"></i> Refresh
+				</button>
+				<!-- ================ Modal From ======================== -->
+				<div class="modal fade" id="modaMainForm" data-backdrop="static" data-keyboard="true" tabindex="- 1"
+					role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Add New & Edit</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form role="form" name="formarticles" id="formarticles" autocomplete="off"
+									enctype="multipart/form-data" action=" <%= linkPrefix %>save" method="post">
+									<div class="form-group row">
+										<label id="labcategorie_id"
+											class="col-sm-2 col-form-label text-sm-right required">Category</label>
+										<div class="col-xs-10 col-sm-10">
+											<div class="dropdown">
+												<div id="divDropdownname" class="dropdown-content">
+													<input type="text" id="name" name="name" size="200"
+														onkeyup="filterSelectBox('name')"
+														onfocus="focusDropdown('name')" onblur="blurDropdown('name')"
+														class="form-control form-control-sm">
+													<input id="categorie_id" name="categorie_id" type="hidden">
+													<div id="DivContenname" class="Divdropdown-content">
+													</div>
+												</div>
+											</div>
+										</div>
+										<label id="labtitle"
+											class="col-sm-2 col-form-label text-sm-right required">Title</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="text" name="title" id="title" value="<%= item.title %>"
+												class="form-control form-control-sm">
+										</div>
+										<label id="labslug"
+											class="col-sm-2 col-form-label text-sm-right required">Slug</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="text" name="slug" id="slug" value="<%= item.slug %>"
+												class="form-control form-control-sm">
+										</div>
+										<label id="labthumb"
+											class="col-sm-2 col-form-label text-sm-right ">Image</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="file" name="thumb" id="thumb"
+												class="form-control form-control-sm">
+											<input type="hidden" name="thumb_old" id="thumb_old"
+												value="<%= item.thumb %>">
+										</div>
+										<label id="labsummary"
+											class="col-sm-2 col-form-label text-sm-right required">Summary</label>
+										<div class="col-xs-10 col-sm-10">
+											<textarea class="form-control" name="summary" id="summary"
+												rows="5"><%= item.summary %></textarea>
+										</div>
+										<label id="labcontent_articles"
+											class="col-sm-2 col-form-label text-sm-right required">Content</label>
+										<div class="col-xs-10 col-sm-10">
+											<textarea class="form-control" name="content_ckeditor" rows="20"
+												id="content_ckeditor"></textarea>
+
+											<input type="hidden" name="content_articles" id="content_articles"
+												value="<%= item.content_articles %>">
+										</div>
+										<label id="labordering"
+											class="col-sm-2 col-form-label text-sm-right ">Ordering</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="number" name="ordering" id="ordering"
+												value="<%= item.ordering %>" class="form-control form-control-sm">
+										</div>
+										<label id="labis_special" class="col-sm-2 col-form-label text-sm-right ">Is
+											Special</label>
+										<div class="col-xs-10 col-sm-10">
+											<input type="checkbox" name="is_special" id="is_special"
+												class="form-control form-control-sm form-control-checkbox">
+										</div>
+										<label id="labstatus"
+											class="col-sm-2 col-form-label text-sm-right ">Atatus</label>
+										<div class="col-xs-10 col-sm-10">
+											<select id="status" name="status" class="custom-select custom-select-sm">
+												<option value="novalue">Choose Atatus</option>
+												<option value="Active" <%=(item.status=="Active" )
+													? 'selected="selected"' : '' %> >Active</option>
+												<option value="Inactive" <%=(item.status=="Inactive" )
+													? 'selected="selected"' : '' %> >Inactive</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label id="labcount_view" class="col-sm-2 col-form-label text-sm-right">Count
+											View</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" readonly name="count_view" id="count_view"
+												value="<%= item.count_view %>" class="form-control form-control-sm">
+										</div>
+
+										<label id="labcount_like" class="col-sm-2 col-form-label text-sm-right">Count
+											Like</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" readonly name="count_like" id="count_like"
+												value="<%= item.count_like %>" class="form-control form-control-sm">
+										</div>
+
+										<label id="labcount_dislike" class="col-sm-2 col-form-label text-sm-right">Count
+											Dislike</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" readonly name="count_dislike" id="count_dislike"
+												value="<%= item.count_dislike %>" class="form-control form-control-sm">
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="text-success" id="divMessage"></div>
+									</div>
+									<input name="_idHidden" id="_idHidden" type="hidden">
+									<div class="modal-footer">
+										&nbsp; <button type="button" id="btnCloseMainMoal" data-dismiss="modal"
+											class="btn btn-sm btn-primary" title="Close">
+											<i class="fa fa-mail-reply"></i> Close
+										</button>
+										<button type="button" id="btnSave" class="btn-sm btn-success" title="Save">
+											<i class="fa fa-save"></i> Save
+										</button>
+										&nbsp; <button type="button" id="btnUpdate" class="btn-sm btn-primary"
+											title="Update">
+											<i class="fa fa-save"></i> Update
+										</button>
+										&nbsp; <button type="button" id="btnSearchPost" class="btn-sm btn-info"
+											title="Search">
+											<i class="fa fa-search"></i> Search
+										</button>
+										&nbsp; <button type="submit" id="btnSearchGet" class="btn-sm btn-warning"
+											title="Search Get">
+											<i class="fa fa-search"></i> Search Get
+										</button>
+										&nbsp; <button type="button" id="btnExport" class="btn-sm btn-success"
+											title="Export">
+											<i class="fa fa-download"></i> Export
+										</button>
+									</div>
+								</form>
+								<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+								<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+								<input name="listDataCatalogue" id="listDataCatalogue" type="hidden"
+									value="<%= catalogue %>">
+								<!-- // Underline -->
+								<!--<div class="card card-info card-outline collapsed-card"></div>-->
+							</div> <!-- End <div class="modal-body">  -->
+							<!-- ================= Other information ==============================-->
+							<div class="card card-info card-outline collapsed-card">
+								<div class="card-header">
+									<h6 class="card-title">Other information</h6>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse"
+											data-toggle="tooltip" title="Collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="card-body" style="display: none;">
+									<div class="row justify-content-between">
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_created_Text">User name created: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_created_Value">User name
+											created: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_created_Text">Datetime created: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_created_Value">Datetime
+											created:</label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_modified_Text">User name modifiedd: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_modified_Value">User
+											name modifiedd: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_modified_Text">DateTime modified: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_modified_Value">DateTime
+											modified: </label>
+									</div>
+								</div>
+
+							</div>
+							<!-- ================= End Other information ==================== -->
+						</div> <!-- End <div class="modal-content">  -->
+					</div>
+				</div>
+				<!-- ================ End Modal From ============================= -->
+
+				<div class="card card-info card-outline">
+					<div class="card-header">
+						<h4 class="card-title">List data &nbsp;</h4>
+						<!-- //===========================================-->
+						<div class="button-group card-title">
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+								<span class="fas fa-cog"></span>
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="width: 300px;">
+								<li>
+									<a href="#" class="small" data-value="categorie_id" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumncategorie_id" />&nbsp;
+										<label id="labcategorie_id_CheckboxShow">Category </label>
+									</a> &nbsp; &nbsp;
+								</li>
+								<li>
+									<a href="#" class="small" data-value="title" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumntitle" />&nbsp;
+										<label id="labtitle_CheckboxShow">Title </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="slug" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnslug" />&nbsp;
+										<label id="labslug_CheckboxShow">Slug </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="thumb" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnthumb" />&nbsp;
+										<label id="labthumb_CheckboxShow">Image </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="summary" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnsummary" />&nbsp;
+										<label id="labsummary_CheckboxShow">Summary </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="content_articles" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumncontent_articles" />&nbsp;
+										<label id="labcontent_articles_CheckboxShow">Content </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="ordering" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnordering" />&nbsp;
+										<label id="labordering_CheckboxShow">Ordering </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="is_special" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnis_special" />&nbsp;
+										<label id="labis_special_CheckboxShow">Is Special </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="status" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnstatus" />&nbsp;
+										<label id="labstatus_CheckboxShow">Atatus </label>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //=========================================================== -->
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+								title="Collapse"><i class="fas fa-minus"></i></button>
+						</div>
+					</div>
+					<div class="card-body">
+						<table id="tablearticles" class="table table-bordered table-hover btn-table mb-0">
+							<thead>
+								<tr>
+									<th class="text-center">
+										<div class="custom-control custom-checkbox">
+											<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+											<label for="check-all" class="custom-control-label"></label>
+										</div>
+									</th>
+									<th class="text-center" data-sort="" data-column="categorie_id" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labcategorie_id_tb">
+											Category <i class="fa fa-fw" data-column="categorie_id"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="title" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labtitle_tb">
+											Title <i class="fa fa-fw" data-column="title"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="slug" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labslug_tb">
+											Slug <i class="fa fa-fw" data-column="slug"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="thumb" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labthumb_tb">
+											Image <i class="fa fa-fw" data-column="thumb"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="summary" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labsummary_tb">
+											Summary <i class="fa fa-fw" data-column="summary"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="content_articles"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labcontent_articles_tb">
+											Content <i class="fa fa-fw" data-column="content_articles"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="ordering" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labordering_tb">
+											Ordering <i class="fa fa-fw" data-column="ordering"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="is_special" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labis_special_tb">
+											Is Special <i class="fa fa-fw" data-column="is_special"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="status" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labstatus_tb">
+											Status <i class="fa fa-fw" data-column="status"></i>
+										</label>
+									</th>
+									<!-- <th class="text-center">Action</a></th> -->
+								</tr>
+							</thead>
+							<tbody id="bodyTablearticles">
+								<tr>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+					<div class="col-xs-1 col-sm-1">
+						<input type="number" class="form-control form-control-sm" name="numberItemPerPage"
+							id="numberItemPerPage" size="4">
+					</div>
+					<div class="col-xs-9 col-sm-9" id="paginationarticles">
+					</div>
+				</div>
+			</div>
+			<script src="admin/js/replaceckeditor.js"></script>
+			<script type="application/javascript">
+
+				var language={};
+				var listData;
+				var linkPrefix=$('#linkPrefix').val();
+				var idMainTable="tablearticles";
+				setSelectedColumnToShowInterface(idMainTable);
+
+				onLoadData();
+				function onLoadData() {
+					getLanguage();
+					setUpdateButtonStatus(false)
+					setInterfaceText();
+					getNumberItemPerPage();
+					var strData=$('#listData').val();
+					listData=JSON.parse(strData);
+					if(listData.length>0) {
+						displayDataToTable();
+						var paramsString=$('#params').val();
+						const params=JSON.parse(paramsString);
+						paginationHelper(params.pagination,"articles",params.currentStatus,params.keyword,linkPrefix,"paginationarticles");
+					}
+				}
+
+				function displayDataToTable() {
+					sortDataJson();
+					showAllColumnInTable(idMainTable);
+					link=createLinkImage("articles");
+					var table=document.getElementById("bodyTablearticles");
+					var lengthtable=table.rows.length-1;
+					for(var n=lengthtable;n>=0;n--) {
+						table.deleteRow(n);
+					}
+					var length=listData.length;
+					if(length<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+						return false;
+					}
+					$("#modaMainForm").modal('hide');
+					listData.forEach(function(data) {
+						var row=table.insertRow(0);
+						var cell0=row.insertCell(0);
+						var cell1=row.insertCell(1);
+						var cell2=row.insertCell(2);
+						var cell3=row.insertCell(3);
+						var cell4=row.insertCell(4);
+						var cell5=row.insertCell(5);
+						var cell6=row.insertCell(6);
+						var cell7=row.insertCell(7);
+						var cell8=row.insertCell(8);
+						var cell9=row.insertCell(9);
+						var cell10=row.insertCell(10);
+						let check=`<div class="custom-control custom-checkbox"> 
+							<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+							<label for="${data._id}" class="custom-control-label"></label>
+							`;
+						let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+							"<i class=\"fas fa-pencil-alt\"></i>"+
+							"</a> "+
+							" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.title+"')\">";
+						strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+						strbutton+=" </ button > </div>";
+
+						cell0.innerHTML=check+strbutton;
+						categories=data.categories;
+						if(categories!=undefined) {
+							if(categories.name!=undefined)
+								cell1.innerHTML=categories.name;
+						}
+						cell2.innerHTML=data.title;
+						cell3.innerHTML=data.slug;
+						//1. display value
+						//cell4.innerHTML = data.thumb;
+						//2. display image
+						cell4.innerHTML=`<img src="${link}${data.thumb}" alt="" width="100" >`;
+						//3. display full link
+						//cell4.innerHTML = `${link}${data.thumb}`;
+						//4. display download file
+						//cell4.innerHTML=`<a href="${link}${data.thumb}" target="_blank">Download</a>`;
+						cell5.innerHTML=data.summary;
+						cell6.innerHTML=data.content_articles;
+						cell7.innerHTML=data.ordering;
+						cell8.innerHTML=data.is_special;
+						cell9.innerHTML=data.status;
+
+						//cell10.innerHTML=strbutton;
+					});
+					hideColumnInTable(idMainTable);
+				}
+				$('input#title').keyup(function() {
+					$('input[name="slug"]').val(change_alias($(this).val()));
+				});
+
+				function setUpdateButtonStatus(statusUpdate) {
+					$('#btnSave').prop('hidden',statusUpdate);
+					$('#btnUpdate').prop('hidden',!statusUpdate);
+				}
+
+				function getLanguage() {
+					var languageString=$('#sysLanguage').val();
+					language=JSON.parse(languageString);
+				}
+
+				function setInterfaceText() {
+					$("#pageTitle").html(language.TitlePage);
+					$("#labcategorie_id").text(language.categorie_id);
+					$("#labtitle").text(language.title);
+					$("#labslug").text(language.slug);
+					$("#labthumb").text(language.thumb);
+					$("#labsummary").text(language.summary);
+					$("#labcontent_articles").text(language.content_articles);
+					$("#labordering").text(language.ordering);
+					$("#labis_special").text(language.is_special);
+					$("#labstatus").text(language.status);
+					$("#labcount_view").text(language.count_view);
+					$("#labcount_like").text(language.count_like);
+					$("#labcount_dislike").text(language.count_dislike);
+
+					$("#labcategorie_id_tb").html(language.categorie_id+"<i class=\"fa fa-fw\" data-column=\"categorie_id\"></i>");
+					$("#labtitle_tb").html(language.title+"<i class=\"fa fa-fw\" data-column=\"title\"></i>");
+					$("#labslug_tb").html(language.slug+"<i class=\"fa fa-fw\" data-column=\"slug\"></i>");
+					$("#labthumb_tb").html(language.thumb+"<i class=\"fa fa-fw\" data-column=\"thumb\"></i>");
+					$("#labsummary_tb").html(language.summary+"<i class=\"fa fa-fw\" data-column=\"summary\"></i>");
+					$("#labcontent_articles_tb").html(language.content_articles+"<i class=\"fa fa-fw\" data-column=\"content_articles\"></i>");
+					$("#labordering_tb").html(language.ordering+"<i class=\"fa fa-fw\" data-column=\"ordering\"></i>");
+					$("#labis_special_tb").html(language.is_special+"<i class=\"fa fa-fw\" data-column=\"is_special\"></i>");
+					$("#labstatus_tb").html(language.status+"<i class=\"fa fa-fw\" data-column=\"status\"></i>");
+
+					$("#labcategorie_id_CheckboxShow").text(language.categorie_id);
+					$("#labtitle_CheckboxShow").text(language.title);
+					$("#labslug_CheckboxShow").text(language.slug);
+					$("#labthumb_CheckboxShow").text(language.thumb);
+					$("#labsummary_CheckboxShow").text(language.summary);
+					$("#labcontent_articles_CheckboxShow").text(language.content_articles);
+					$("#labordering_CheckboxShow").text(language.ordering);
+					$("#labis_special_CheckboxShow").text(language.is_special);
+					$("#labstatus_CheckboxShow").text(language.status);
+				}
+
+				createDataForDropdownLists();
+				function createDataForDropdownLists() {
+					var strCatalogue=$('#listDataCatalogue').val();
+					arrCatalogue=JSON.parse(strCatalogue);
+					createDataForDropdown(arrCatalogue[0],'categorie_id','_id','name','name','-- Chose --',{'showId': false});
+				}
+
+				closeAllDropdown();
+				function closeAllDropdown() {
+					var DivContenname=document.getElementById('DivContenname');
+					DivContenname.hidden=true;
+
+				}
+
+				function getById(Id) {
+					var link=linkPrefix+'getById/'+Id;
+					$.ajax({
+						type: 'GET',
+						url: link,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							if(success==true) {
+								showDataToForm(resultdata.data);
+							}
+						},
+						failure: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+						error: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+					});
+				}
+
+				function showDataToForm(data) {
+					try {
+						setUpdateButtonStatus(true);
+						$("#modaMainForm").modal('show');
+						$('#_idHidden').val(data._id);
+						$('#categorie_id').val(data.categorie_id);
+						categories=data.categories;
+						if(categories!=undefined) {
+							if(categories.name!=undefined)
+								$('#name').val(categories.name);
+						}
+						$('#title').val(data.title);
+						$('#slug').val(data.slug);
+						$('#thumb_old').val(data.thumb);
+						$('#summary').val(data.summary);
+						var contentDecode=decodeHTMLEntities(data.content_articles);
+						CKEDITOR.instances['content_ckeditor'].setData(contentDecode);
+
+						//$('#content_articles').val(data.content_articles);
+						$('#ordering').val(data.ordering);
+						if((data.is_special=="true")||(data.is_special==true)||(data.is_special=="active")||(data.is_special=="yes")||(data.is_special=="1"))
+							$("#is_special").prop("checked",true);
+						else $("#is_special").prop("checked",false);
+						$('#status').val(data.status);
+
+						create=data.create;
+						if(create!=undefined) {
+							$('#labuser_name_created_Value').text(create.user_name_created);
+							$('#labdatetime_created_Value').text(create.datetime_created);
+						}
+						modified=data.modified;
+						if(modified!=undefined) {
+							$('#labuser_name_modified_Value').text(modified.user_name_modified);
+							$('#labdatetime_modified_Value').text(modified.datetime_modified);
+						}
+					}
+					catch(error) {}
+				}
+
+				$('#btnOpenMainModalForm').click(function() {
+					$("#modaMainForm").modal('show');
+					clearForm();
+				});
+
+				$('#btnSearchPost_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				$('#btnExport_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				function clearForm() {
+					try {
+						$('#_idHidden').val('');
+						setUpdateButtonStatus(false)
+						$('#categorie_id').val('');
+						$('#name').val('');
+						$('#title').val('');
+						$('#slug').val('');
+						$('#thumb').val('');
+						$('#summary').val('');
+						$('#content_articles').val('');
+						$('#ordering').val('');
+						$("#is_special").prop("checked",false);
+						$('#status').val('');
+					}
+					catch(error) {}
+				}
+
+				$('#btnSearchPost').click(function() {
+					$(this).prop('disabled',true);
+					getContentPages(1);
+				});
+
+				function getContentPages(page) {
+					var sortStorage=getSortType(linkPrefix);
+					let data={
+						categorie_id: $('#categorie_id').val(),
+						title: $('#title').val(),
+						slug: $('#slug').val(),
+						thumb: $('#thumb').val(),
+						summary: $('#summary').val(),
+						content_articles: $('#content_articles').val(),
+						status: $('#status').val(),
+						Page: page,
+						sortColumn: sortStorage.sortColumn,
+						sortType: sortStorage.sortType,
+						numberItemPerPage: $('#numberItemPerPage').val()
+					}
+					var link=linkPrefix+'search';
+					$.ajax({
+						type: 'POST',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnSearchPost').prop('disabled',false);
+							listData=resultdata.data;
+							displayDataToTable();
+							let params=resultdata.params;
+							paginationHelper(params.pagination,"articles","","",linkPrefix,"paginationarticles");
+
+							if(params.pagination.totalItems>0) {
+								var message=language.Message_Find+params.pagination.totalItems+language.Message_Words_records;
+								showNoticeSuccess(message);
+							}
+						},
+						failure: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						},
+						error: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						}
+					});
+					$('#btnSearchPost').prop('disabled',false);
+				}
+
+				$('#btnSave').click(function() {
+					$(this).prop('disabled',true);
+					chekValueAndSubmit();
+					$(this).prop('disabled',false);
+				});
+
+				function chekValueAndSubmit() {
+					if(($('#categorie_id').val().length<1)||($('#categorie_id').val().length>50)) {
+						var message=formatMessage(language.categorie_id+": "+language.Message_Invalid_categorie_id,'1','50');
+						alert(message);
+						return false;
+					}
+					if(($('#title').val().length<1)||($('#title').val().length>255)) {
+						var message=formatMessage(language.title+": "+language.Message_Invalid_title,'1','255');
+						alert(message);
+						return false;
+					}
+					if(($('#slug').val().length<1)||($('#slug').val().length>255)) {
+						var message=formatMessage(language.slug+": "+language.Message_Invalid_slug,'1','255');
+						alert(message);
+						return false;
+					}
+					if(($('#summary').val().length<1)||($('#summary').val().length>1000)) {
+						var message=formatMessage(language.summary+": "+language.Message_Invalid_summary,'1','1000');
+						alert(message);
+						return false;
+					}
+
+					var editorText=CKEDITOR.instances.content_ckeditor.getData();// content_ckeditor is name control textarea
+					var txt=document.createElement('textarea');
+					txt.innerHTML=editorText;
+					$("#content_articles").val(txt.value); // Decoded // input hidden
+
+					if(($('#content_articles').val().length<5)||($('#content_articles').val().length>65535)) {
+						var message=formatMessage(language.content_articles+": "+language.Message_Invalid_content_articles,'1','65535');
+						alert(message);
+						return false;
+					}
+
+
+					// if(($('#content_articles').val().length<1)||($('#content_articles').val().length>65535)) {
+					// 	var message=formatMessage(language.content_articles+": "+language.Message_Invalid_content_articles,'1','65535');
+					// 	alert(message);
+					// 	return false;
+					// }
+					let is_special=$('#is_special').is(":checked")? 1:0;
+					$('#is_special').val(is_special);
+					document.getElementById("formarticles").submit();
+				}
+
+				function getDataForm() {
+					if(($('#categorie_id').val().length<1)||($('#categorie_id').val().length>50)) {
+						var message=formatMessage(language.categorie_id+": "+language.Message_Invalid_categorie_id,'1','50');
+						alert(message);
+						return false;
+					}
+					if(($('#title').val().length<1)||($('#title').val().length>255)) {
+						var message=formatMessage(language.title+": "+language.Message_Invalid_title,'1','255');
+						alert(message);
+						return false;
+					}
+					if(($('#slug').val().length<1)||($('#slug').val().length>255)) {
+						var message=formatMessage(language.slug+": "+language.Message_Invalid_slug,'1','255');
+						alert(message);
+						return false;
+					}
+					if(($('#summary').val().length<1)||($('#summary').val().length>1000)) {
+						var message=formatMessage(language.summary+": "+language.Message_Invalid_summary,'1','1000');
+						alert(message);
+						return false;
+					}
+					if(($('#content_articles').val().length<1)||($('#content_articles').val().length>65535)) {
+						var message=formatMessage(language.content_articles+": "+language.Message_Invalid_content_articles,'1','65535');
+						alert(message);
+						return false;
+					}
+					return {
+						'_idHidden': $('#_idHidden').val(),
+						'categorie_id': $('#categorie_id').val(),
+						'categories': {
+							'id': $('#categorie_id').val(),
+							'name': $('#name').val()
+						},
+						'title': $('#title').val(),
+						'slug': $('#slug').val(),
+						'thumb': $('#thumb').val(),
+						'summary': $('#summary').val(),
+						'content_articles': $('#content_articles').val(),
+						'ordering': $('#ordering').val(),
+						'is_special': $('#is_special').is(":checked")? 1:0,
+						'status': $('#status').val(),
+					}
+				}
+
+				function saveInsert() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnSave').prop('disabled',false);
+						return false;
+					}
+					var link=linkPrefix+'save';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false))
+								showNoticeDanger(language.Message_AddNewError+' ('+response.message+')');
+							else if((success!=true)&&(success!='true'))
+								showNoticeDanger(result.message);
+							else {
+								insertRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+					});
+					$('#btnSave').prop('disabled',false);
+				}
+
+				function insertRow(data) {
+					showAllColumnInTable(idMainTable);
+					showNoticeSuccess(language.Message_AddNewSuccess);
+					var table=document.getElementById("bodyTablearticles");
+					var row=table.insertRow(0);
+					var cell0=row.insertCell(0);
+					var cell1=row.insertCell(1);
+					var cell2=row.insertCell(2);
+					var cell3=row.insertCell(3);
+					var cell4=row.insertCell(4);
+					var cell5=row.insertCell(5);
+					var cell6=row.insertCell(6);
+					var cell7=row.insertCell(7);
+					var cell8=row.insertCell(8);
+					var cell9=row.insertCell(9);
+					var cell10=row.insertCell(10);
+					let check=`<div class="custom-control custom-checkbox"> 
+						<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+						<label for="${data._id}" class="custom-control-label"></label>
+					`;
+					let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						"<i class=\"fas fa-pencil-alt\"></i>"+
+						"</a> "+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.title+"')\">";
+					strbutton+=" <i class=\"fas fa-trash-alt\"></i> "+
+						" </ button > "+
+						" </div> ";
+
+
+					cell0.innerHTML=check+strbutton;
+
+					if(data.categorie_id==$('#categorie_id').val()) {
+						cell1.innerHTML=$('#name').val();
+					}
+					cell2.innerHTML=data.title;
+					cell3.innerHTML=data.slug;
+					cell4.innerHTML=data.thumb;
+					cell5.innerHTML=data.summary;
+					cell6.innerHTML=data.content_articles;
+					cell7.innerHTML=data.ordering;
+					cell8.innerHTML=data.is_special;
+					cell9.innerHTML=data.status;
+
+					cell10.innerHTML=strbutton;
+					hideColumnInTable(idMainTable);
+				}
+
+				$('#btnUpdate').click(function() {
+					$(this).prop('disabled',true);
+					chekValueAndSubmit();
+					$(this).prop('disabled',false);
+				});
+
+				function saveUpdate() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnUpdate').prop('disabled',false);
+						return false;
+					}
+					if(data._idHidden=="") {
+						$('#btnUpdate').prop('disabled',false);
+						showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+						return false;
+					}
+					var link=linkPrefix+'update';
+					$.ajax({
+						type: 'put',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_UpdateError);
+								return false;
+							}
+							else if((success!=true)&&(success!='true')) {
+								showNoticeDanger(result.message);
+								return false;
+							}
+							else {
+								updateRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						}
+					});
+					$('#btnUpdate').prop('disabled',false);
+				}
+
+				function updateRow(data) {
+					showNoticeSuccess(language.Message_UpdateSuccess);
+					showAllColumnInTable(idMainTable);
+					$("#modaMainForm").modal('hide');
+					var row=$("#tablearticles button[data-id='"+data._id+"']").parents("tr")[0];
+					var tr="<tr>"+
+						"<td class=\"text-center\">"+
+						"<div class=\"custom-control custom-checkbox\">"+
+						"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\""+data._id+"\" value=\""+data._id+"\"> "+
+						"<label for=\""+data._id+"\" class=\"custom-control-label\"></label> "+
+
+						" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						" <i class=\"fas fa-pencil-alt\"></i>"+
+						" </a>"+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.title+"')\">"+
+						" <i class=\"fas fa-trash-alt\"></i> "+
+						" </button> "+
+						" </div>"+
+						"</td>";
+					if(data.categorie_id==$('#categorie_id').val()) {
+						tr+="<td class=\"text-center\">"+$('#name').val()+"</td>";
+					}
+					tr+="<td class=\"text-center\">"+data.title+"</td>";
+					tr+="<td class=\"text-center\">"+data.slug+"</td>";
+					tr+="<td class=\"text-center\">"+data.thumb+"</td>";
+					tr+="<td class=\"text-center\">"+data.summary+"</td>";
+					tr+="<td class=\"text-center\">"+data.content_articles+"</td>";
+					tr+="<td class=\"text-center\">"+data.ordering+"</td>";
+					tr+="<td class=\"text-center\">"+data.is_special+"</td>";
+					tr+="<td class=\"text-center\">"+data.status+"</td>";
+					// tr+="<td class=\"text-center\">"+
+
+					// 	" </td>";
+					tr+=" </tr>";
+					$(row).after(tr);
+					$(row).remove();
+					hideColumnInTable(idMainTable);
+				}
+				function deleteById(row,objectId,objectName) {
+					var message=language.Message_DoYouWantToDeleteById+' '+objectName+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={
+						'_id': objectId
+					};
+					var link=linkPrefix+'deleteById';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							var message=resultdata.message;
+							var notice={};
+							if((success=='true')||(success==true)) {
+								showNoticeSuccess(language.Message_DeleteSuccess);
+								var i=row.parentNode.parentNode.rowIndex;
+								document.getElementById("tablearticles").deleteRow(i);
+								return true;
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+							else if(message.length>10) {
+								showNoticeDanger(message);
+								return false;
+							}
+							else {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnDelete').click(function() {
+					$(this).prop('disabled',true);
+					deleteList();
+					$(this).prop('disabled',false);
+				});
+				function deleteList() {
+					var arrayId=[];
+					var listId=" ";
+					$("input:checkbox[name=chkListData]:checked").each(function() {
+						arrayId.push($(this).val());
+						listId+=$(this).val()+',';
+					});
+					let message=language.Message_DoYouWantToDeleteInTheList+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={arrayId};
+					var link=linkPrefix+'deleteList';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var result=resultdata.data;
+							var success=result.success;
+							var message=result.message;
+							if((success=='true')||(success==true)) {
+								let deleteSuccess=result.deleteSuccess;
+								let deleteError=result.deleteError;
+								if(deleteSuccess.length>0) {
+									let message=language.Message_DeleteSuccess;
+									message+=" "+deleteSuccess.toString();
+									if(deleteError.length>0) {
+										message+=" \n"+language.Message_DeleteFail+" "+deleteError.toString();
+									}
+									showNoticeSuccess(message);
+									deleteRows(arrayId,"bodyTablearticles");
+									return true;
+								}
+								else if(deleteError.length>0) {
+									let message=language.Message_DeleteFail+" "+deleteError.toString();
+									showNoticeDanger(message);
+								}
+								else {
+									showNoticeDanger(language.Message_DeleteFail);
+								}
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnExport').click(function() {
+					$(this).prop('disabled',true);
+					exportData();
+					$(this).prop('disabled',false);
+				});
+
+				function exportData() {
+					let data={
+						'categorie_id': $('#categorie_id').val(),
+						'title': $('#title').val(),
+						'slug': $('#slug').val(),
+						'thumb': $('#thumb').val(),
+						'summary': $('#summary').val(),
+						'content_articles': $('#content_articles').val(),
+						'status': $('#status').val(),
+					}
+					var link=linkPrefix+'exportData';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnExport').prop('disabled',false);
+							let result=resultdata.data;
+							showNoticeSuccess(language.Message_CompletedGetData);
+							ExportToExcel(result);
+						},
+						failure: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						},
+						error: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						}
+					});
+					$('#btnExport').prop('disabled',false);
+				}
+
+				function ExportToExcel(datas) {
+					let itemCount=datas.length;
+					if(itemCount>1000) {
+						showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+					}
+					if(itemCount<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+					}
+					var strTable='<style type="text/css">';
+					strTable+=' .Border { ';
+					strTable+='         color: windowtext; ';
+					strTable+='         font-size: 11.0pt; ';
+					strTable+='         word-break:break-all;';
+					strTable+='         font-style: normal; ';
+					strTable+='         text-decoration: none; ';
+					strTable+='         font-family: "Times New Roman", serif; ';
+					strTable+='         text-align: left; ';
+					strTable+='         vertical-align: bottom;';
+					strTable+='         border-left: .5pt solid windowtext; ';
+					strTable+='         border-right: .5pt solid windowtext; ';
+					strTable+='         border-top: .5pt solid windowtext; ';
+					strTable+='         border-bottom: .5pt solid windowtext; ';
+					strTable+='         padding-left: 1px; ';
+					strTable+='         padding-right: 1px; ';
+					strTable+='         padding-top: 1px; ';
+					strTable+='     } ';
+
+					strTable+=' .BorderHeader { ';
+					strTable+='        color: white; ';
+					strTable+='         background-color:#0026ff; ';
+					strTable+='        font-size: 11.0pt; ';
+					strTable+='        text-align: center; ';
+					strTable+='        font-style: normal; ';
+					strTable+='        text-decoration: none; ';
+					strTable+='        font-family: "Times New Roman", serif; ';
+					strTable+='        vertical-align: bottom;';
+					strTable+='        border-left: .5pt solid windowtext; ';
+					strTable+='        border-right: .5pt solid windowtext; ';
+					strTable+='        border-top: .5pt solid windowtext; ';
+					strTable+='        border-bottom: .5pt solid windowtext; ';
+					strTable+='        padding-left: 1px; ';
+					strTable+='        padding-right: 1px; ';
+					strTable+='        padding-top: 1px; ';
+					strTable+='     } ';
+					strTable+='  </style> ';
+					strTable+=' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+					strTable+='<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+					strTable+='<th class="BorderHeader" >Order</th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Category </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Title </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Slug </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Image </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Summary </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Content </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Ordering </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Is Special </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Atatus </th> ';
+					strTable+='</tr> ';
+					var n=0;
+					var currentRow=4;
+					for(var i=0;i<itemCount;i++) {
+						var vTemp=datas[i];
+						currentRow+=1;
+						n+=1;
+						strTable+='<tr >';
+						strTable+='<th class="Border" > '+n+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.categorie_id+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.title+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.slug+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.thumb+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.summary+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.content_articles+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.ordering+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.is_special+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.status+' </th> ';
+						strTable+='</tr>';
+					}
+					strTable+=' </table> ';
+					ExportHtmlToExcel(strTable,'articles');
+					showNoticeSuccess(language.Message_ExportSuccess);
+				}
+
+			</script>

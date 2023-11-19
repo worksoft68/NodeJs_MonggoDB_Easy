@@ -1,0 +1,273 @@
+{
+	"/contact": {
+		"get": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Returns list data from the system that the user has access to",
+			"requestBody": {
+				"description": "page on load"
+			},
+			"responses": {
+				"200": {
+					"description": "A list of contact.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/getAll": {
+		"post": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Returns list data from the system, the list of data is retrieved by page-by-page",
+			"requestBody": {
+				"description": "Page number  to get data",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/getAll"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of contact.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/{Id}": {
+		"get": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Get data by Id",
+			"parameters": [
+				{
+					"name": "Id",
+					"in": "path",
+					"description": "The id that you need to get data", 
+					"required": true,
+					"schema": {
+						"type": "integer"
+					}
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/save": {
+		"post": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Insert new data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/contactFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"201": {
+					"description": "Save was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/update": {
+		"put": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Update data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/contactFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Update was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/deleteById": {
+		"delete": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Delete by id",
+			"requestBody": {
+				"description": "The Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/idNumber"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/deleteList": {
+		"delete": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Delete by list id",
+			"requestBody": {
+				"description": "The list Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/listIdNumber"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/search": {
+		"post": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Search data by content entered on the form",
+			"requestBody": {
+				"description": "The list of data is retrieved by page-by-page",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/contactFromSearch"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of contact can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/contact/exportData": {
+		"post": {
+			"tags": [
+				"contact"
+			],
+			"summary": "Export data by content entered on the form",
+			"requestBody": {
+				"description": "All data is retrieved",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/contactFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of contact can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/contact"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

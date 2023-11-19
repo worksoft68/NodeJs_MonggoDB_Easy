@@ -1,0 +1,56 @@
+
+<%- include ('./../../helpers/format-date') %>
+<%- include ('./../../helpers/format-summary') %>
+<%- include ('./../../helpers/customSettings') %>
+<!--  include ./../helpers/customSettings  // Header đã kéo vào rồi, ở đây không cần kéo nữa -->
+<% 
+    const linkPrefix     = systemConfig.prefixBlog;
+    const folder_uploads = 'uploads/articles/'; 
+%>
+
+<div class="col-lg-8 post-list">
+    <!-- Start latest-post Area -->
+    <div class="latest-post-wrap">
+        <h4 class="cat-title"><%- showCustomSettings('Title Latest News',itemsCustomSettings);  %></h4>      
+        <% itemsNews.forEach((item)=>{ %>
+            <div class="single-latest-post row">
+                <div class="col-lg-5 post-left">
+                    <div class="feature-img relative">
+                        <div class="overlay overlay-bg"></div>
+                    <img class="img-fluid" src="<%= folder_uploads + item.thumb %>" alt="<%= item.title %>">
+                    </div>
+                    <ul class="tags">
+                        <li><a href="<%= linkPrefix %>/categories/<%= item.slug %>-<%= item.categorie_id %>">
+                                <%= item.categories.name %>
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-7 post-right">
+                    <a href="<%= linkPrefix %>/articles/<%= item.slug%>-<%= item._id %>">
+                        <%= item.title %>
+                    </a>
+                    <ul class="meta">
+                        <li><a href="#"><span class="lnr lnr-user"></span>
+                                <%= item.create.user_name_created %>
+                            </a></li>
+                        <li><a href="#"><span class="lnr lnr-calendar-full"></span>
+                                <%= formatDate(item.create.datetime_created) %>
+                            </a></li>
+                    </ul>
+                    <p class="excert">
+                        <%- formatSummary(item.summary) %> ...
+                    </p>
+                </div>
+            </div>
+        <%}) %>
+    </div>
+    <!-- End latest-post Area -->
+
+    <!-- Start banner-ads Area -->
+    <div class="col-lg-12 ad-widget-wrap mt-30 mb-30">
+     <%- showCustomSettings('Ads Footer',itemsCustomSettings);  %>
+     <!--   <img class="img-fluid" src="frontend/img/banner-ad.jpg" alt="">-->
+    </div>
+    <!-- End banner-ads Area -->
+    
+</div>

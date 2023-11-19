@@ -27,7 +27,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+#[Bb]in/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -230,7 +230,7 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
-ClientBin/
+#ClientBin/
 ~$*
 *~
 *.dbmdl
@@ -283,7 +283,9 @@ FakesAssemblies/
 
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
+
 node_modules/
+
 
 # Visual Studio 6 build log
 *.plg
@@ -350,7 +352,7 @@ OpenCover/
 ASALocalRun/
 
 # MSBuild Binary and Structured Log
-*.binlog
+#*.binlog
 
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
@@ -396,3 +398,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Folder node_modules
+/node_modules
+# Folder vscode
+.vscode/
+

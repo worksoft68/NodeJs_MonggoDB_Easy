@@ -1,0 +1,273 @@
+{
+	"/sys_customsettings": {
+		"get": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Returns list data from the system that the user has access to",
+			"requestBody": {
+				"description": "page on load"
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_customsettings.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/getAll": {
+		"post": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Returns list data from the system, the list of data is retrieved by page-by-page",
+			"requestBody": {
+				"description": "Page number  to get data",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/getAll"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_customsettings.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/{Id}": {
+		"get": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Get data by Id",
+			"parameters": [
+				{
+					"name": "Id",
+					"in": "path",
+					"description": "The id that you need to get data", 
+					"required": true,
+					"schema": {
+						"type": "string"
+					}
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "OK",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/save": {
+		"post": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Insert new data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_customsettingsFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"201": {
+					"description": "Save was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/update": {
+		"put": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Update data",
+			"requestBody": {
+				"description": "Data input interface",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_customsettingsFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Update was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/deleteById": {
+		"delete": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Delete by id",
+			"requestBody": {
+				"description": "The Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/idString"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/deleteList": {
+		"delete": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Delete by list id",
+			"requestBody": {
+				"description": "The list Id will be deleted",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/listIdString"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "Delete was successful",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/search": {
+		"post": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Search data by content entered on the form",
+			"requestBody": {
+				"description": "The list of data is retrieved by page-by-page",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_customsettingsFromSearch"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_customsettings can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"/sys_customsettings/exportData": {
+		"post": {
+			"tags": [
+				"sys_customsettings"
+			],
+			"summary": "Export data by content entered on the form",
+			"requestBody": {
+				"description": "All data is retrieved",
+				"required": true,
+				"content": {
+					"application/x-www-form-urlencoded": {
+						"schema": {
+							"$ref": "#/components/schema/sys_customsettingsFrom"
+						}
+					}
+				}
+			},
+			"responses": {
+				"200": {
+					"description": "A list of sys_customsettings can be looked up on the system.",
+					"content": {
+						"application/json": {
+							"schema": {
+							"$ref": "#/components/schema/sys_customsettings"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

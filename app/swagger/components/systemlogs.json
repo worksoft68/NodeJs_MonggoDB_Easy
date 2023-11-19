@@ -1,0 +1,156 @@
+{
+	"systemlogs": {
+		"type": "object",
+		"properties": {
+			"success": {
+				"type": "boolean"
+			},
+			"data": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number"
+					},
+					"action_user": {
+						"type": "string"
+					},
+					"impact_zone": {
+						"type": "string"
+					},
+					"id_table": {
+						"type": "string"
+					},
+					"content_log": {
+						"type": "string"
+					},
+					"contentlog_max": {
+						"type": "string"
+					},
+					"ip": {
+						"type": "string"
+					},
+					"mac_address": {
+						"type": "string"
+					},
+					"hostname": {
+						"type": "string"
+					},
+					"id_user": {
+						"type": "number"
+					},
+					"fullname": {
+						"type": "string"
+					},
+					"datetime_log": {
+						"type": "string"
+					}
+				}
+			},
+			"optionResult": {
+				"type": "object",
+				"properties": {
+					"option1": {
+						"type": "string"
+					},
+					"optionx": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"systemlogsFrom": {
+		"type": "object",
+		"properties": {
+			"id": {
+				"type": "number"
+			},
+			"action_user": {
+				"type": "string"
+			},
+			"impact_zone": {
+				"type": "string"
+			},
+			"id_table": {
+				"type": "string"
+			},
+			"content_log": {
+				"type": "string"
+			},
+			"contentlog_max": {
+				"type": "string"
+			},
+			"ip": {
+				"type": "string"
+			},
+			"mac_address": {
+				"type": "string"
+			},
+			"hostname": {
+				"type": "string"
+			},
+			"id_user": {
+				"type": "number"
+			},
+			"fullname": {
+				"type": "string"
+			},
+			"datetime_log": {
+				"type": "string"
+			}
+		}
+	},
+	"systemlogsFromSearch": {
+		"type": "object",
+		"properties": {
+			"id": {
+				"type": "number"
+			},
+			"action_user": {
+				"type": "string"
+			},
+			"impact_zone": {
+				"type": "string"
+			},
+			"id_table": {
+				"type": "string"
+			},
+			"content_log": {
+				"type": "string"
+			},
+			"contentlog_max": {
+				"type": "string"
+			},
+			"ip": {
+				"type": "string"
+			},
+			"mac_address": {
+				"type": "string"
+			},
+			"hostname": {
+				"type": "string"
+			},
+			"id_user": {
+				"type": "number"
+			},
+			"fullname": {
+				"type": "string"
+			},
+			"datetime_log": {
+				"type": "string"
+			},
+			"Page": {
+				"type": "integer"
+			},
+			"numberItemPerPage": {
+				"type": "integer"
+			},
+			"sortColumn": {
+				"type": "string"
+			},
+			"sortType": {
+				"type": "string"
+			}
+		}
+	}
+}

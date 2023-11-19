@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zxx" class="no-js">
+
+<head>
+		<%- include ('./elements/head') %>
+			</head>
+	<body>
+		<%- include ('./elements/header') %>
+			<div class="site-main-container">
+				<!-- Start top-post Area - chỉ ở trang chủ mới hiện ra các bài đăng gần nhất , các trang con truyền top_post = false -->
+				<% if(top_post==true){ %>
+					<%- include ('./elements/top_post') %>
+						<% } %>
+							<!-- End top-post Area -->
+		
+							<!-- Start latest-post Area -->
+							<section class="latest-post-area pb-120">
+								<div class="container no-padding">
+									<div class="row">
+						<%- body %>
+						<%- include ('./elements/sildebar') %>
+					</div>
+					</div>
+			</section>
+			<!-- End latest-post Area -->
+		</div>
+		<%- include ('./elements/footer') %>
+			<%- include ('./elements/script') %>
+				</body>
+</html>

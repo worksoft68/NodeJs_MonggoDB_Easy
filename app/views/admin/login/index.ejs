@@ -1,0 +1,83 @@
+<% const linkPrefix=systemConfig.prefixAdmin + `/auth/login/`; %>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <%- include ('./../../../admin/elements/header') %>
+            <script src="admin/js/sha1.js"></script>
+            <script src="admin/js/custom.js"></script>
+            <script src="admin/js/jquery/jquery.min.js"></script>
+            <script src="admin/js/jquery-ui/jquery-ui.min.js"></script>
+    </head>
+
+    <body class="login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                Login Admin
+                <!--  <a href=""><b>Admin</b></a> -->
+            </div>
+            <!-- /.login-logo -->
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <%- include ('./../../elements/errors-login') %>
+                        <%- include ('./../../elements/notify') %>
+
+                            <p class="login-box-msg">Đăng nhập trang quản trị 123</p>
+
+                            <form role="form" action="<%= linkPrefix %>" method="POST" id="form-login"
+                                onsubmit="return MaHoa()">
+                                <!-- USERNAME -->
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" value="hoa.huynh"
+                                        placeholder="Tên đăng nhập" name="username">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-user"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- PASSWORD -->
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" value="1234567" placeholder="Mật khẩu"
+                                        name="password">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <span class="fas fa-lock"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- TOKEN -->
+                                <input type="hidden" name="form[token]" value="1597565605">
+                                <button type="submit" class="btn btn-info btn-block">Đăng nhập</button>
+                                <!-- /.col -->
+                            </form>
+                </div>
+
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+        <!-- script -->
+        <script>
+            function MaHoa() {
+                let $elmInputPassword=$('input[name="password"]');
+                let $elmInputUsername=$('input[name="username"]');
+                var strPassword=$elmInputPassword.val();
+                var strUsername=$elmInputUsername.val();
+                strPassword=replaceAll(strPassword,' ','');
+                strUsername=replaceAll(strUsername,' ','');
+                strPassword=hex_sha1(strPassword);
+                strUsername=hex_sha1(strUsername);
+                $elmInputUsername.val(strUsername);
+                $elmInputPassword.val(strPassword);
+                return true;
+            }
+
+
+
+            function replaceAll(str,find,replace) {
+                return str.replace(new RegExp(find,'g'),replace);
+            }
+        </script>
+    </body>
+
+    </html>

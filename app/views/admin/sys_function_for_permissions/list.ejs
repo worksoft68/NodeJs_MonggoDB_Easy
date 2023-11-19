@@ -1,0 +1,807 @@
+<%- include ('./../helpers/pagination') %>
+<%
+	const collection = "sys_function_for_permissions";
+	const linkPrefix = systemConfig.prefixAdmin + `/${collection}/`; 
+%>
+<%- include ('./../elements/notify') %>
+<div class="container-fluid">
+	<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+	<input name="params" id="params" type="hidden" value="<%= params %>">
+	&nbsp; &nbsp; <button type="button" id="btnOpenMainModalForm" class="btn btn-primary">
+		<i class="fas fa-plus"></i> Add new
+	</button>
+	&nbsp; <button type="button" id = "btnDelete" class="btn-sm btn-danger" title="Delete">
+		<i class="fas fa-trash-alt"></i> Delete
+	</button>
+	&nbsp; <button type="button" id = "btnSearchPost_OpenForm" class="btn-sm btn-info" title="Search">
+		<i class="fa fa-search"></i> Search
+	</button>
+	&nbsp; <button type="button" id = "btnExport_OpenForm" class="btn-sm btn-success" title="Export">
+		<i class="fa fa-download"></i> Export
+	</button>
+	&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh" onclick="RefreshPage()">
+		<i class="fa fa-refresh"></i> Refresh
+	</button>
+	<!-- ================ Modal From ======================== -->
+	<div class="modal fade" id="modaMainForm" data-backdrop="static" data-keyboard="true" tabindex="- 1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add New & Edit</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+			<form role="form" name="formsys_function_for_permissions" id="formsys_function_for_permissions"  action =" <%= linkPrefix %>searchGet" method="get">
+				<div class="form-group row">
+					<label id="labfunction_name" class="col-sm-2 col-form-label text-sm-right required">Function</label>
+					<div class="col-xs-4 col-sm-4">
+						<input type="text"  name="function_name"  id="function_name"  value="<%= item.function_name %>" class="form-control form-control-sm">
+					</div>
+					<label id="labdescription" class="col-sm-2 col-form-label text-sm-right ">Description</label>
+					<div class="col-xs-4 col-sm-4">
+						<input type="text"  name="description"  id="description"  value="<%= item.description %>" class="form-control form-control-sm">
+					</div>
+					<label id="labnote" class="col-sm-2 col-form-label text-sm-right ">Note</label>
+					<div class="col-xs-4 col-sm-4">
+						<input type="text"  name="note"  id="note"  value="<%= item.note %>" class="form-control form-control-sm">
+					</div>
+					<label id="labstatus" class="col-sm-2 col-form-label text-sm-right ">Status</label>
+					<div class="col-xs-4 col-sm-4">
+						<input type="checkbox"  name="status"  id="status" class="form-control form-control-sm form-control-checkbox">
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class = "text-success" id = "divMessage"></div>
+				</div>
+						<input name="_idHidden" id="_idHidden" type="hidden">
+				<div class="modal-footer">
+					&nbsp; <button type="button" id="btnCloseMainMoal" data-dismiss="modal"
+						class="btn btn-sm btn-primary" title="Close">
+						<i class="fa fa-mail-reply"></i> Close
+					</button>
+						<button type="button" id = "btnSave" class="btn-sm btn-success" title="Save">
+							<i class="fa fa-save"></i> Save
+						</button>
+						&nbsp; <button type="button" id = "btnUpdate" class="btn-sm btn-primary" title="Update">
+							<i class="fa fa-save"></i> Update
+						</button>
+						&nbsp; <button type="button" id = "btnSearchPost" class="btn-sm btn-info" title="Search">
+							<i class="fa fa-search"></i> Search
+						</button>
+						&nbsp; <button type="submit" id = "btnSearchGet" class="btn-sm btn-warning" title="Search Get">
+							<i class="fa fa-search"></i> Search Get
+						</button>
+						&nbsp; <button type="button" id = "btnExport" class="btn-sm btn-success" title="Export">
+							<i class="fa fa-download"></i> Export
+						</button>
+				</div>
+			</form>
+						<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+						<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+					<!-- // Underline -->
+				<!--<div class="card card-info card-outline collapsed-card"></div>-->
+			</div> <!-- End <div class="modal-body">  -->
+		<!-- ================= Other information ==============================-->
+		<div class="card card-info card-outline collapsed-card">
+			<div class="card-header">
+				<h6 class="card-title">Other information</h6>
+				<div class="card-tools">
+					<button type="button" class="btn btn-tool" data-card-widget="collapse"
+						data-toggle="tooltip" title="Collapse">
+						<i class="fas fa-plus"></i>
+					</button>
+				</div>
+			</div>
+			<div class="card-body" style="display: none;">
+				<div class="row justify-content-between">
+					<label class="col-sm-3 col-form-label text-sm-right" id="labuser_name_created_Text">User name created: </label>
+					<label class="col-sm-3 col-form-label" id="labuser_name_created_Value">User name created: </label>
+					<label class="col-sm-3 col-form-label text-sm-right" id="labdatetime_created_Text">Datetime created: </label>
+					<label class="col-sm-3 col-form-label" id="labdatetime_created_Value">Datetime created:</label>
+					<label class="col-sm-3 col-form-label text-sm-right" id="labuser_name_modified_Text">User name modifiedd: </label>
+					<label class="col-sm-3 col-form-label" id="labuser_name_modified_Value">User name modifiedd: </label>
+					<label class="col-sm-3 col-form-label text-sm-right" id="labdatetime_modified_Text">DateTime modified: </label>
+					<label class="col-sm-3 col-form-label" id="labdatetime_modified_Value">DateTime modified: </label>
+				</div>
+			</div>
+					
+		</div>
+		<!-- ================= End Other information ==================== -->
+			</div> <!-- End <div class="modal-content">  -->
+		</div>
+	</div>
+	<!-- ================ End Modal From ============================= -->
+
+	<div class="card card-info card-outline">
+		<div class="card-header">
+			<h4 class="card-title">List data &nbsp;</h4>
+			<!-- //===========================================-->
+			<div class="button-group card-title">
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle"
+					data-toggle="dropdown">
+					<span class="fas fa-cog"></span>
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" style="width: 300px;">
+					<li>
+						<a href="#" class="small" data-value="function_name" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnfunction_name" />&nbsp;
+							<label id="labfunction_name_CheckboxShow">Function </label>
+						</a> &nbsp; &nbsp;
+						<a href="#" class="small" data-value="description" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumndescription" />&nbsp;
+							<label id="labdescription_CheckboxShow">Description </label>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="small" data-value="note" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnnote" />&nbsp;
+							<label id="labnote_CheckboxShow">Note </label>
+						</a> &nbsp; &nbsp;
+					</li>
+					<li>
+						<a href="#" class="small" data-value="status" tabIndex="-1">
+							<input type="checkbox" id="ckhShowColumnstatus" />&nbsp;
+							<label id="labstatus_CheckboxShow">Status </label>
+						</a> &nbsp; &nbsp;
+					</li>
+				</ul>
+			</div>
+			<!-- //=========================================================== -->
+			<div class="card-tools">
+				<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fas fa-minus"></i></button>
+			</div>
+		</div>
+		<div class="card-body">
+			<table id="tablesys_function_for_permissions" class="table table-bordered table-hover btn-table mb-0">
+				<thead>
+					<tr>
+						<th class="text-center">
+							<div class="custom-control custom-checkbox">
+								<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+								<label for="check-all" class="custom-control-label"></label>
+							</div>
+						</th>
+						<th class="text-center" data-sort="" data-column="function_name" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labfunction_name_tb">
+								Function <i class="fa fa-fw" data-column="function_name"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="description" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labdescription_tb">
+								Description <i class="fa fa-fw" data-column="description"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="note" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labnote_tb">
+								Note <i class="fa fa-fw" data-column="note"></i>
+							</label>
+						</th>
+						<th class="text-center" data-sort="" data-column="status" class="columnHeader" onclick="sortByColumn(this)">
+							<label id="labstatus_tb">
+								Status <i class="fa fa-fw" data-column="status"></i>
+							</label>
+						</th>
+						<th class="text-center">Action</a></th>
+					</tr>
+				</thead>
+				<tbody id="bodyTablesys_function_for_permissions">
+					<tr>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+						<th class="text-center"></a></th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+		<div class="col-xs-1 col-sm-1">
+			<input type="number" class="form-control form-control-sm" name="numberItemPerPage" id="numberItemPerPage" size="4">
+		</div>
+		<div class="col-xs-9 col-sm-9" id="paginationsys_function_for_permissions">
+		</div>
+	</div>
+</div>
+<script type="application/javascript">
+var language = {};
+var listData;
+var linkPrefix=$('#linkPrefix').val();
+var idMainTable="tablesys_function_for_permissions";
+setSelectedColumnToShowInterface(idMainTable);
+
+onLoadData();
+function onLoadData(){
+	getLanguage();
+	setUpdateButtonStatus(false)
+	setInterfaceText();
+	getNumberItemPerPage();
+	var strData = $('#listData').val();
+	listData = JSON.parse(strData);
+	if(listData.length>0){
+		displayDataToTable();
+		var paramsString = $('#params').val();
+		const params = JSON.parse(paramsString);
+		paginationHelper(params.pagination, "sys_function_for_permissions", params.currentStatus, params.keyword,linkPrefix,  "paginationsys_function_for_permissions");
+	}
+}
+
+function displayDataToTable(){
+	sortDataJson();
+	showAllColumnInTable(idMainTable);
+	var table = document.getElementById("bodyTablesys_function_for_permissions");
+	var lengthtable= table.rows.length-1;
+	for(var n = lengthtable; n >= 0; n--) {
+		table.deleteRow(n);
+	}
+	var length = listData.length;
+	if(length <1 ) {
+		showNoticeDanger(language.Message_NotFoundData);
+		return false;
+	}
+	$("#modaMainForm").modal('hide');
+	listData.forEach(function(data) {
+		var row = table.insertRow(0);
+		var cell0 = row.insertCell(0);
+		var cell1 = row.insertCell(1);
+		var cell2 = row.insertCell(2);
+		var cell3 = row.insertCell(3);
+		var cell4 = row.insertCell(4);
+		var cell5 = row.insertCell(5);
+		let check= `<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+				<label for="${data._id}" class="custom-control-label"></label>
+			</div>`;
+		cell0.innerHTML = check;
+		cell1.innerHTML = data.function_name;
+		cell2.innerHTML = data.description;
+		cell3.innerHTML = data.note;
+		cell4.innerHTML = data.status;
+		let strbutton = " <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+			"<i class=\"fas fa-pencil-alt\"></i>" + 
+			"</a> " + 
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','" + data.function_name + "')\">";
+			strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+		strbutton += " </ button > ";
+		cell5.innerHTML = strbutton;
+	});
+	hideColumnInTable(idMainTable);
+}
+function setUpdateButtonStatus(statusUpdate){	
+	$('#btnSave').prop('hidden', statusUpdate);
+	$('#btnUpdate').prop('hidden', !statusUpdate);
+}
+
+function getLanguage(){
+	var languageString = $('#sysLanguage').val();	
+	language = JSON.parse(languageString);
+}
+
+function setInterfaceText(){
+	$("#pageTitle").html(language.TitlePage);
+	$("#labfunction_name").text(language.function_name);
+	$("#labdescription").text(language.description);
+	$("#labnote").text(language.note);
+	$("#labstatus").text(language.status);
+
+	$("#labfunction_name_tb").html(language.function_name+"<i class=\"fa fa-fw\" data-column=\"function_name\"></i>");
+	$("#labdescription_tb").html(language.description+"<i class=\"fa fa-fw\" data-column=\"description\"></i>");
+	$("#labnote_tb").html(language.note+"<i class=\"fa fa-fw\" data-column=\"note\"></i>");
+	$("#labstatus_tb").html(language.status+"<i class=\"fa fa-fw\" data-column=\"status\"></i>");
+
+	$("#labfunction_name_CheckboxShow").text(language.function_name);
+	$("#labdescription_CheckboxShow").text(language.description);
+	$("#labnote_CheckboxShow").text(language.note);
+	$("#labstatus_CheckboxShow").text(language.status);
+}
+
+function getById(Id){
+	var link = linkPrefix + 'getById/'+Id;
+	$.ajax({
+		type: 'GET',
+		url: link,
+		dataType: "json",
+		success: function(resultdata){
+			var success = resultdata.success;
+			if(success == true){
+				showDataToForm(resultdata.data);
+			}
+		},
+		failure: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+		error: function (response) {
+			alert(language.Message_GetItemByIdError);
+		},
+	});
+}
+
+function showDataToForm(data){
+	try{
+		setUpdateButtonStatus(true);
+		$("#modaMainForm").modal('show');
+		$('#_idHidden').val(data._id);
+		$('#function_name').val(data.function_name);
+		$('#description').val(data.description);
+		$('#note').val(data.note);
+		if((data.status == "true") || (data.status == true) || (data.status == "active")|| (data.status == "yes")|| (data.status == "1"))
+			$("#status").prop("checked", true);
+		else $("#status").prop("checked", false);
+
+		create = data.create;
+		if(create != undefined) {
+			$('#labuser_name_created_Value').text(create.user_name_created);
+			$('#labdatetime_created_Value').text(create.datetime_created);
+		}
+		modified = data.modified;
+		if(modified != undefined) {
+		$('#labuser_name_modified_Value').text(modified.user_name_modified);
+		$('#labdatetime_modified_Value').text(modified.datetime_modified);
+		}
+	}
+	catch(error){}
+}
+
+$('#btnOpenMainModalForm').click(function () {
+	$("#modaMainForm").modal('show');
+	clearForm();
+});
+
+$('#btnSearchPost_OpenForm').click(function(){
+	$("#modaMainForm").modal('show');
+});
+
+$('#btnExport_OpenForm').click(function(){
+	$("#modaMainForm").modal('show');
+});
+
+function clearForm(){
+	try{
+		$('#_idHidden').val('');
+		setUpdateButtonStatus(false)
+		$('#function_name').val('');
+		$('#description').val('');
+		$('#note').val('');
+	}
+	catch(error){}
+}
+
+$('#btnSearchPost').click(function(){
+	$(this).prop('disabled', true);
+	getContentPages(1);
+});
+
+function getContentPages(page){
+	var sortStorage=getSortType(linkPrefix);
+	let data = {
+		function_name : $('#function_name').val(),
+		description : $('#description').val(),
+		note : $('#note').val(),
+		Page : page,
+		sortColumn: sortStorage.sortColumn,
+		sortType: sortStorage.sortType,
+		numberItemPerPage: $('#numberItemPerPage').val()
+	}
+	var link = linkPrefix + 'search';
+	$.ajax({
+		type: 'POST',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnSearchPost').prop('disabled', false);
+			listData = resultdata.data;
+			displayDataToTable();
+			let params = resultdata.params;
+			paginationHelper(params.pagination, "sys_function_for_permissions", "", "", linkPrefix, "paginationsys_function_for_permissions");
+
+			if(params.pagination.totalItems > 0 ) {
+				var message = language.Message_Find + params.pagination.totalItems + language.Message_Words_records;
+				showNoticeSuccess(message);
+			}
+		},
+		failure: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		},
+		error: function (response) {
+			$('#btnSearchPost').prop('disabled', false);
+			showNoticeDanger('Search Error');
+		}
+	});
+	$('#btnSearchPost').prop('disabled', false);
+}
+
+$('#btnSave').click(function(){
+	$(this).prop('disabled', true);
+	saveInsert();
+});
+
+function chekValueAndSubmit(){
+	if(($('#function_name').val().length < 1) || ($('#function_name').val().length > 50)) {
+		var message = formatMessage(language.function_name + ": "+ language.Message_Invalid_function_name, '1','50');
+		alert(message);
+		return false;
+	}
+	let status= $('#status').is(":checked")? 1:0;
+	$('#status').val(status);
+	document.getElementById("formsys_function_for_permissions").submit();
+}
+
+function getDataForm(){
+	if(($('#function_name').val().length < 1) || ($('#function_name').val().length > 50)) {
+		var message = formatMessage(language.function_name + ": "+ language.Message_Invalid_function_name, '1','50');
+		alert(message);
+		return false;
+	}
+	return {
+		'_idHidden' : $('#_idHidden').val(),
+		'function_name' : $('#function_name').val(),
+		'description' : $('#description').val(),
+		'note' : $('#note').val(),
+		'status' : $('#status').is(":checked")? 1:0,
+	}
+}
+
+function saveInsert(){
+	let data = getDataForm();
+	if(data == false) {
+		$('#btnSave').prop('disabled', false);
+		return false;
+	}
+	var link = linkPrefix + 'save';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false))
+				showNoticeDanger(language.Message_AddNewError + ' ('+response.message+')');
+			else if((success != true) && (success != 'true'))
+				showNoticeDanger(result.message);
+			else {
+				insertRow(result.data);
+				clearForm();
+			}
+		},
+		failure: function (response) {
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+		error: function (response) {
+			showErrorMessageSave(response, language.Message_AddNewError);
+		},
+	});
+	$('#btnSave').prop('disabled', false);
+}
+
+function insertRow(data){
+	showAllColumnInTable(idMainTable);
+	showNoticeSuccess(language.Message_AddNewSuccess);
+	var table = document.getElementById("bodyTablesys_function_for_permissions");
+	var row = table.insertRow(0);
+	var cell0 = row.insertCell(0);
+	var cell1 = row.insertCell(1);
+	var cell2 = row.insertCell(2);
+	var cell3 = row.insertCell(3);
+	var cell4 = row.insertCell(4);
+	var cell5 = row.insertCell(5);
+	let check= `<div class="custom-control custom-checkbox"> 
+					<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+					<label for="${data._id}" class="custom-control-label"></label>
+				</div>`;
+	cell0.innerHTML = check;
+	cell1.innerHTML = data.function_name;
+	cell2.innerHTML = data.description;
+	cell3.innerHTML = data.note;
+	cell4.innerHTML = data.status;
+	let strbutton = " <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+		"<i class=\"fas fa-pencil-alt\"></i>" + 
+		"</a> " + 
+		" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','" + data.function_name + "')\">";
+	strbutton += " <i class=\"fas fa-trash-alt\"></i> ";
+	strbutton += " </ button > ";
+	cell5.innerHTML = strbutton;
+	hideColumnInTable(idMainTable);
+}
+
+$('#btnUpdate').click(function(){
+	$(this).prop('disabled', true);
+	saveUpdate();
+});
+
+function saveUpdate(){
+	let data = getDataForm();
+	if(data == false) {
+		$('#btnUpdate').prop('disabled', false);
+		return false;
+	}
+	if(data._idHidden == ""){
+		$('#btnUpdate').prop('disabled', false);
+		showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+		return false;
+	}
+	var link = linkPrefix + 'update';
+	$.ajax({
+		type: 'put',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(response){
+			var success = response.success;
+			var result 	= response.data;
+			if((success == 'false') || (success == false) ){
+				showNoticeDanger(language.Message_UpdateError);
+				return false;
+			}
+			else if((success != true) && (success != 'true')){
+				showNoticeDanger(result.message);
+				return false;
+			}
+			else {
+				updateRow(result.data);
+				clearForm();
+			}
+		},
+		failure: function (response) {
+			showErrorMessageSave(response, language.Message_UpdateError);
+		},
+		error: function (response) {
+			showErrorMessageSave(response, language.Message_UpdateError);
+		}
+	});
+	$('#btnUpdate').prop('disabled', false);
+}
+
+function updateRow(data){
+	showNoticeSuccess(language.Message_UpdateSuccess);
+	showAllColumnInTable(idMainTable);
+	$("#modaMainForm").modal('hide');
+	var row = $("#tablesys_function_for_permissions button[data-id='" + data._id + "']").parents("tr")[0];
+	var tr = "<tr>"+
+		"<td class=\"text-center\">" +
+			"<div class=\"custom-control custom-checkbox\">"+ 
+				"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\"" + data._id + "\" value=\"" + data._id + "\"> "+
+				"<label for=\"" + data._id + "\" class=\"custom-control-label\"></label> "+
+			"</div>"+
+		"</td>";
+		tr +=  "<td class=\"text-center\">" + data.function_name + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.description + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.note + "</td>";
+		tr +=  "<td class=\"text-center\">" + data.status + "</td>";
+		tr += "<td class=\"text-center\">" +
+			" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">" +
+				" <i class=\"fas fa-pencil-alt\"></i>" +
+			" </a>" +
+			" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.function_name+"')\">" +
+				" <i class=\"fas fa-trash-alt\"></i> " +
+			" </button> " +
+		" </td>" +
+	" </tr>";
+	$(row).after(tr);
+	$(row).remove();
+	hideColumnInTable(idMainTable);
+}
+function deleteById(row, objectId, objectName){
+	var message =  language.Message_DoYouWantToDeleteById  +' '+ objectName+'?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = {
+		'_id' : objectId
+	};
+	var link = linkPrefix+'deleteById';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var success = resultdata.success;
+			var message = resultdata.message;
+			var notice 	= {};
+			if((success == 'true') || (success == true)){
+				showNoticeSuccess(language.Message_DeleteSuccess);
+				var i = row.parentNode.parentNode.rowIndex;
+				document.getElementById("tablesys_function_for_permissions").deleteRow(i);
+				return true;
+			}
+			else if((success=='false')||(success==false)) {
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+			else if(message.length > 10){
+				showNoticeDanger(message);
+				return false;
+			}
+			else {
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnDelete').click(function(){
+	$(this).prop('disabled', true);
+	deleteList();
+	$(this).prop('disabled', false);
+});
+function deleteList(){
+	var arrayId = [];
+	var listId 	= " ";
+	$("input:checkbox[name=chkListData]:checked").each(function(){
+		arrayId.push($(this).val());
+		listId += $(this).val() + ',';
+	});
+	let message =  language.Message_DoYouWantToDeleteInTheList + '?';
+	var answer = confirm(message)
+	if (!answer){	return false; } 
+	let data = { arrayId };
+	var link = linkPrefix+'deleteList';
+	$.ajax({
+		type	: 'delete',
+		url		: link,
+		data	: data,
+		dataType: "json",
+		success	: function(resultdata){
+			var result = resultdata.data;
+			var success = result.success;
+			var message = result.message;
+			if((success == 'true') || (success == true)){
+				let deleteSuccess = result.deleteSuccess;
+				let deleteError = result.deleteError;
+				if(deleteSuccess.length > 0){
+					let message = language.Message_DeleteSuccess;
+					message += " "+ deleteSuccess.toString();
+					if(deleteError.length > 0){
+						message += " \n"+  language.Message_DeleteFail + " "+ deleteError.toString();
+					}
+					showNoticeSuccess(message);
+					deleteRows(arrayId,"bodyTablesys_function_for_permissions");
+					return true;
+				}
+				else if(deleteError.length > 0){
+					let message = language.Message_DeleteFail + " "+ deleteError.toString();
+					showNoticeDanger(message);
+				}
+				else{
+					showNoticeDanger(language.Message_DeleteFail);
+				}
+			}
+			else if((success == 'false') || (success == false)){
+				showNoticeDanger(language.Message_DeleteFail);
+				return false;
+			}
+		},
+		failure: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		},
+		error: function (response) {
+			showNoticeDanger(language.Message_DeleteFail);
+		}
+	});
+}
+
+$('#btnExport').click(function(){
+	$(this).prop('disabled', true);
+	exportData();
+	$(this).prop('disabled', false);
+});
+
+function exportData(){
+	let data = {
+		'function_name' : $('#function_name').val(),
+		'description' : $('#description').val(),
+		'note' : $('#note').val(),
+	}
+	var link = linkPrefix + 'exportData';
+	$.ajax({
+		type: 'post',
+		url: link,
+		data: data,
+		dataType: "json",
+		success: function(resultdata){
+			$('#btnExport').prop('disabled', false);
+			let result = resultdata.data;
+			showNoticeSuccess(language.Message_CompletedGetData);
+			ExportToExcel(result);
+		},
+		failure: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		},
+		error: function (response) {
+			$('#btnExport').prop('disabled', false);
+			showNoticeDanger('Export Error');
+		}
+	});
+	$('#btnExport').prop('disabled', false);
+}
+
+function ExportToExcel(datas){
+	let itemCount = datas.length; 
+	if(itemCount > 1000) {
+		showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+	}
+	if(itemCount < 1) {
+		showNoticeDanger(language.Message_NotFoundData);
+	}
+	var strTable = '<style type="text/css">';
+	strTable += ' .Border { ';
+	strTable += '         color: windowtext; ';
+	strTable += '         font-size: 11.0pt; ';
+	strTable += '         word-break:break-all;';
+	strTable += '         font-style: normal; ';
+	strTable += '         text-decoration: none; ';
+	strTable += '         font-family: "Times New Roman", serif; ';
+	strTable += '         text-align: left; ';
+	strTable += '         vertical-align: bottom;';
+	strTable += '         border-left: .5pt solid windowtext; ';
+	strTable += '         border-right: .5pt solid windowtext; ';
+	strTable += '         border-top: .5pt solid windowtext; ';
+	strTable += '         border-bottom: .5pt solid windowtext; ';
+	strTable += '         padding-left: 1px; ';
+	strTable += '         padding-right: 1px; ';
+	strTable += '         padding-top: 1px; ';
+	strTable += '     } ';
+
+	strTable += ' .BorderHeader { ';
+	strTable += '        color: white; ';
+	strTable += '         background-color:#0026ff; ';
+	strTable += '        font-size: 11.0pt; ';
+	strTable += '        text-align: center; ';
+	strTable += '        font-style: normal; ';
+	strTable += '        text-decoration: none; ';
+	strTable += '        font-family: "Times New Roman", serif; ';
+	strTable += '        vertical-align: bottom;';
+	strTable += '        border-left: .5pt solid windowtext; ';
+	strTable += '        border-right: .5pt solid windowtext; ';
+	strTable += '        border-top: .5pt solid windowtext; ';
+	strTable += '        border-bottom: .5pt solid windowtext; ';
+	strTable += '        padding-left: 1px; ';
+	strTable += '        padding-right: 1px; ';
+	strTable += '        padding-top: 1px; ';
+	strTable += '     } ';
+	strTable += '  </style> ';
+	strTable += ' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+	strTable += '<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+	strTable += '<th class="BorderHeader" >Order</th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Function </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Description </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Note </th> ';
+	strTable += '<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Status </th> ';
+	strTable += '</tr> ';
+	var n = 0;
+	var currentRow = 4;
+	for(var i = 0; i < itemCount; i++) {
+		var vTemp = datas[i];
+		currentRow += 1;
+		 n += 1;
+		strTable += '<tr >';
+		strTable += '<th class="Border" > ' + n + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.function_name + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.description + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.note + ' </th> ';
+		 strTable += '<th  class="Border" > ' + vTemp.status + ' </th> ';
+		strTable += '</tr>';
+	}
+	strTable += ' </table> ';
+	ExportHtmlToExcel(strTable, 'sys_function_for_permissions');
+	showNoticeSuccess(language.Message_ExportSuccess);
+}
+
+</script>

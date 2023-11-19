@@ -1,0 +1,7 @@
+{
+    "schema": {
+        "$ref": "./componentsGeneral.json",
+        "$ref": "./categories.json",
+        "$ref": "./loaiHangHoa.json"
+    }
+}

@@ -1,0 +1,1307 @@
+<%- include ('./../helpers/pagination') %>
+	<% const collection="sys_users" ; const linkPrefix=systemConfig.prefixAdmin + `/${collection}/`; %>
+		<%- include ('./../elements/notify') %>
+			<div class="container-fluid">
+				<input name="linkPrefix" id="linkPrefix" type="hidden" value="<%= linkPrefix %>">
+				<input name="params" id="params" type="hidden" value="<%= params %>">
+				&nbsp; &nbsp; <button type="button" id="btnOpenMainModalForm" class="btn btn-primary">
+					<i class="fas fa-plus"></i> Add new
+				</button>
+				&nbsp; <button type="button" id="btnDelete" class="btn-sm btn-danger" title="Delete">
+					<i class="fas fa-trash-alt"></i> Delete
+				</button>
+				&nbsp; <button type="button" id="btnSearchPost_OpenForm" class="btn-sm btn-info" title="Search">
+					<i class="fa fa-search"></i> Search
+				</button>
+				&nbsp; <button type="button" id="btnExport_OpenForm" class="btn-sm btn-success" title="Export">
+					<i class="fa fa-download"></i> Export
+				</button>
+				&nbsp; <button type="button" id="btnRefreshPage" class="btn-sm btn-warning" title="Refresh"
+					onclick="RefreshPage()">
+					<i class="fa fa-refresh"></i> Refresh
+				</button>
+				<!-- ================ Modal From ======================== -->
+				<div class="modal fade" id="modaMainForm" data-backdrop="static" data-keyboard="true" tabindex="- 1"
+					role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Add New & Edit</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form role="form" name="formsys_users" id="formsys_users" autocomplete="off"
+									action=" <%= linkPrefix %>searchGet" method="get">
+									<div class="form-group row">
+										<label id="labemployee_code"
+											class="col-sm-2 col-form-label text-sm-right required">Employee Code</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="employee_code" id="employee_code"
+												value="<%= item.employee_code %>" class="form-control form-control-sm">
+										</div>
+										<label id="labid_company"
+											class="col-sm-2 col-form-label text-sm-right required">Company</label>
+										<div class="col-xs-2 col-sm-2">
+											<div class="dropdown">
+												<div id="divDropdownname" class="dropdown-content">
+													<input type="text" id="name" name="name"
+														onkeyup="filterSelectBox('name')"
+														onfocus="focusDropdown('name')" onblur="blurDropdown('name')"
+														class="form-control form-control-sm">
+													<input id="id_company" name="id_company" type="hidden">
+													<div id="DivContenname" class="Divdropdown-content">
+													</div>
+												</div>
+											</div>
+										</div>
+										<label id="labid_department"
+											class="col-sm-2 col-form-label text-sm-right required">Department</label>
+										<div class="col-xs-2 col-sm-2">
+											<div class="dropdown">
+												<div id="divDropdowndepartment_name" class="dropdown-content">
+													<input type="text" id="department_name" name="department_name"
+														onkeyup="filterSelectBox('department_name')"
+														onfocus="focusDropdown('department_name')"
+														onblur="blurDropdown('department_name')"
+														class="form-control form-control-sm">
+													<input id="id_department" name="id_department" type="hidden">
+													<div id="DivContendepartment_name" class="Divdropdown-content">
+													</div>
+												</div>
+											</div>
+										</div>
+										<label id="labid_position"
+											class="col-sm-2 col-form-label text-sm-right required">Position</label>
+										<div class="col-xs-2 col-sm-2">
+											<div class="dropdown">
+												<div id="divDropdownposition_name" class="dropdown-content">
+													<input type="text" id="position_name" name="position_name"
+														onkeyup="filterSelectBox('position_name')"
+														onfocus="focusDropdown('position_name')"
+														onblur="blurDropdown('position_name')"
+														class="form-control form-control-sm">
+													<input id="id_position" name="id_position" type="hidden">
+													<div id="DivContenposition_name" class="Divdropdown-content">
+													</div>
+												</div>
+											</div>
+										</div>
+										<label id="lablastname"
+											class="col-sm-2 col-form-label text-sm-right required">Lastname</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="lastname" id="lastname"
+												value="<%= item.lastname %>" class="form-control form-control-sm">
+										</div>
+										<label id="labfirstname"
+											class="col-sm-2 col-form-label text-sm-right required">Firstname</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="firstname" id="firstname"
+												value="<%= item.firstname %>" class="form-control form-control-sm">
+										</div>
+										<label id="labusername"
+											class="col-sm-2 col-form-label text-sm-right required">Username</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="username" id="username"
+												value="<%= item.username %>" class="form-control form-control-sm">
+										</div>
+										<label id="labpassword"
+											class="col-sm-2 col-form-label text-sm-right required">Password</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="password" id="password"
+												value="<%= item.password %>" class="form-control form-control-sm">
+										</div>
+										<label id="labbirthday"
+											class="col-sm-2 col-form-label text-sm-right ">Birthday</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="date" name="birthday" id="birthday"
+												class="form-control form-control-sm">
+										</div>
+										<label id="labsex" class="col-sm-2 col-form-label text-sm-right ">Sex</label>
+										<div class="col-xs-2 col-sm-2">
+											<select id="sex" name="sex" class="custom-select custom-select-sm">
+												<option value="novalue">Choose Sex</option>
+												<option value="Active" <%=(item.sex=="Active" ) ? 'selected="selected"'
+													: '' %> >Active</option>
+												<option value="Inactive" <%=(item.sex=="Inactive" )
+													? 'selected="selected"' : '' %> >Inactive</option>
+											</select>
+										</div>
+										<label id="labemail"
+											class="col-sm-2 col-form-label text-sm-right ">Email</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="email" id="email" value="<%= item.email %>"
+												class="form-control form-control-sm">
+										</div>
+										<label id="labphonenumber" class="col-sm-2 col-form-label text-sm-right ">Phone
+											Number</label>
+										<div class="col-xs-2 col-sm-2">
+											<input type="text" name="phonenumber" id="phonenumber"
+												value="<%= item.phonenumber %>" class="form-control form-control-sm">
+										</div>
+										<label id="labstatus"
+											class="col-sm-2 col-form-label text-sm-right ">status</label>
+										<div class="col-xs-2 col-sm-2">
+										</div>
+									</div>
+									<div class="form-group row">
+										<div class="text-success" id="divMessage"></div>
+									</div>
+									<input name="_idHidden" id="_idHidden" type="hidden">
+									<div class="modal-footer">
+										&nbsp; <button type="button" id="btnCloseMainMoal" data-dismiss="modal"
+											class="btn btn-sm btn-primary" title="Close">
+											<i class="fa fa-mail-reply"></i> Close
+										</button>
+										<button type="button" id="btnSave" class="btn-sm btn-success" title="Save">
+											<i class="fa fa-save"></i> Save
+										</button>
+										&nbsp; <button type="button" id="btnUpdate" class="btn-sm btn-primary"
+											title="Update">
+											<i class="fa fa-save"></i> Update
+										</button>
+										&nbsp; <button type="button" id="btnSearchPost" class="btn-sm btn-info"
+											title="Search">
+											<i class="fa fa-search"></i> Search
+										</button>
+										&nbsp; <button type="submit" id="btnSearchGet" class="btn-sm btn-warning"
+											title="Search Get">
+											<i class="fa fa-search"></i> Search Get
+										</button>
+										&nbsp; <button type="button" id="btnExport" class="btn-sm btn-success"
+											title="Export">
+											<i class="fa fa-download"></i> Export
+										</button>
+									</div>
+								</form>
+								<input name="listData" id="listData" type="hidden" value="<%= itemString %>">
+								<input name="sysLanguage" id="sysLanguage" type="hidden" value="<%= language %>">
+								<input name="listDataCatalogue" id="listDataCatalogue" type="hidden"
+									value="<%= catalogue %>">
+								<!-- // Underline -->
+								<!--<div class="card card-info card-outline collapsed-card"></div>-->
+							</div> <!-- End <div class="modal-body">  -->
+							<!-- ================= Other information ==============================-->
+							<div class="card card-info card-outline collapsed-card">
+								<div class="card-header">
+									<h6 class="card-title">Other information</h6>
+									<div class="card-tools">
+										<button type="button" class="btn btn-tool" data-card-widget="collapse"
+											data-toggle="tooltip" title="Collapse">
+											<i class="fas fa-plus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="card-body" style="display: none;">
+									<div class="row justify-content-between">
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_created_Text">User name created: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_created_Value">User name
+											created: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_created_Text">Datetime created: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_created_Value">Datetime
+											created:</label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labuser_name_modified_Text">User name modifiedd: </label>
+										<label class="col-sm-3 col-form-label" id="labuser_name_modified_Value">User
+											name modifiedd: </label>
+										<label class="col-sm-3 col-form-label text-sm-right"
+											id="labdatetime_modified_Text">DateTime modified: </label>
+										<label class="col-sm-3 col-form-label" id="labdatetime_modified_Value">DateTime
+											modified: </label>
+									</div>
+								</div>
+
+							</div>
+							<!-- ================= End Other information ==================== -->
+						</div> <!-- End <div class="modal-content">  -->
+					</div>
+				</div>
+				<!-- ================ End Modal From ============================= -->
+
+				<div class="card card-info card-outline">
+					<div class="card-header">
+						<h4 class="card-title">List data &nbsp;</h4>
+						<!-- //===========================================-->
+						<div class="button-group card-title">
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+								<span class="fas fa-cog"></span>
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" style="width: 300px;">
+								<li>
+									<a href="#" class="small" data-value="employee_code" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnemployee_code" />&nbsp;
+										<label id="labemployee_code_CheckboxShow">Employee Code </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="id_company" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnid_company" />&nbsp;
+										<label id="labid_company_CheckboxShow">Company </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="id_department" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnid_department" />&nbsp;
+										<label id="labid_department_CheckboxShow">Department </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="id_position" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnid_position" />&nbsp;
+										<label id="labid_position_CheckboxShow">Position </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="lastname" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnlastname" />&nbsp;
+										<label id="lablastname_CheckboxShow">Lastname </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="firstname" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnfirstname" />&nbsp;
+										<label id="labfirstname_CheckboxShow">Firstname </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="username" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnusername" />&nbsp;
+										<label id="labusername_CheckboxShow">Username </label>
+									</a> &nbsp; &nbsp;
+								</li>
+								<li>
+									<a href="#" class="small" data-value="password" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnpassword" />&nbsp;
+										<label id="labpassword_CheckboxShow">Password </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="birthday" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnbirthday" />&nbsp;
+										<label id="labbirthday_CheckboxShow">Birthday </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="sex" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnsex" />&nbsp;
+										<label id="labsex_CheckboxShow">Sex </label>
+									</a> &nbsp; &nbsp;
+									<a href="#" class="small" data-value="email" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnemail" />&nbsp;
+										<label id="labemail_CheckboxShow">Email </label>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="small" data-value="phonenumber" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnphonenumber" />&nbsp;
+										<label id="labphonenumber_CheckboxShow">Phone Number </label>
+									</a> &nbsp; &nbsp;
+								</li>
+								<li>
+									<a href="#" class="small" data-value="status" tabIndex="-1">
+										<input type="checkbox" id="ckhShowColumnstatus" />&nbsp;
+										<label id="labstatus_CheckboxShow">status </label>
+									</a> &nbsp; &nbsp;
+								</li>
+							</ul>
+						</div>
+						<!-- //=========================================================== -->
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip"
+								title="Collapse"><i class="fas fa-minus"></i></button>
+						</div>
+					</div>
+					<div class="card-body">
+						<table id="tablesys_users" class="table table-bordered table-hover btn-table mb-0">
+							<thead>
+								<tr>
+									<th class="text-center">
+										<div class="custom-control custom-checkbox">
+											<input class="custom-control-input cbAll" type="checkbox" id="check-all">
+											<label for="check-all" class="custom-control-label"></label>
+										</div>
+									</th>
+									<th class="text-center" data-sort="" data-column="employee_code"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labemployee_code_tb">
+											Employee Code <i class="fa fa-fw" data-column="employee_code"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="id_company" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labid_company_tb">
+											Company <i class="fa fa-fw" data-column="id_company"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="id_department"
+										class="columnHeader" onclick="sortByColumn(this)">
+										<label id="labid_department_tb">
+											Department <i class="fa fa-fw" data-column="id_department"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="id_position" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labid_position_tb">
+											Position <i class="fa fa-fw" data-column="id_position"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="lastname" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="lablastname_tb">
+											Lastname <i class="fa fa-fw" data-column="lastname"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="firstname" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labfirstname_tb">
+											Firstname <i class="fa fa-fw" data-column="firstname"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="username" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labusername_tb">
+											Username <i class="fa fa-fw" data-column="username"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="password" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labpassword_tb">
+											Password <i class="fa fa-fw" data-column="password"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="birthday" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labbirthday_tb">
+											Birthday <i class="fa fa-fw" data-column="birthday"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="sex" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labsex_tb">
+											Sex <i class="fa fa-fw" data-column="sex"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="email" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labemail_tb">
+											Email <i class="fa fa-fw" data-column="email"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="phonenumber" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labphonenumber_tb">
+											Phone Number <i class="fa fa-fw" data-column="phonenumber"></i>
+										</label>
+									</th>
+									<th class="text-center" data-sort="" data-column="status" class="columnHeader"
+										onclick="sortByColumn(this)">
+										<label id="labstatus_tb">
+											status <i class="fa fa-fw" data-column="status"></i>
+										</label>
+									</th>
+									<th class="text-center">Action</a></th>
+								</tr>
+							</thead>
+							<tbody id="bodyTablesys_users">
+								<tr>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+									<th class="text-center"></a></th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="form-group row">
+					<div class="col-xs-1 col-sm-1">Quantity per page:</div>
+					<div class="col-xs-1 col-sm-1">
+						<input type="number" class="form-control form-control-sm" name="numberItemPerPage"
+							id="numberItemPerPage" size="4">
+					</div>
+					<div class="col-xs-9 col-sm-9" id="paginationsys_users">
+					</div>
+				</div>
+			</div>
+			<script type="application/javascript">
+				var language={};
+				var listData;
+				var linkPrefix=$('#linkPrefix').val();
+				var idMainTable="tablesys_users";
+				setSelectedColumnToShowInterface(idMainTable);
+
+				onLoadData();
+				function onLoadData() {
+					getLanguage();
+					setUpdateButtonStatus(false)
+					setInterfaceText();
+					getNumberItemPerPage();
+					var strData=$('#listData').val();
+					listData=JSON.parse(strData);
+					if(listData.length>0) {
+						displayDataToTable();
+						var paramsString=$('#params').val();
+						const params=JSON.parse(paramsString);
+						paginationHelper(params.pagination,"sys_users",params.currentStatus,params.keyword,linkPrefix,"paginationsys_users");
+					}
+				}
+
+				function displayDataToTable() {
+					sortDataJson();
+					showAllColumnInTable(idMainTable);
+					var table=document.getElementById("bodyTablesys_users");
+					var lengthtable=table.rows.length-1;
+					for(var n=lengthtable;n>=0;n--) {
+						table.deleteRow(n);
+					}
+					var length=listData.length;
+					if(length<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+						return false;
+					}
+					$("#modaMainForm").modal('hide');
+					(listData);
+					listData.forEach(function(data) {
+						var row=table.insertRow(0);
+						var cell0=row.insertCell(0);
+						var cell1=row.insertCell(1);
+						var cell2=row.insertCell(2);
+						var cell3=row.insertCell(3);
+						var cell4=row.insertCell(4);
+						var cell5=row.insertCell(5);
+						var cell6=row.insertCell(6);
+						var cell7=row.insertCell(7);
+						var cell8=row.insertCell(8);
+						var cell9=row.insertCell(9);
+						var cell10=row.insertCell(10);
+						var cell11=row.insertCell(11);
+						var cell12=row.insertCell(12);
+						var cell13=row.insertCell(13);
+						var cell14=row.insertCell(14);
+						let check=`<div class="custom-control custom-checkbox"> 
+				<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+				<label for="${data._id}" class="custom-control-label"></label>
+			</div>`;
+						cell0.innerHTML=check;
+						cell1.innerHTML=data.employee_code;
+						sys_companies=data.sys_companies;
+						if(sys_companies!=undefined) {
+							if(sys_companies.name!=undefined)
+								cell2.innerHTML=sys_companies.name;
+						}
+						sys_departments=data.sys_departments;
+						if(sys_departments!=undefined) {
+							if(sys_departments.department_name!=undefined)
+								cell3.innerHTML=sys_departments.department_name;
+						}
+						sys_positions=data.sys_positions;
+						if(sys_positions!=undefined) {
+							if(sys_positions.position_name!=undefined)
+								cell4.innerHTML=sys_positions.position_name;
+						}
+
+						cell5.innerHTML=data.lastname;
+						cell6.innerHTML=data.firstname;
+						cell7.innerHTML=data.username;
+						cell8.innerHTML=data.password;
+						cell9.innerHTML=data.birthday;
+						cell10.innerHTML=data.sex;
+						cell11.innerHTML=data.email;
+						cell12.innerHTML=data.phonenumber;
+						cell13.innerHTML=data.status;
+						let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+							"<i class=\"fas fa-pencil-alt\"></i>"+
+							"</a> "+
+							" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.employee_code+"')\">";
+						strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+						strbutton+=" </ button > ";
+						cell14.innerHTML=strbutton;
+					});
+					hideColumnInTable(idMainTable);
+				}
+				function setUpdateButtonStatus(statusUpdate) {
+					$('#btnSave').prop('hidden',statusUpdate);
+					$('#btnUpdate').prop('hidden',!statusUpdate);
+				}
+
+				function getLanguage() {
+					var languageString=$('#sysLanguage').val();
+					language=JSON.parse(languageString);
+				}
+
+				function setInterfaceText() {
+					$("#pageTitle").html(language.TitlePage);
+					$("#labemployee_code").text(language.employee_code);
+					$("#labid_company").text(language.id_company);
+					$("#labid_department").text(language.id_department);
+					$("#labid_position").text(language.id_position);
+					$("#lablastname").text(language.lastname);
+					$("#labfirstname").text(language.firstname);
+					$("#labusername").text(language.username);
+					$("#labpassword").text(language.password);
+					$("#labbirthday").text(language.birthday);
+					$("#labsex").text(language.sex);
+					$("#labemail").text(language.email);
+					$("#labphonenumber").text(language.phonenumber);
+					$("#labstatus").text(language.status);
+
+					$("#labemployee_code_tb").html(language.employee_code+"<i class=\"fa fa-fw\" data-column=\"employee_code\"></i>");
+					$("#labid_company_tb").html(language.id_company+"<i class=\"fa fa-fw\" data-column=\"id_company\"></i>");
+					$("#labid_department_tb").html(language.id_department+"<i class=\"fa fa-fw\" data-column=\"id_department\"></i>");
+					$("#labid_position_tb").html(language.id_position+"<i class=\"fa fa-fw\" data-column=\"id_position\"></i>");
+					$("#lablastname_tb").html(language.lastname+"<i class=\"fa fa-fw\" data-column=\"lastname\"></i>");
+					$("#labfirstname_tb").html(language.firstname+"<i class=\"fa fa-fw\" data-column=\"firstname\"></i>");
+					$("#labusername_tb").html(language.username+"<i class=\"fa fa-fw\" data-column=\"username\"></i>");
+					$("#labpassword_tb").html(language.password+"<i class=\"fa fa-fw\" data-column=\"password\"></i>");
+					$("#labbirthday_tb").html(language.birthday+"<i class=\"fa fa-fw\" data-column=\"birthday\"></i>");
+					$("#labsex_tb").html(language.sex+"<i class=\"fa fa-fw\" data-column=\"sex\"></i>");
+					$("#labemail_tb").html(language.email+"<i class=\"fa fa-fw\" data-column=\"email\"></i>");
+					$("#labphonenumber_tb").html(language.phonenumber+"<i class=\"fa fa-fw\" data-column=\"phonenumber\"></i>");
+					$("#labstatus_tb").html(language.status+"<i class=\"fa fa-fw\" data-column=\"status\"></i>");
+
+					$("#labemployee_code_CheckboxShow").text(language.employee_code);
+					$("#labid_company_CheckboxShow").text(language.id_company);
+					$("#labid_department_CheckboxShow").text(language.id_department);
+					$("#labid_position_CheckboxShow").text(language.id_position);
+					$("#lablastname_CheckboxShow").text(language.lastname);
+					$("#labfirstname_CheckboxShow").text(language.firstname);
+					$("#labusername_CheckboxShow").text(language.username);
+					$("#labpassword_CheckboxShow").text(language.password);
+					$("#labbirthday_CheckboxShow").text(language.birthday);
+					$("#labsex_CheckboxShow").text(language.sex);
+					$("#labemail_CheckboxShow").text(language.email);
+					$("#labphonenumber_CheckboxShow").text(language.phonenumber);
+					$("#labstatus_CheckboxShow").text(language.status);
+				}
+
+				createDataForDropdownLists();
+				function createDataForDropdownLists() {
+					var strCatalogue=$('#listDataCatalogue').val();
+					arrCatalogue=JSON.parse(strCatalogue);
+					createDataForDropdown(arrCatalogue[0],'id_company','_id','name','name','-- Chose --');
+					createDataForDropdown(arrCatalogue[1],'id_department','_id','department_name','department_name','-- Chose --');
+					createDataForDropdown(arrCatalogue[2],'id_position','_id','position_name','position_name','-- Chose --');
+				}
+
+				closeAllDropdown();
+				function closeAllDropdown() {
+					var DivContenname=document.getElementById('DivContenname');
+					DivContenname.hidden=true;
+
+					var DivContendepartment_name=document.getElementById('DivContendepartment_name');
+					DivContendepartment_name.hidden=true;
+
+					var DivContenposition_name=document.getElementById('DivContenposition_name');
+					DivContenposition_name.hidden=true;
+
+				}
+
+				function getById(Id) {
+					var link=linkPrefix+'getById/'+Id;
+					$.ajax({
+						type: 'GET',
+						url: link,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							if(success==true) {
+								showDataToForm(resultdata.data);
+							}
+						},
+						failure: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+						error: function(response) {
+							alert(language.Message_GetItemByIdError);
+						},
+					});
+				}
+
+				function showDataToForm(data) {
+					try {
+						setUpdateButtonStatus(true);
+						$("#modaMainForm").modal('show');
+						$('#_idHidden').val(data._id);
+						$('#employee_code').val(data.employee_code);
+						$('#id_company').val(data.id_company);
+						sys_companies=data.sys_companies;
+						if(sys_companies!=undefined) {
+							if(sys_companies.name!=undefined)
+								$('#name').val(sys_companies.name);
+						}
+						$('#id_department').val(data.id_department);
+						sys_departments=data.sys_departments;
+						if(sys_departments!=undefined) {
+							if(sys_departments.department_name!=undefined)
+								$('#department_name').val(sys_departments.department_name);
+						}
+						$('#id_position').val(data.id_position);
+						sys_positions=data.sys_positions;
+						if(sys_positions!=undefined) {
+							if(sys_positions.position_name!=undefined)
+								$('#position_name').val(sys_positions.position_name);
+						}
+						$('#lastname').val(data.lastname);
+						$('#firstname').val(data.firstname);
+						$('#username').val(data.username);
+						$('#password').val(data.password);
+						$('#birthday').val(data.birthday);
+						$('#sex').val(data.sex);
+						$('#email').val(data.email);
+						$('#phonenumber').val(data.phonenumber);
+						$('#status').val(data.status);
+
+						create=data.create;
+						if(create!=undefined) {
+							$('#labuser_name_created_Value').text(create.user_name_created);
+							$('#labdatetime_created_Value').text(create.datetime_created);
+						}
+						modified=data.modified;
+						if(modified!=undefined) {
+							$('#labuser_name_modified_Value').text(modified.user_name_modified);
+							$('#labdatetime_modified_Value').text(modified.datetime_modified);
+						}
+					}
+					catch(error) {}
+				}
+
+				$('#btnOpenMainModalForm').click(function() {
+					$("#modaMainForm").modal('show');
+					clearForm();
+				});
+
+				$('#btnSearchPost_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				$('#btnExport_OpenForm').click(function() {
+					$("#modaMainForm").modal('show');
+				});
+
+				function clearForm() {
+					try {
+						$('#_idHidden').val('');
+						setUpdateButtonStatus(false)
+						$('#employee_code').val('');
+						$('#id_company').val('');
+						$('#name').val('');
+						$('#id_department').val('');
+						$('#department_name').val('');
+						$('#id_position').val('');
+						$('#position_name').val('');
+						$('#lastname').val('');
+						$('#firstname').val('');
+						$('#username').val('');
+						$('#password').val('');
+						$('#birthday').val('');
+						$('#sex').val('');
+						$('#email').val('');
+						$('#phonenumber').val('');
+						$('#status').val('');
+					}
+					catch(error) {}
+				}
+
+				$('#btnSearchPost').click(function() {
+					$(this).prop('disabled',true);
+					getContentPages(1);
+				});
+
+				function getContentPages(page) {
+					var sortStorage=getSortType(linkPrefix);
+					let data={
+						employee_code: $('#employee_code').val(),
+						id_company: $('#id_company').val(),
+						id_department: $('#id_department').val(),
+						id_position: $('#id_position').val(),
+						lastname: $('#lastname').val(),
+						firstname: $('#firstname').val(),
+						username: $('#username').val(),
+						password: $('#password').val(),
+						sex: $('#sex').val(),
+						email: $('#email').val(),
+						phonenumber: $('#phonenumber').val(),
+						status: $('#status').val(),
+						Page: page,
+						sortColumn: sortStorage.sortColumn,
+						sortType: sortStorage.sortType,
+						numberItemPerPage: $('#numberItemPerPage').val()
+					}
+					var link=linkPrefix+'search';
+					$.ajax({
+						type: 'POST',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnSearchPost').prop('disabled',false);
+							listData=resultdata.data;
+							displayDataToTable();
+							let params=resultdata.params;
+							paginationHelper(params.pagination,"sys_users","","",linkPrefix,"paginationsys_users");
+
+							if(params.pagination.totalItems>0) {
+								var message=language.Message_Find+params.pagination.totalItems+language.Message_Words_records;
+								showNoticeSuccess(message);
+							}
+						},
+						failure: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						},
+						error: function(response) {
+							$('#btnSearchPost').prop('disabled',false);
+							showNoticeDanger('Search Error');
+						}
+					});
+					$('#btnSearchPost').prop('disabled',false);
+				}
+
+				$('#btnSave').click(function() {
+					$(this).prop('disabled',true);
+					saveInsert();
+				});
+
+				function chekValueAndSubmit() {
+					if(($('#employee_code').val().length<1)||($('#employee_code').val().length>15)) {
+						var message=formatMessage(language.employee_code+": "+language.Message_Invalid_employee_code,'1','15');
+						alert(message);
+						return false;
+					}
+					if(($('#id_company').val().length<-9223372036854775808)||($('#id_company').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_company+": "+language.Message_Invalid_id_company,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#id_department').val().length<-9223372036854775808)||($('#id_department').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_department+": "+language.Message_Invalid_id_department,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#id_position').val().length<-9223372036854775808)||($('#id_position').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_position+": "+language.Message_Invalid_id_position,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#lastname').val().length<1)||($('#lastname').val().length>30)) {
+						var message=formatMessage(language.lastname+": "+language.Message_Invalid_lastname,'1','30');
+						alert(message);
+						return false;
+					}
+					if(($('#firstname').val().length<1)||($('#firstname').val().length>30)) {
+						var message=formatMessage(language.firstname+": "+language.Message_Invalid_firstname,'1','30');
+						alert(message);
+						return false;
+					}
+					if(($('#username').val().length<1)||($('#username').val().length>20)) {
+						var message=formatMessage(language.username+": "+language.Message_Invalid_username,'1','20');
+						alert(message);
+						return false;
+					}
+					if(($('#password').val().length<1)||($('#password').val().length>50)) {
+						var message=formatMessage(language.password+": "+language.Message_Invalid_password,'1','50');
+						alert(message);
+						return false;
+					}
+					document.getElementById("formsys_users").submit();
+				}
+
+				function getDataForm() {
+					if(($('#employee_code').val().length<1)||($('#employee_code').val().length>15)) {
+						var message=formatMessage(language.employee_code+": "+language.Message_Invalid_employee_code,'1','15');
+						alert(message);
+						return false;
+					}
+					if(($('#id_company').val().length<-9223372036854775808)||($('#id_company').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_company+": "+language.Message_Invalid_id_company,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#id_department').val().length<-9223372036854775808)||($('#id_department').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_department+": "+language.Message_Invalid_id_department,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#id_position').val().length<-9223372036854775808)||($('#id_position').val().length>18446744073709551615)) {
+						var message=formatMessage(language.id_position+": "+language.Message_Invalid_id_position,'-9223372036854775808','18446744073709551615');
+						alert(message);
+						return false;
+					}
+					if(($('#lastname').val().length<1)||($('#lastname').val().length>30)) {
+						var message=formatMessage(language.lastname+": "+language.Message_Invalid_lastname,'1','30');
+						alert(message);
+						return false;
+					}
+					if(($('#firstname').val().length<1)||($('#firstname').val().length>30)) {
+						var message=formatMessage(language.firstname+": "+language.Message_Invalid_firstname,'1','30');
+						alert(message);
+						return false;
+					}
+					if(($('#username').val().length<1)||($('#username').val().length>20)) {
+						var message=formatMessage(language.username+": "+language.Message_Invalid_username,'1','20');
+						alert(message);
+						return false;
+					}
+					if(($('#password').val().length<1)||($('#password').val().length>50)) {
+						var message=formatMessage(language.password+": "+language.Message_Invalid_password,'1','50');
+						alert(message);
+						return false;
+					}
+					return {
+						'_idHidden': $('#_idHidden').val(),
+						'employee_code': $('#employee_code').val(),
+						'id_company': $('#id_company').val(),
+						'sys_companies': {
+							'id': $('#id_company').val(),
+							'name': $('#name').val()
+						},
+						'id_department': $('#id_department').val(),
+						'sys_departments': {
+							'id': $('#id_department').val(),
+							'department_name': $('#department_name').val()
+						},
+						'id_position': $('#id_position').val(),
+						'sys_positions': {
+							'id': $('#id_position').val(),
+							'position_name': $('#position_name').val()
+						},
+						'lastname': $('#lastname').val(),
+						'firstname': $('#firstname').val(),
+						'username': $('#username').val(),
+						'password': $('#password').val(),
+						'birthday': $('#birthday').val(),
+						'sex': $('#sex').val(),
+						'email': $('#email').val(),
+						'phonenumber': $('#phonenumber').val(),
+						'status': $('#status').val(),
+					}
+				}
+
+				function saveInsert() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnSave').prop('disabled',false);
+						return false;
+					}
+					var link=linkPrefix+'save';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false))
+								showNoticeDanger(language.Message_AddNewError+' ('+response.message+')');
+							else if((success!=true)&&(success!='true'))
+								showNoticeDanger(result.message);
+							else {
+								insertRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_AddNewError);
+						},
+					});
+					$('#btnSave').prop('disabled',false);
+				}
+
+				function insertRow(data) {
+					showAllColumnInTable(idMainTable);
+					showNoticeSuccess(language.Message_AddNewSuccess);
+					var table=document.getElementById("bodyTablesys_users");
+					var row=table.insertRow(0);
+					var cell0=row.insertCell(0);
+					var cell1=row.insertCell(1);
+					var cell2=row.insertCell(2);
+					var cell3=row.insertCell(3);
+					var cell4=row.insertCell(4);
+					var cell5=row.insertCell(5);
+					var cell6=row.insertCell(6);
+					var cell7=row.insertCell(7);
+					var cell8=row.insertCell(8);
+					var cell9=row.insertCell(9);
+					var cell10=row.insertCell(10);
+					var cell11=row.insertCell(11);
+					var cell12=row.insertCell(12);
+					var cell13=row.insertCell(13);
+					var cell14=row.insertCell(14);
+					let check=`<div class="custom-control custom-checkbox"> 
+					<input class="custom-control-input" type="checkbox" name="chkListData" id="${data._id}" value="${data._id}">
+					<label for="${data._id}" class="custom-control-label"></label>
+				</div>`;
+					cell0.innerHTML=check;
+					cell1.innerHTML=data.employee_code;
+					if(data.id_company==$('#id_company').val()) {
+						cell2.innerHTML=$('#name').val();
+					}
+					if(data.id_department==$('#id_department').val()) {
+						cell3.innerHTML=$('#department_name').val();
+					}
+					if(data.id_position==$('#id_position').val()) {
+						cell4.innerHTML=$('#position_name').val();
+					}
+					cell5.innerHTML=data.lastname;
+					cell6.innerHTML=data.firstname;
+					cell7.innerHTML=data.username;
+					cell8.innerHTML=data.password;
+					cell9.innerHTML=data.birthday;
+					cell10.innerHTML=data.sex;
+					cell11.innerHTML=data.email;
+					cell12.innerHTML=data.phonenumber;
+					cell13.innerHTML=data.status;
+					let strbutton=" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						"<i class=\"fas fa-pencil-alt\"></i>"+
+						"</a> "+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.employee_code+"')\">";
+					strbutton+=" <i class=\"fas fa-trash-alt\"></i> ";
+					strbutton+=" </ button > ";
+					cell14.innerHTML=strbutton;
+					hideColumnInTable(idMainTable);
+				}
+
+				$('#btnUpdate').click(function() {
+					$(this).prop('disabled',true);
+					saveUpdate();
+				});
+
+				function saveUpdate() {
+					let data=getDataForm();
+					if(data==false) {
+						$('#btnUpdate').prop('disabled',false);
+						return false;
+					}
+					if(data._idHidden=="") {
+						$('#btnUpdate').prop('disabled',false);
+						showNoticeDanger(language.Message_HaveNotSelectedItemUpdate);
+						return false;
+					}
+					var link=linkPrefix+'update';
+					$.ajax({
+						type: 'put',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(response) {
+							var success=response.success;
+							var result=response.data;
+							if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_UpdateError);
+								return false;
+							}
+							else if((success!=true)&&(success!='true')) {
+								showNoticeDanger(result.message);
+								return false;
+							}
+							else {
+								updateRow(result.data);
+								clearForm();
+							}
+						},
+						failure: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						},
+						error: function(response) {
+							showErrorMessageSave(response,language.Message_UpdateError);
+						}
+					});
+					$('#btnUpdate').prop('disabled',false);
+				}
+
+				function updateRow(data) {
+					showNoticeSuccess(language.Message_UpdateSuccess);
+					showAllColumnInTable(idMainTable);
+					$("#modaMainForm").modal('hide');
+					var row=$("#tablesys_users button[data-id='"+data._id+"']").parents("tr")[0];
+					var tr="<tr>"+
+						"<td class=\"text-center\">"+
+						"<div class=\"custom-control custom-checkbox\">"+
+						"<input class=\"custom-control-input\" type=\"checkbox\" name=\"chkListData\" id=\""+data._id+"\" value=\""+data._id+"\"> "+
+						"<label for=\""+data._id+"\" class=\"custom-control-label\"></label> "+
+						"</div>"+
+						"</td>";
+					tr+="<td class=\"text-center\">"+data.employee_code+"</td>";
+					if(data.id_company==$('#id_company').val()) {
+						tr+="<td class=\"text-center\">"+$('#name').val()+"</td>";
+					}
+					if(data.id_department==$('#id_department').val()) {
+						tr+="<td class=\"text-center\">"+$('#department_name').val()+"</td>";
+					}
+					if(data.id_position==$('#id_position').val()) {
+						tr+="<td class=\"text-center\">"+$('#position_name').val()+"</td>";
+					}
+					tr+="<td class=\"text-center\">"+data.lastname+"</td>";
+					tr+="<td class=\"text-center\">"+data.firstname+"</td>";
+					tr+="<td class=\"text-center\">"+data.username+"</td>";
+					tr+="<td class=\"text-center\">"+data.password+"</td>";
+					tr+="<td class=\"text-center\">"+data.birthday+"</td>";
+					tr+="<td class=\"text-center\">"+data.sex+"</td>";
+					tr+="<td class=\"text-center\">"+data.email+"</td>";
+					tr+="<td class=\"text-center\">"+data.phonenumber+"</td>";
+					tr+="<td class=\"text-center\">"+data.status+"</td>";
+					tr+="<td class=\"text-center\">"+
+						" <a  onclick=\"getById('"+data._id+"')\" type=\"button\" class=\"rounded-circle btn btn-sm btn-info\" title=\"Edit\">"+
+						" <i class=\"fas fa-pencil-alt\"></i>"+
+						" </a>"+
+						" <button type=\"button\" class=\"rounded-circle btn btn-sm btn-danger\" data-id=\""+data._id+"\" title=\"Delete\"  onclick=\"deleteById(this,'"+data._id+"','"+data.employee_code+"')\">"+
+						" <i class=\"fas fa-trash-alt\"></i> "+
+						" </button> "+
+						" </td>"+
+						" </tr>";
+					$(row).after(tr);
+					$(row).remove();
+					hideColumnInTable(idMainTable);
+				}
+				function deleteById(row,objectId,objectName) {
+					var message=language.Message_DoYouWantToDeleteById+' '+objectName+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={
+						'_id': objectId
+					};
+					var link=linkPrefix+'deleteById';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var success=resultdata.success;
+							var message=resultdata.message;
+							var notice={};
+							if((success=='true')||(success==true)) {
+								showNoticeSuccess(language.Message_DeleteSuccess);
+								var i=row.parentNode.parentNode.rowIndex;
+								document.getElementById("tablesys_users").deleteRow(i);
+								return true;
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+							else if(message.length>10) {
+								showNoticeDanger(message);
+								return false;
+							}
+							else {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnDelete').click(function() {
+					$(this).prop('disabled',true);
+					deleteList();
+					$(this).prop('disabled',false);
+				});
+				function deleteList() {
+					var arrayId=[];
+					var listId=" ";
+					$("input:checkbox[name=chkListData]:checked").each(function() {
+						arrayId.push($(this).val());
+						listId+=$(this).val()+',';
+					});
+					let message=language.Message_DoYouWantToDeleteInTheList+' '+listId+'?';
+					var answer=confirm(message)
+					if(!answer) {return false;}
+					let data={arrayId};
+					var link=linkPrefix+'deleteList';
+					$.ajax({
+						type: 'delete',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							var result=resultdata.data;
+							var success=result.success;
+							var message=result.message;
+							if((success=='true')||(success==true)) {
+								let deleteSuccess=result.deleteSuccess;
+								let deleteError=result.deleteError;
+								if(deleteSuccess.length>0) {
+									let message=language.Message_DeleteSuccess;
+									message+=" "+deleteSuccess.toString();
+									if(deleteError.length>0) {
+										message+=" \n"+language.Message_DeleteFail+" "+deleteError.toString();
+									}
+									showNoticeSuccess(message);
+									deleteRows(arrayId,"bodyTablesys_users");
+									return true;
+								}
+								else if(deleteError.length>0) {
+									let message=language.Message_DeleteFail+" "+deleteError.toString();
+									showNoticeDanger(message);
+								}
+								else {
+									showNoticeDanger(language.Message_DeleteFail);
+								}
+							}
+							else if((success=='false')||(success==false)) {
+								showNoticeDanger(language.Message_DeleteFail);
+								return false;
+							}
+						},
+						failure: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						},
+						error: function(response) {
+							showNoticeDanger(language.Message_DeleteFail);
+						}
+					});
+				}
+
+				$('#btnExport').click(function() {
+					$(this).prop('disabled',true);
+					exportData();
+					$(this).prop('disabled',false);
+				});
+
+				function exportData() {
+					let data={
+						'employee_code': $('#employee_code').val(),
+						'id_company': $('#id_company').val(),
+						'id_department': $('#id_department').val(),
+						'id_position': $('#id_position').val(),
+						'lastname': $('#lastname').val(),
+						'firstname': $('#firstname').val(),
+						'username': $('#username').val(),
+						'password': $('#password').val(),
+						'sex': $('#sex').val(),
+						'email': $('#email').val(),
+						'phonenumber': $('#phonenumber').val(),
+						'status': $('#status').val(),
+					}
+					var link=linkPrefix+'exportData';
+					$.ajax({
+						type: 'post',
+						url: link,
+						data: data,
+						dataType: "json",
+						success: function(resultdata) {
+							$('#btnExport').prop('disabled',false);
+							let result=resultdata.data;
+							showNoticeSuccess(language.Message_CompletedGetData);
+							ExportToExcel(result);
+						},
+						failure: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						},
+						error: function(response) {
+							$('#btnExport').prop('disabled',false);
+							showNoticeDanger('Export Error');
+						}
+					});
+					$('#btnExport').prop('disabled',false);
+				}
+
+				function ExportToExcel(datas) {
+					let itemCount=datas.length;
+					if(itemCount>1000) {
+						showNoticeDanger(language.Message_WarningWhenExportingDataTooMuch);
+					}
+					if(itemCount<1) {
+						showNoticeDanger(language.Message_NotFoundData);
+					}
+					var strTable='<style type="text/css">';
+					strTable+=' .Border { ';
+					strTable+='         color: windowtext; ';
+					strTable+='         font-size: 11.0pt; ';
+					strTable+='         word-break:break-all;';
+					strTable+='         font-style: normal; ';
+					strTable+='         text-decoration: none; ';
+					strTable+='         font-family: "Times New Roman", serif; ';
+					strTable+='         text-align: left; ';
+					strTable+='         vertical-align: bottom;';
+					strTable+='         border-left: .5pt solid windowtext; ';
+					strTable+='         border-right: .5pt solid windowtext; ';
+					strTable+='         border-top: .5pt solid windowtext; ';
+					strTable+='         border-bottom: .5pt solid windowtext; ';
+					strTable+='         padding-left: 1px; ';
+					strTable+='         padding-right: 1px; ';
+					strTable+='         padding-top: 1px; ';
+					strTable+='     } ';
+
+					strTable+=' .BorderHeader { ';
+					strTable+='        color: white; ';
+					strTable+='         background-color:#0026ff; ';
+					strTable+='        font-size: 11.0pt; ';
+					strTable+='        text-align: center; ';
+					strTable+='        font-style: normal; ';
+					strTable+='        text-decoration: none; ';
+					strTable+='        font-family: "Times New Roman", serif; ';
+					strTable+='        vertical-align: bottom;';
+					strTable+='        border-left: .5pt solid windowtext; ';
+					strTable+='        border-right: .5pt solid windowtext; ';
+					strTable+='        border-top: .5pt solid windowtext; ';
+					strTable+='        border-bottom: .5pt solid windowtext; ';
+					strTable+='        padding-left: 1px; ';
+					strTable+='        padding-right: 1px; ';
+					strTable+='        padding-top: 1px; ';
+					strTable+='     } ';
+					strTable+='  </style> ';
+					strTable+=' <table id="testTable"  border="1" frame="hsides" rules="groups" summary="Code page support in different versions of MS Windows."> ';
+					strTable+='<tr class="BorderHeader" style="background - color:#0026ff; color:#fff"> ';
+					strTable+='<th class="BorderHeader" >Order</th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Employee Code </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Company </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Department </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Position </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Lastname </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Firstname </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Username </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Password </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Birthday </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Sex </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Email </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> Phone Number </th> ';
+					strTable+='<th  class="BorderHeader" style="width: 100px; white - space:nowrap"> status </th> ';
+					strTable+='</tr> ';
+					var n=0;
+					var currentRow=4;
+					for(var i=0;i<itemCount;i++) {
+						var vTemp=datas[i];
+						currentRow+=1;
+						n+=1;
+						strTable+='<tr >';
+						strTable+='<th class="Border" > '+n+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.employee_code+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.id_company+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.id_department+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.id_position+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.lastname+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.firstname+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.username+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.password+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.birthday+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.sex+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.email+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.phonenumber+' </th> ';
+						strTable+='<th  class="Border" > '+vTemp.status+' </th> ';
+						strTable+='</tr>';
+					}
+					strTable+=' </table> ';
+					ExportHtmlToExcel(strTable,'sys_users');
+					showNoticeSuccess(language.Message_ExportSuccess);
+				}
+
+			</script>

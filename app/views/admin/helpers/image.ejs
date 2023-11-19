@@ -1,0 +1,13 @@
+<% 
+    imageHelper = (folder, imageName, alt = "Image", className = "item-image w-100") => 
+    {
+    
+        if((imageName == null) || (imageName == '')){ 
+            imageName = 'no-avatar.png';
+        }
+        return `<img class="${className}" src="${folder + imageName}" alt="${alt}" />`;
+    }
+%>
+
+
+

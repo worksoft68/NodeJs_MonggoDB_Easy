@@ -1,0 +1,21 @@
+<%
+ highlightHelper = (data, keyword) =>{
+
+    var arrKeyword = keyword.split('-');
+    for(let index=0; index < arrKeyword.length; index++)
+    {
+        if(arrKeyword[index] != "")
+        {
+            var keywordHighlight = `<span class ='highlight'>${arrKeyword[index]}</span>`;
+                data = data.replace(new RegExp(arrKeyword[index], "ig"), keywordHighlight);           
+        }
+    }
+        
+    return data;   
+}
+
+
+%>
+
+
+
